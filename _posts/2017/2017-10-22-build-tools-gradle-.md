@@ -490,7 +490,7 @@ apply plugin: GreetingPlugin
 ```
 如果代码量较多我们就不能写在build.gradle文件，需要像编写一个库一样来写插件。而这个时候我们就可以创建一个模块，也就是第二种。
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2017-10-22-gradle-project-structure.png){:.center-image}*项目的地址[SimpleWeather](https://github.com/HawksJamesf/SimpleWeather)*
+![]({{site.asseturl}}/2017-10-22/2017-10-22-gradle-project-structure.png){:.center-image}*项目的地址[SimpleWeather](https://github.com/HawksJamesf/SimpleWeather)*
 
 这里有几点需要注意的
 - 模块的名字必须是buildSrc。

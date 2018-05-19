@@ -46,7 +46,7 @@ AT.mH(H)|main (UI线程)
 
 ### *Activity*{:.header3-font}
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-activity.png)
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-activity.png)
 
 启动流程：
 1.调用者进程通过AMS这个Framework端Binder将启动另一个Activity的信息传给SystemServer进程。
@@ -57,7 +57,7 @@ AT.mH(H)|main (UI线程)
 
 先来一张图熟悉一下Framework层的启动流程，认识一下几个重要的角色
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-activity-2.png){:.white-bg-image}
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-activity-2.png){:.white-bg-image}
 
 ActivityStarter：决定了intent和flag如何打开Activity和关联task、stack
 
@@ -80,12 +80,12 @@ ActivityStackSupervisor：由于多屏功能的出现，就需要ActivityStackSu
 下面就是管理Activity的关系图了。
 
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-activity-4.png){:.white-bg-image}
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-activity-4.png){:.white-bg-image}
 
 
 &emsp;&emsp;在应用层，Activity的生命周期如下：
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-activity-3.png)
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-activity-3.png)
 
 我们可以看到，在performResume方法也就是Activity的resume阶段之后才会将View通过addView呈现在屏幕上。所以唯有handleResumeActivity执行完，View才是可见的。也就是Activity#onResum的方法中，View并不是可见的，而应该是Resumed才可见。
 
@@ -93,9 +93,9 @@ ActivityStackSupervisor：由于多屏功能的出现，就需要ActivityStackSu
 
 Service的启动流程
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-service-start1.png)
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-service-start1.png)
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-service-start2.png){:.white-bg-image}
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-service-start2.png){:.white-bg-image}
 
 启动流程：
 1.调用者进程通过AMS这个Framework端Binder将启动另一个Service的信息传给SystemServer进程。
@@ -105,9 +105,9 @@ Service的启动流程
 
 Service的绑定流程
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-service-bind1.png)
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-service-bind1.png)
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-service-bind2.png){:.white-bg-image}
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-service-bind2.png){:.white-bg-image}
 
 启动流程：
 1.调用者进程通过AMS这个Framework端Binder将绑定另一个Service的信息传给SystemServer进程。
@@ -116,13 +116,13 @@ Service的绑定流程
 
 ### *BroadcastReceiver*{:.header3-font}
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-broadcastreceiver-1.png)
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-broadcastreceiver-1.png)
 
 广播的动态注册是在AMS中使用Map数据结构将InnerReceiver作为key，ReceiverList（DeathRecipient子类）作为value保存起来
 
 
 发送有序广播
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-broadcastreceiver-2.png){:.white-bg-image}
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-broadcastreceiver-2.png){:.white-bg-image}
 
 
 启动流程：
@@ -132,7 +132,7 @@ Service的绑定流程
 
 
 ### *ContentProvider*{:.header3-font}
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-15-launch-contentprovider.png)
+![]({{site.asseturl}}/2018-03-15/2018-03-15-launch-contentprovider.png)
 
 
 <!-- 启动流程：

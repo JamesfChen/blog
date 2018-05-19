@@ -73,7 +73,7 @@ android {
 ----
 
 先来看看我的项目结构图。
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-02-09-project-overview-modular.png)
+![]({{site.asseturl}}/2018-02-09/2018-02-09-project-overview-modular.png)
 
 &emsp;&emsp;在src目录下，我们创建了一个component目录，用来放置调试代码，比如res资源，组件启动器，AndroidManifest文件等等。这里我们有必要来说说这个目录结构，其实我们可以在src目录下创建任意个目录用来override/add main目录下的一些资源。前提是这个任意目录结构要和main相同，gradle提供了debug/release两个目录。override/add 的规则是，新建的layout/drawable两个目录会覆盖main的layout/drawable，其余的都是add。所以我们可以把main目录看成是基础资源，而新建的component目录，提供的确实一些调试代码，当编译release时，并不会受到component目录的干扰，因为，我们接下来的代码决定了component也是一种build type。
 
@@ -177,7 +177,7 @@ public class StarterActivity extends BaseRouterActivity {
 ### *组件化项目*{:.header3-font}
 
 再看看一个组件化的案例。
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-02-09-architecture-evolution.png)
+![]({{site.asseturl}}/2018-02-09/2018-02-09-architecture-evolution.png)
 
 由于初期，架构v1.x版本比较野蛮的采用了PBL分包，数据交互使用MVP，而随着代码量、业务的增长，在架构v2.x版本则采取底层按照功能模块划分，业务层通过组件化的形式将业务解耦，使其便于调试编译。这里我们确实可以看出MVP架构的价值，不像Android早期的View-Module模式，很多的保证了底层与业务层的充分解耦，如果新增业务，只要通过修改P层，从而让底层与V层做到适配，绝大多数中间人都是为了传递委一方的需求，另一方的能力。
 

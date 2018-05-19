@@ -19,7 +19,7 @@ tag:
 
 ## *3.Introduction*{:.header2-font}
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-01-25-location-system-framework-architecture.png)
+![]({{site.asseturl}}/2018-01-25/2018-01-25-location-system-framework-architecture.png)
 
 &emsp;&emsp;这个架构其实很好理解，应用层通过注册监听器来接受底层上报的定位数据，而定位数据的来源很多，可以是高精度的gps，可以network，也可以是passive。除了可以获取定位数据，还可以获取gps的测绘数据，以及gps其他信息。由于网络定位的优化算法都是服务厂商自己在搞，涉及到商业利益不便开源，所以我们在Android Location API中很少看到除了gps其他的定位服务API。Android团队为了保护服务厂商的利益，就像当时的HAL层出现一样，在Location的framework层提供了很多的XxxProxy类，然后通过ServiceWatcher连接到服务厂商自己的进程，从而规避了服务厂商暴露源码的风险。
 

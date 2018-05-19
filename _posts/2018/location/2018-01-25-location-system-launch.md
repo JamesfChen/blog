@@ -21,7 +21,7 @@ tag:
 ### *Application层*{:.header3-font}
 &emsp;&emsp;
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-01-25-location-system-launch-api.png)
+![]({{site.asseturl}}/2018-01-25/2018-01-25-location-system-launch-api.png)
 
 &emsp;&emsp;提供给开发者的接口可以认为两种requestSingleUpdate和requestLocationUpdates，前者获取一次，而或者可以根据大于多少时间再更新，大于多少距离再更新。但是不论差别多大，它们的底层都是调用`requestLocationUpdates(LocationRequest request, LocationListener listener,
             Looper looper, PendingIntent intent)`实现的。
@@ -675,7 +675,7 @@ public abstract class LocationProviderBase {
 
 该应用源码位于framework/base/packages下面
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-01-25-location-system-launch-fusedlocation-app.png)
+![]({{site.asseturl}}/2018-01-25/2018-01-25-location-system-launch-fusedlocation-app.png)
 
 
 &emsp;&emsp;这里我们可以大致说一下Android团队如何做的。FusedLocationProvider重写了LocationProviderBase提供的方法，并且也提供了自己的配置属性。

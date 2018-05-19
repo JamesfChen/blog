@@ -21,8 +21,8 @@ tag:
 
 &emsp;&emsp;首先要知道Android中窗口的分布是按照z-order的，也就是指向屏幕外的z轴。z-order值越大，就会覆盖住值越小的，从而也就更能被我们看到。这些值被按照窗口类型分为：应用窗口（1-99）、子窗口（1000 - 1999）、系统窗口（2000-2999）
 
-<!-- ![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-23-Window-Zorder.png) -->
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-23-Window-types.png)
+<!-- ![]({{site.asseturl}}/2018-03-23/2018-03-23-Window-Zorder.png) -->
+![]({{site.asseturl}}/2018-03-23/2018-03-23-Window-types.png)
 <!-- 
 |应用窗口 | 子窗口 |系统窗口|
 |---|---|----|
@@ -68,13 +68,13 @@ tag:
 ### *flag*{:.header3-font}
 &emsp;&emsp;其次，你还可以控制窗口的flag。是否焦点、是否允许在锁屏显示、是否全屏等。
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-23-Window-flags.png)
+![]({{site.asseturl}}/2018-03-23/2018-03-23-Window-flags.png)
 
 
 ### *soft input mode*{:.header3-font}
 还有控制ime的参数
 
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-03-23-Window-softinput.png)
+![]({{site.asseturl}}/2018-03-23/2018-03-23-Window-softinput.png)
 
 
 当然了你还可以设置窗口的其他属性，比如宽高、透明度、gravity、margin等

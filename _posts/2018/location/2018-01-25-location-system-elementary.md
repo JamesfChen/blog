@@ -30,7 +30,7 @@ tag:
 
 ### *阅读API*{:.header3-font}
 &emsp;&emsp;
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-01-25-location-system-api-overview.png)
+![]({{site.asseturl}}/2018-01-25/2018-01-25-location-system-api-overview.png)
 
 &emsp;&emsp;我们可以将其划分层以下几类
 
@@ -57,7 +57,7 @@ tag:
 
 ### *Location 策略*{:.header3-font}
 &emsp;&emsp;
-![]({{site.asseturl}}/{{ page.date | date: "%Y-%m-%d" }}/2018-01-25-location-system-location-strategies.png)
+![]({{site.asseturl}}/2018-01-25/2018-01-25-location-system-location-strategies.png)
 
 &emsp;&emsp;上面是Android文档提供的最佳性能模型的timeline。那么如何做到最佳性能 ？
 
