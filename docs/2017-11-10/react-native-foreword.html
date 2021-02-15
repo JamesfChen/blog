@@ -1,0 +1,569 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2017-11-10/react-native-foreword">React Native ---  前言</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Fri, 10 Nov 2017 22:50:00 +0000</time> -->
+                  <time datetime='2017-11-10'>Fri, Nov 10 2017, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :2111</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/React Native">React Native</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+
+<p>  讲React Native之前，我们应该知道这么一些故事。React是由Facebook公司开发，并且开源到了github，与Vue都是现在很火的前端开发库。之后Facebook觉得这套库在前端使用的效果很是不错，就想让移动端也支持，从而实现如他们的口号一样“Learn Once，Write Anywhere”—学习一次，任何平台都能写。这不就是大前端吗，所以React Native孕育而生。在编码方面React不同于传统的HTML+CSS+JavaScript这一套开发方式，而是采用组件化的形式，让开发者在组件里面可以混写HTML+JavaScript，即JSX代码。而原来的HTML直接解析成真实DOM树，现在也变成了组件先成为虚拟DOM，在插入文档之后才会变成真实DOM。React利用了一个叫做DOM diff的算法提高了网页的性能，所以我们在移动端上面看到很多用React Native实现的应用性能比用HTML5库实现的好很多。看看京东金融和微信。关于HTML5 VS React ，这两者孰优孰劣可以参考这一篇文章<a href="http://www.ruanyifeng.com/blog/2015/02/future-of-dom.html">也许，DOM 不是答案</a></p>
+
+<p>  不过React Native现在还没有出1.0版本，各种坑还没有被修复。比如网络请求ajax并不能适配移动端的，所以使用了web标准fetch。但是却不妨碍它能带来的效益，所以很多大厂也适配了。不过由于其License，很多大厂也不敢用了。</p>
+
+<p>  而不论使用何种实现都离不开浏览器的引擎WebKit。由于Apple想要开发自己的浏览器（Safari），所以就从KHTML分支fork出了WebKit项目，和KHTML引擎同期还有一款Gecko引擎（Firefox）。由于外界压力，最终将WebKit开源了。随着项目开源，越来越多的公司加入进来，Google就是其中一个。但是由于跟KDE一样和Apple相处不恰，Google决定自己在WebCore上面开发Blink,再结合自主研发的v8（JavaScript引擎），共同研制了开源项目Chromium，该引擎就是现如今Android平台的浏览器引擎。其实在Android4.4之前使用的是Webkit引擎去实现WebView，而现在使用的是Chromium引擎。博主也会在后续跟随老罗的脚步学习这方面知识，如果有兴趣的同学欢迎讨论。推荐一篇博文，先让大家入个门<a href="http://blog.csdn.net/luoshengyang/article/details/46569161">Android Chromium WebView学习启动篇</a>。不过话说回来，Apple也不甘示弱，为了提高JavaScript引擎的性能，重写了JavaScriptCore，并且命名SquirrelFish，后来这个项目演变成了SquirrelFish  Extreme（SFX）。主要原因就是前者是一个字节码解释权，而后者却是直接将JavaScript代码编译成机器码,这样可以提高执行速度，所以导致了项目名变更的情况。</p>
+
+<p>  React Native在iOS平台使用的是WebKit，而在Android平台目前使用的也是Webkit，并不是平台提供的Chromium。Facebook对于JavaScriptCore引擎又进行了客制化。在github可以找到<a href="https://github.com/facebook/android-jsc">facebook android-jsc</a>。知道了这些事之后，我们可以来做个大概的总结，其实React Native框架就是我们平时的原生开发通过libjsc.so等库去解析bundle（许多JavaScript文件的打包文件，为了提高性能所以进行了打包），而Java和JavaScript的交互就是通过这一层所谓的bridge完成的。所以由c/c++编写的库就像媒婆一样，为两者牵线搭桥。而我们想要去使用动态库libjsc,就需要知道它提供的API。Apple已经为我们提供了它的API文档<a href="https://developer.apple.com/documentation/javascriptcore">framework JavaScriptCore</a>。也可以通过这一篇文章<a href="https://www.raywenderlich.com/124075/javascriptcore-tutorial">JavaScriptCore Tutorial for iOS: Getting Started</a>简单了解一下JavaScriptCore引擎中的一些知识。</p>
+
+<p><img src="/blog/asset/2017-11-10-react-native-foreword-arch.jpeg" alt="arch" /></p>
+
+<p>  说完这些知识点，我们就知道了其实React Native的存在就是为了让原生开发的一套规范转换到Web开发规范，既然换了一种开发方式就意味着你要学习Web开发的相关知识，这里推荐一篇博文供大家入门前端开发，<a href="http://www.ruanyifeng.com/blog/2015/03/react.html">React 入门实例教程</a></p>
+
+<p>  之后我们将要学习的内容有如下：</p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—入门</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—框架概述</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />React Native—启动流程</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—开发者调试工具</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—智能指针实现</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—基于JavaScriptCore引擎的封装</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—基于JNI的封装</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—Java和JavaScript通信机制</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—学习总结</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />React Native—项目实战</li>
+</ul>
+
+<h2 id="2reference"><em class="header2-font">2.Reference</em></h2>
+
+<p><a href="https://36kr.com/p/202396.html">历史在重演：从KHTML到WebKit，再到Blink</a><br />
+<a href="http://www.ruanyifeng.com/blog/2015/02/future-of-dom.html">也许，DOM 不是答案</a><br />
+<a href="https://reactjs.org/docs/hello-world.html">React官网</a><br />
+<a href="http://www.ruanyifeng.com/blog/2015/03/react.html">React 入门实例教程</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2017-11-10/react-native-foreword" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2017-11-10/react-native-foreword&text=React Native ---  前言" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2017-11-10/react-native-foreword&title=React Native ---  前言&summary=这是一篇计划文，描述了我们如何学习React Native&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=React Native ---  前言&body=这是一篇计划文，描述了我们如何学习React Native https://jamesfchen.github.io/2017-11-10/react-native-foreword" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017-11-10/react-native-foreword";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

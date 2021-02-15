@@ -1,0 +1,532 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Sun, 13 Dec 2020 22:50:00 +0000</time> -->
+                  <time datetime='2020-12-13'>Sun, Dec 13 2020, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :2671</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/逆向工程">逆向工程</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#3introduction" id="markdown-toc-3introduction"><em class="header2-font">3.Introduction</em></a>    <ul>
+      <li><a href="#端口配置" id="markdown-toc-端口配置"><em class="header3-font">端口配置</em></a></li>
+      <li><a href="#导入ca证书" id="markdown-toc-导入ca证书"><em class="header3-font">导入CA证书</em></a>        <ul>
+          <li><a href="#修改app的配置" id="markdown-toc-修改app的配置">修改app的配置</a></li>
+          <li><a href="#升级为系统ca证书步骤" id="markdown-toc-升级为系统ca证书步骤">升级为系统CA证书步骤</a></li>
+        </ul>
+      </li>
+      <li><a href="#关于ca证书" id="markdown-toc-关于ca证书"><em class="header3-font">关于CA证书</em></a></li>
+      <li><a href="#抓包原理" id="markdown-toc-抓包原理"><em class="header3-font">抓包原理</em></a></li>
+      <li><a href="#可扩展的抓包软件" id="markdown-toc-可扩展的抓包软件"><em class="header3-font">可扩展的抓包软件</em></a></li>
+    </ul>
+  </li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>//todo</p>
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+<h3 id="端口配置"><em class="header3-font">端口配置</em></h3>
+<p>  随便配置一个不和哪些知名端口(8080 、443)冲突的端口就行<br />
+<img src="/blog/asset/crawler/fiddler1.png" alt="arch" class="center-image" /><em><code class="language-plaintext highlighter-rouge">fiddler</code></em><br />
+<img src="/blog/asset/crawler/charles1.png" alt="arch" class="center-image" /><em><code class="language-plaintext highlighter-rouge">charles</code></em></p>
+<h3 id="导入ca证书"><em class="header3-font">导入CA证书</em></h3>
+<p>  在Android系统的设置应用中采用凭证管理器管理系统CA证书和用户CA证书。它们分别存放于两个地方，系统证书位置：/system/etc/security/cacerts，用户证书位置：/data/misc/keystore/user_0，所以只要将证书放到这两个位置就能被信任使用，但是考虑到安全问题，在Android7.0之前(不包括7.0)安装的用户CA证书是可以被信任使用，Android7.0之后(包括7.0)安装的用户CA证书将不能被信任使用，需要使用root机器升级为系统CA证书。Android7.0之后是否使用用户CA证书将于App开发者自己配置决定，如果不引用外部CA证书也可以引用app内部CA证书，其存放raw或者asset。所以要么修改app的配置要么升级证书为系统证书。</p>
+
+<h4 id="修改app的配置">修改app的配置</h4>
+<p>Add a file res/xml/network_security_config.xml to your app:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;network-security-config&gt;</span> 
+  <span class="nt">&lt;debug-overrides&gt;</span> 
+    <span class="nt">&lt;trust-anchors&gt;</span> 
+      <span class="c">&lt;!-- Trust user added CAs while debuggable only --&gt;</span>
+      <span class="nt">&lt;certificates</span> <span class="na">src=</span><span class="s">"user"</span> <span class="nt">/&gt;</span> 
+    <span class="nt">&lt;/trust-anchors&gt;</span> 
+  <span class="nt">&lt;/debug-overrides&gt;</span> 
+<span class="nt">&lt;/network-security-config&gt;</span>
+</code></pre></div></div>
+<p>Then add a reference to this file in your app’s manifest, as follows:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;manifest</span> <span class="err">...</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;application</span> <span class="na">android:networkSecurityConfig=</span><span class="s">"@xml/network_security_config"</span> <span class="err">...</span> <span class="nt">&gt;</span>
+        ...
+    <span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span>
+</code></pre></div></div>
+<h4 id="升级为系统ca证书步骤">升级为系统CA证书步骤</h4>
+<p><code class="language-plaintext highlighter-rouge">openssl x509 -inform PEM -subject_hash_old -in cacert.pem</code><br />
+通过openssl会在第一行生成一串hash值,87bc3517，然后将cacert.pem文件重新命名为87bc3517.0<br />
+<code class="language-plaintext highlighter-rouge">adb push 87bc3517.0 /data/local/tmp/</code><br />
+记住千万不要push到sdcard，不然用户组就会是sdcard_rw,push到/data/local/tmp/，用户组为shell，使用shell组CA证书才能在/system/etc/security/cacerts目录有效</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb shell
+su
+mount -o rw,remount /system
+cp -f /data/local/tmp/87bc3517.0 /system/etc/security/cacerts
+</code></pre></div></div>
+<p><img src="/blog/asset/crawler/fiddler2.png" alt="arch" class="center-image" /><em><code class="language-plaintext highlighter-rouge">fiddler</code></em><br />
+<img src="/blog/asset/crawler/charles2.png" alt="arch" class="center-image" /><em><code class="language-plaintext highlighter-rouge">charles</code></em></p>
+<h3 id="关于ca证书"><em class="header3-font">关于CA证书</em></h3>
+<p>  CA是Certificate Authorities(证书机构)的简称，CA证书就是有官方的、公认的机构提供的证书。主流的CA机构有Comodo、Symantec(DigiCert子公司)、GeoTrust(DigiCert子公司)、DigiCert、Thawte、GlobalSign、RapidSSL。CA证书的格式有很多种,可以看这个文章<a href="https://www.alibabacloud.com/help/zh/doc-detail/42214.htm">主流数字证书都有哪些格式？</a>。由于Android系统的framework由java语言编写，所以其App的签名使用的是java keystore。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x509公钥证书规范
+PKCS#7 是消息语法 （常用于数字签名与加密）
+PKCS#12 个人消息交换与打包语法 （如.PFX .P12）打包成带公钥与私钥
+
+jarsign工具签名时使用的是keystore文件
+signapk工具签名时使用的是pk8,x509.pem文件
+
+</code></pre></div></div>
+
+<h3 id="抓包原理"><em class="header3-font">抓包原理</em></h3>
+<p>  抓包软件通过通过这样一种模式来实现抓包的:客户端 &lt;–&gt;中间人&lt;—&gt;服务端<br />
+<img src="/blog/asset/crawler/ssl_tsl单向认证.png" alt="arch" class="center-image" /><em><code class="language-plaintext highlighter-rouge">ssl_tsl单向认证</code></em><br />
+  单向认证中是对于服务端的认证，所以为了通过认证服务端会下发一份CA证书给客户端校验，CA证书中包含了服务端的公钥pub_key等其他信息。通过了校验之后，客户端就会将自己的密钥premaster secert用pub_key加密发给服务端。服务端用private_key解密，然后双方用密钥key(由client random+server random+premaster secret共同生成)进行通过。期间服务端使用了非对称加密pub_key、private_key，客户端提供的密钥key是对称加密，解密CA证书使用了操作系统或者浏览器提供的CA证书公钥,CA证书密钥也是非对称，服务器需要通过CA机构(CA秘钥)获取加密之后的证书</p>
+
+<p>  双向认证是对于服务端和客户端的认证，为了验证客户端，在客户端校验完服务端的证书之后，客户端也要发送一份自己的证书给服务端校验。当服务端校验通过同时告知客户端加密方案，客户端就会发送密钥premaster secert给服务端，然后通信</p>
+
+<p>  Fiddler/Charles使用了Http代理进行抓包,Wireshark/tcpdump使用了网卡抓包，所以运行Wireshark的机器要要有一张无线网卡(360无线网卡)，用来给手机当做热点，这样才能抓到手机上面的包。</p>
+
+<h3 id="可扩展的抓包软件"><em class="header3-font">可扩展的抓包软件</em></h3>
+<p>还有更加“银杏”的抓包软件MITMProxy 、 HttpCanary 都是支持编写plugin来扩展功能</p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

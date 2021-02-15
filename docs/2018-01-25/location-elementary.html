@@ -1,0 +1,677 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-01-25/location-elementary">Location系统 --- 入门</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Thu, 25 Jan 2018 22:50:00 +0000</time> -->
+                  <time datetime='2018-01-25'>Thu, Jan 25 2018, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :4199</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/framework-design/location">framework-design/location</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#2about" id="markdown-toc-2about"><em class="header2-font">2.About</em></a></li>
+  <li><a href="#3introduction" id="markdown-toc-3introduction"><em class="header2-font">3.Introduction</em></a>    <ul>
+      <li><a href="#阅读api" id="markdown-toc-阅读api"><em class="header3-font">阅读API</em></a></li>
+      <li><a href="#location-策略" id="markdown-toc-location-策略"><em class="header3-font">Location 策略</em></a></li>
+    </ul>
+  </li>
+  <li><a href="#4reference" id="markdown-toc-4reference"><em class="header2-font">4.Reference</em></a></li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  我总是在思考一个问题，如果一件事情你重来没有做过，那么要如何才能入门并且熟练上手 ？ 我认为就是把API看几遍，把相关的资料看几遍。然后再去实践，不懂在回头查看之前的资料。那么现在就让我们先入门吧</p>
+
+<h2 id="2about"><em class="header2-font">2.About</em></h2>
+<p>  这一篇主要讲的是API的基本使用，以及一些定位的概念，不会涉及太深的实现原理。由于现如今定位库有很多，比如google、百度、高德、腾讯，已经拿到许可证的滴滴也在做自己的定位系统。然而Android提供的定位框架却更加值得我们去阅读学习，毕竟是开源项目。所以这里的API都是Android API，而不是google在Android开发者文档推荐自己的google API。</p>
+
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+<p>  要想使用定位，就必须通过<code class="language-plaintext highlighter-rouge">getSystemService(Context.LOCATION_SERVICE)</code>获得LocationManager对象，通过LocationManager对象可以做下面三件事</p>
+
+<ul>
+  <li>通过确定使用哪个LocationProvider去获取定位数据</li>
+  <li>注册来自LocationProvider的周期性更新数据的监听</li>
+  <li>注册用户进入指定的区域然后发送PendingIntent的监听</li>
+</ul>
+
+<p>看完上面三件事，其实我们可以猜出，定位数据都是通过注册监听器，然后让底层上报数据，而这些数据绝大部分都实现了Android推荐的序列化方式Parcelable。</p>
+
+<p>  所以让我们来看看底层都会给我们提供哪些数据。</p>
+
+<h3 id="阅读api"><em class="header3-font">阅读API</em></h3>
+<p>  <br />
+<img src="/blog/asset/2018-01-25/2018-01-25-location-system-api-overview.png" alt="" /></p>
+
+<p>  我们可以将其划分层以下几类</p>
+
+<p>位置：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Location：经纬度、时间戳、海拔、方位（bearing）等
+Geocoder：用于进行经纬度和地址两者互相转换的工具
+Address：地址
+</code></pre></div></div>
+
+<p>卫星：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GnssClock：获得时钟的偏差、时钟的漂移等数据
+GnssStatus：方位（azimuth）、 信道的载波频率(carrier frequency of the signal tracked)、载波噪音密度（carrier-to-noise density）、（elevation of the satellite）
+GnssMeasurement：通过该类可以获取两种类型的数据raw information 和 computed information。比如获得adr（accumulated delta range），getAccumulatedDeltaRangeMeters()和getAccumulatedDeltaRangeUncertaintyMeters()
+GnssNavigationMessage：获取gps 导航 message
+</code></pre></div></div>
+
+<p>回调接口：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GnssMeasurementsEvent.Callback：测绘的回调信息
+GnssNavigationMessage.Callback：导航的回调信息
+GnssStatus.Callback：卫星的状态回调。
+</code></pre></div></div>
+
+<h3 id="location-策略"><em class="header3-font">Location 策略</em></h3>
+<p>  <br />
+<img src="/blog/asset/2018-01-25/2018-01-25-location-system-location-strategies.png" alt="" /></p>
+
+<p>  上面是Android文档提供的最佳性能模型的timeline。那么如何做到最佳性能 ？</p>
+
+<ul>
+  <li>选择合适的Provider</li>
+  <li>及时关闭请求更新</li>
+  <li>获取更好的定位信息</li>
+</ul>
+
+<p>  1.选择合适的Provider：这个可以根据具体的情景来选择，通过Criteria可以实现选择。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nc">Criteria</span> <span class="n">criteria</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Criteria</span><span class="o">();</span>
+        <span class="n">criteria</span><span class="o">.</span><span class="na">setAccuracy</span><span class="o">(</span><span class="nc">Criteria</span><span class="o">.</span><span class="na">ACCURACY_COARSE</span><span class="o">);</span>
+        <span class="n">criteria</span><span class="o">.</span><span class="na">setAltitudeRequired</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">criteria</span><span class="o">.</span><span class="na">setBearingAccuracy</span><span class="o">(</span><span class="nc">Criteria</span><span class="o">.</span><span class="na">ACCURACY_HIGH</span><span class="o">);</span>
+        <span class="n">criteria</span><span class="o">.</span><span class="na">setPowerRequirement</span><span class="o">(</span><span class="nc">Criteria</span><span class="o">.</span><span class="na">POWER_HIGH</span><span class="o">);</span>
+</code></pre></div></div>
+<p>  2.及时关闭请求更新：由于定位获取数据是个比较耗费电量的操作，所以不使用定位时要及时关闭。通过<code class="language-plaintext highlighter-rouge">removeUpdates</code>方法可以及时的关闭请求更新。</p>
+
+<p>  3.获取更好的定位信息：通过getLastKnownLocation获取上次缓存的定位信息，再通过requestLocationUpdates获取最新定位信息，比较两者获取最好的信息。</p>
+
+<p>这边Android文档给了个挑选较好定位信息的例子。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TWO_MINUTES</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="o">;</span>
+
+<span class="cm">/** Determines whether one Location reading is better than the current Location fix
+  * @param location  The new Location that you want to evaluate
+  * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+  */</span>
+<span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isBetterLocation</span><span class="o">(</span><span class="nc">Location</span> <span class="n">location</span><span class="o">,</span> <span class="nc">Location</span> <span class="n">currentBestLocation</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">currentBestLocation</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// A new location is always better than no location</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Check whether the new location fix is newer or older</span>
+    <span class="kt">long</span> <span class="n">timeDelta</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="na">getTime</span><span class="o">()</span> <span class="o">-</span> <span class="n">currentBestLocation</span><span class="o">.</span><span class="na">getTime</span><span class="o">();</span>
+    <span class="kt">boolean</span> <span class="n">isSignificantlyNewer</span> <span class="o">=</span> <span class="n">timeDelta</span> <span class="o">&gt;</span> <span class="no">TWO_MINUTES</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">isSignificantlyOlder</span> <span class="o">=</span> <span class="n">timeDelta</span> <span class="o">&lt;</span> <span class="o">-</span><span class="no">TWO_MINUTES</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">isNewer</span> <span class="o">=</span> <span class="n">timeDelta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="c1">// If it's been more than two minutes since the current location, use the new location</span>
+    <span class="c1">// because the user has likely moved</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isSignificantlyNewer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="c1">// If the new location is more than two minutes older, it must be worse</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">isSignificantlyOlder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Check whether the new location fix is more or less accurate</span>
+    <span class="kt">int</span> <span class="n">accuracyDelta</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">location</span><span class="o">.</span><span class="na">getAccuracy</span><span class="o">()</span> <span class="o">-</span> <span class="n">currentBestLocation</span><span class="o">.</span><span class="na">getAccuracy</span><span class="o">());</span>
+    <span class="kt">boolean</span> <span class="n">isLessAccurate</span> <span class="o">=</span> <span class="n">accuracyDelta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">isMoreAccurate</span> <span class="o">=</span> <span class="n">accuracyDelta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">isSignificantlyLessAccurate</span> <span class="o">=</span> <span class="n">accuracyDelta</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="o">;</span>
+
+    <span class="c1">// Check if the old and new location are from the same provider</span>
+    <span class="kt">boolean</span> <span class="n">isFromSameProvider</span> <span class="o">=</span> <span class="n">isSameProvider</span><span class="o">(</span><span class="n">location</span><span class="o">.</span><span class="na">getProvider</span><span class="o">(),</span>
+            <span class="n">currentBestLocation</span><span class="o">.</span><span class="na">getProvider</span><span class="o">());</span>
+
+    <span class="c1">// Determine location quality using a combination of timeliness and accuracy</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isMoreAccurate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">isNewer</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isLessAccurate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">isNewer</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isSignificantlyLessAccurate</span> <span class="o">&amp;&amp;</span> <span class="n">isFromSameProvider</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/** Checks whether two providers are the same */</span>
+<span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isSameProvider</span><span class="o">(</span><span class="nc">String</span> <span class="n">provider1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">provider2</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">provider1</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">provider2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">provider1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">provider2</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>看完上面的代码我们可以知道通过<code class="language-plaintext highlighter-rouge">时间间隔</code>、<code class="language-plaintext highlighter-rouge">精确度</code>来判断哪个定位数据更有用。其实有时候我们还需要考虑其他因素。</p>
+
+<h2 id="4reference"><em class="header2-font">4.Reference</em></h2>
+<p><a href="https://developer.android.com/guide/topics/location/strategies.html">Location Strategies</a><br />
+<a href="https://developer.android.com/guide/topics/sensors/gnss.html">Raw GNSS Measurements</a><br />
+<a href="http://unclechen.github.io/2016/09/02/Android%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E8%A7%A3%E6%9E%90/">Android地理位置服务解析</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-01-25/location-elementary" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-01-25/location-elementary&text=Location系统 --- 入门" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-01-25/location-elementary&title=Location系统 --- 入门&summary=基本API使用&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=Location系统 --- 入门&body=基本API使用 https://jamesfchen.github.io/2018-01-25/location-elementary" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2018-01-25/location-elementary";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

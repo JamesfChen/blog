@@ -1,0 +1,635 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-03-15/service-ams-component">Framework层的服务 --- AMS管理四大组件</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Thu, 15 Mar 2018 00:00:00 +0000</time> -->
+                  <time datetime='2018-03-15'>Thu, Mar 15 2018, 00:00</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :3838</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/framework-design/service">framework-design/service</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#2about" id="markdown-toc-2about"><em class="header2-font">2.About</em></a></li>
+  <li><a href="#3introduction" id="markdown-toc-3introduction"><em class="header2-font">3.Introduction</em></a>    <ul>
+      <li><a href="#activity" id="markdown-toc-activity"><em class="header3-font">Activity</em></a></li>
+      <li><a href="#service" id="markdown-toc-service"><em class="header3-font">Service</em></a></li>
+      <li><a href="#broadcastreceiver" id="markdown-toc-broadcastreceiver"><em class="header3-font">BroadcastReceiver</em></a></li>
+      <li><a href="#contentprovider" id="markdown-toc-contentprovider"><em class="header3-font">ContentProvider</em></a></li>
+    </ul>
+  </li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  在了解了AMS的启动流程之后，我们就需要开始了解运行中的AMS是如何管理四大组件的。所以这一篇会通过图形的方式带领大家了解怎么管理的。</p>
+<h2 id="2about"><em class="header2-font">2.About</em></h2>
+<p>  在此之前我们需要知道一些背景知识</p>
+
+<p>1.Handler</p>
+
+<p>  Handler在Android线程通讯中起着重要的作用，所以下面我罗列了一堆的Handler。</p>
+
+<table class="inner-borders">
+  <thead>
+    <tr>
+      <th>framework层Handler</th>
+      <th>运行线程</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AMS.mUiHandler(UiHandler)</td>
+      <td>android.ui</td>
+    </tr>
+    <tr>
+      <td>AMS.mBgHandler(Handler)</td>
+      <td>android.bg</td>
+    </tr>
+    <tr>
+      <td>AMS.sKillHandler(KillHandler)</td>
+      <td>ActivityManagerService：kill</td>
+    </tr>
+    <tr>
+      <td>AMS.mHandler(MainHandler)</td>
+      <td>ActivityManagerService</td>
+    </tr>
+    <tr>
+      <td>ASS.mHandler(ActivityStackSupervisorHandler)</td>
+      <td>ActivityManagerService</td>
+    </tr>
+    <tr>
+      <td>AS.mHandler(ActivityStackHandler)</td>
+      <td>ActivityManagerService</td>
+    </tr>
+    <tr>
+      <td>BroadcastQueue.mHandler(BroadcastHandler)</td>
+      <td>ActivityManagerService</td>
+    </tr>
+    <tr>
+      <td>ActiveServices.mServiceMap(ServiceMap)</td>
+      <td>ActivityManagerService</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>AMS：ActivityManagerService</li>
+  <li>ASS：ActivityStackSupervisor</li>
+  <li>AS：ActivityStack</li>
+</ul>
+
+<table class="inner-borders">
+  <thead>
+    <tr>
+      <th>Application层Handler</th>
+      <th>运行线程</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AT.mH(H)</td>
+      <td>main (UI线程)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>2.ApplicationThread<br />
+  ApplicationThread(IApplicationThread.Stub)为ActivityThread接收来自于服务端的响应，四大组件就是通过ApplicationThread接收了服务端的消息，从而实现了其调度。</p>
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+
+<h3 id="activity"><em class="header3-font">Activity</em></h3>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-activity.png" alt="" /></p>
+
+<p>启动流程：<br />
+1.调用者进程通过AMS这个Framework端Binder将启动另一个Activity的信息传给system_server进程。<br />
+2.ActivityStarter处理了这些intent和flag等信息之后，然后交给ActivityStackSupervisior/ActivityStack去处理被调用进程的Activity进栈。如果被调用者进程存在，就会使用ApplicationThread这个Application端Binder通知已存在的被调用者进程启动Activity。如果被调用者进程不存在，就会使用Socket通知Zygote进程fork出一个进程，用来承载即将启动的Activity。<br />
+3.在新的进程里面会创建ActivityThread对象，完成开启主线程loop、ApplicationThread依附在AMS、初始化Context、Application等工作，并且通过Classload加载Activity，创建Activity对象，完成Activity生命周期的调用。</p>
+
+<p>  接下来我们细致讲解一下Application层和Framework层各个角色。</p>
+
+<p>先来一张图熟悉一下Framework层的启动流程，认识一下几个重要的角色</p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-activity-2.png" alt="" class="white-bg-image" /></p>
+
+<p>ActivityStarter：决定了intent和flag如何打开Activity和关联task、stack</p>
+
+<p>ActivityStack：管理者Activity</p>
+
+<p>ActivityStack管理Activity生命周期相关的几个方法。</p>
+
+<ul>
+  <li>startActivityLocked()</li>
+  <li>resumeTopActivityLocked()</li>
+  <li>completeResumeLocked()</li>
+  <li>startPausingLocked()</li>
+  <li>completePauseLocked()</li>
+  <li>stopActivityLocked()</li>
+  <li>activityPausedLocked()</li>
+  <li>finishActivityLocked()</li>
+  <li>activityDestroyedLocked()</li>
+</ul>
+
+<p>ActivityStackSupervisor：由于多屏功能的出现，就需要ActivityStackSupervisor这么一个类来管理ActivityStack。</p>
+
+<p>下面就是管理Activity的关系图了。</p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-activity-4.png" alt="" class="white-bg-image" /></p>
+
+<p>  在应用层，Activity的生命周期如下：</p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-activity-3.png" alt="" /></p>
+
+<p>我们可以看到，在performResume方法也就是Activity的resume阶段之后才会将View通过addView呈现在屏幕上。所以唯有handleResumeActivity执行完，View才是可见的。也就是Activity#onResum的方法中，View并不是可见的，而应该是Resumed才可见。</p>
+
+<h3 id="service"><em class="header3-font">Service</em></h3>
+
+<p>Service的启动流程</p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-service-start1.png" alt="" /></p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-service-start2.png" alt="" class="white-bg-image" /></p>
+
+<p>启动流程：<br />
+1.调用者进程通过AMS这个Framework端Binder将启动另一个Service的信息传给system_server进程。<br />
+2.ActiveService会处理即将启动的Service的信息。如果被调用者进程存在，就会使用ApplicationThread这个Application端Binder通知已存在的被调用者进程启动Service。如果被调用者进程不存在，就会使用Socket通知Zygote进程fork出一个进程，用来承载即将启动的Service。<br />
+3.在新的进程里面会创建ActivityThread对象，完成开启主线程loop、ApplicationThread依附在AMS、初始化Context、Application等工作，并且通过Classload加载Service，创建Service对象，完成Service生命周期的调用。</p>
+
+<p>Service的绑定流程</p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-service-bind1.png" alt="" /></p>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-service-bind2.png" alt="" class="white-bg-image" /></p>
+
+<p>启动流程：<br />
+1.调用者进程通过AMS这个Framework端Binder将绑定另一个Service的信息传给system_server进程。<br />
+2.ActiveService会处理即将启动的Service的信息。如果被调用者进程存在，就会使用ApplicationThread这个Application端Binder通知已存在的被调用者进程启动Service。如果被调用者进程不存在，就会使用Socket通知Zygote进程fork出一个进程，用来承载即将启动的Service。<br />
+3.在新的进程里面会创建ActivityThread对象，完成开启主线程loop、ApplicationThread依附在AMS、初始化Context、Application等工作，并且通过Classload加载Service，创建Service对象，紧接着通过AMS将正在绑定的Service对客户端提供的Binder接口传给Application端的InnerConnection这个Binder，InnerConnection会让ServiceDispatcher这个派发人去分发Binder，从而实现了绑定的工作。</p>
+
+<h3 id="broadcastreceiver"><em class="header3-font">BroadcastReceiver</em></h3>
+
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-broadcastreceiver-1.png" alt="" /></p>
+
+<p>广播的动态注册是在AMS中使用Map数据结构将InnerReceiver作为key，ReceiverList（DeathRecipient子类）作为value保存起来</p>
+
+<p>发送有序广播<br />
+<img src="/blog/asset/2018-03-15/2018-03-15-launch-broadcastreceiver-2.png" alt="" class="white-bg-image" /></p>
+
+<p>启动流程：<br />
+1.调用者进程通过AMS这个Framework端Binder将广播的信息传给system_server进程。<br />
+2.BroadcastQueue通过内部类BroadcastHandler向已经注册广播的应用发送消息，要么通过for循环发送普通广播，要么通过方法递归发送有序广播。如果被调用者进程存在，就会使用ApplicationThread这个Application端Binder通知已存在的被调用者进程接受广播。如果被调用者进程不存在，就会使用Socket通知Zygote进程fork出一个进程，用来承载即将接受广播的Receiver。<br />
+3.在新的进程里面会创建ActivityThread对象，完成开启主线程loop、ApplicationThread依附在AMS、初始化Context、Application等工作，并且通过Classload加载BroadcastReceiver，创建BroadcastReceiver对象，完成BroadcastReceiver生命周期的调用。</p>
+
+<h3 id="contentprovider"><em class="header3-font">ContentProvider</em></h3>
+<p><img src="/blog/asset/2018-03-15/2018-03-15-launch-contentprovider.png" alt="" /></p>
+
+<!-- 启动流程：
+1.调用者进程通过AMS这个Framework端Binder将广播的信息传给system_server进程。
+2.BroadcastQueue通过内部类BroadcastHandler向已经注册广播的应用发送消息，要么通过for循环发送普通广播，要么通过方法递归发送有序广播。如果被调用者进程存在，就会使用ApplicationThread这个Application端Binder通知已存在的被调用者进程接受广播。如果被调用者进程不存在，就会使用Socket通知Zygote进程fork出一个进程，用来承载即将接受广播的Receiver。
+3.在新的进程里面会创建ActivityThread对象，完成开启主线程loop、ApplicationThread依附在AMS、初始化Context、Application等工作，并且通过Classload加载BroadcastReceiver，创建BroadcastReceiver对象，完成BroadcastReceiver生命周期的调用。 -->
+
+<!-- ## *4.Reference*{:.header2-font} -->
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

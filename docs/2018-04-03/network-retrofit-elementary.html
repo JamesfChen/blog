@@ -1,0 +1,795 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-04-03/network-retrofit-elementary">网络 --- Retrofit的使用</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Tue, 03 Apr 2018 22:50:00 +0000</time> -->
+                  <time datetime='2018-04-03'>Tue, Apr 03 2018, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :7520</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/app-design/network">app-design/network</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#2introduction" id="markdown-toc-2introduction"><em class="header2-font">2.Introduction</em></a>    <ul>
+      <li><a href="#retrofit-注解类" id="markdown-toc-retrofit-注解类"><em class="header3-font">Retrofit 注解类</em></a>        <ul>
+          <li><a href="#请求的方法" id="markdown-toc-请求的方法">请求的方法</a></li>
+          <li><a href="#请求header" id="markdown-toc-请求header">请求header</a></li>
+          <li><a href="#请求body" id="markdown-toc-请求body">请求body</a></li>
+          <li><a href="#url相关" id="markdown-toc-url相关">url相关</a></li>
+        </ul>
+      </li>
+      <li><a href="#retrofit-转化器适配器" id="markdown-toc-retrofit-转化器适配器"><em class="header3-font">Retrofit 转化器、适配器</em></a>        <ul>
+          <li><a href="#converter" id="markdown-toc-converter">Converter</a></li>
+          <li><a href="#adapter" id="markdown-toc-adapter">Adapter</a></li>
+          <li><a href="#原理" id="markdown-toc-原理">原理</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  Retrofit是由Square公司出品，基于OkHttp做的一层Restful API，关于什么是Restful API,请参考这一篇文章<a href="http://www.ruanyifeng.com/blog/2011/09/restful.html">理解RESTful架构</a>,闲话不多说，进入主题</p>
+
+<h2 id="2introduction"><em class="header2-font">2.Introduction</em></h2>
+<h3 id="retrofit-注解类"><em class="header3-font">Retrofit 注解类</em></h3>
+<p><img src="/blog/asset/network/retrofit-annotation.png" alt="network" /></p>
+<h4 id="请求的方法">请求的方法</h4>
+<hr />
+<p>GET/HEAD POST/PUT/PATCH DELETE  OPTIONS   HTTP( custom method )</p>
+
+<ul>
+  <li>GET:会放回数据</li>
+  <li>HEAD:不会放回数据</li>
+  <li>POST:不会在原有资源基础上进行更新，会重新生成资源</li>
+  <li>PUT:会在原有资源基础上进行更新</li>
+  <li>PATCH:局部更新<br />
+<br /></li>
+</ul>
+
+<h4 id="请求header">请求header</h4>
+<hr />
+<ul>
+  <li>Header、Headers:手动配置死了</li>
+  <li>HeaderMap:比较灵活，可以通过代码配置<br />
+<br /></li>
+</ul>
+
+<h4 id="请求body">请求body</h4>
+<hr />
+<ul>
+  <li>Body  <br />
+ps:Converter.Factory 和Converter用于转换被Body注解的对象，比如将对象转换成json；将对象转换成xml，将对象转换成字符串。除了处理请求body，还能处理响应的body以什么方式被读取。请求方法中最大的不同就在于它们的请求body了。</li>
+</ul>
+
+<p>下面是请求方法的body讨论：</p>
+<ol>
+  <li>get的请求body<br />
+一般比较少用</li>
+  <li>post/put/patch的请求body<br />
+可以上传的数据类型有下列几种
+    <ul>
+      <li>body encoding发送 FormUrlEncoded ( Field FieldMap )</li>
+      <li>表单发送 Multipart ( Part PartMap )<br />
+<br /></li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="url相关">url相关</h4>
+<hr />
+<p>Path Query QueryMap QueryName  Url</p>
+
+<p>Streaming 采用分块传输的方式传输大文件，就是流模式取代缓存模式，通常在header中添加<code class="language-plaintext highlighter-rouge">Transfer-Encoding: chunked</code>信息，Http默认采用的是缓存模式，通常在header中添加<code class="language-plaintext highlighter-rouge">Content-Length: 3495</code></p>
+
+<h3 id="retrofit-转化器适配器"><em class="header3-font">Retrofit 转化器、适配器</em></h3>
+
+<h4 id="converter">Converter</h4>
+<hr />
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Converter</span><span class="o">&lt;</span><span class="no">F</span><span class="o">,</span> <span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="no">T</span> <span class="nf">convert</span><span class="o">(</span><span class="no">F</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">;</span>
+
+ 
+  <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Factory</span> <span class="o">{</span>
+    
+    <span class="c1">//响应的body转换</span>
+    <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="nc">Converter</span><span class="o">&lt;</span><span class="nc">ResponseBody</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">responseBodyConverter</span><span class="o">(</span><span class="nc">Type</span> <span class="n">type</span><span class="o">,</span>
+        <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="nc">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">//请求的body转换</span>
+    <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="nc">Converter</span><span class="o">&lt;?,</span> <span class="nc">RequestBody</span><span class="o">&gt;</span> <span class="nf">requestBodyConverter</span><span class="o">(</span><span class="nc">Type</span> <span class="n">type</span><span class="o">,</span>
+        <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">parameterAnnotations</span><span class="o">,</span> <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">methodAnnotations</span><span class="o">,</span> <span class="nc">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">//用于处理url</span>
+    <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="nc">Converter</span><span class="o">&lt;?,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="nf">stringConverter</span><span class="o">(</span><span class="nc">Type</span> <span class="n">type</span><span class="o">,</span> <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span>
+        <span class="nc">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  利用工厂模式创建Converter，通过override Converter的convert方法，从而达到数据的类型的转换。<br />
+网络数据交互发展历史可以看下面</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SOP:HTTP+XML(过去)
+REST:HTTP+JSON(现在)
+gRPC+protobuf(未来) ​​​​
+</code></pre></div></div>
+<p>服务端可以给我们传xml、json、protobuf等格式的数据，但是我们希望被映射成对象，更加的便于我们理解和操作对象。这个时候我们可以自己写一些convert，将xml/json/protobuf转换成对象。</p>
+
+<p>来看个例子：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">Service</span> <span class="o">{</span>
+    <span class="nd">@POST</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">AnImplementation</span><span class="o">&gt;</span> <span class="nf">anImplementation</span><span class="o">(</span><span class="nd">@Body</span> <span class="nc">AnImplementation</span> <span class="n">impl</span><span class="o">);</span>
+    <span class="nd">@POST</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">AnInterface</span><span class="o">&gt;</span> <span class="nf">anInterface</span><span class="o">(</span><span class="nd">@Body</span> <span class="nc">AnInterface</span> <span class="n">impl</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">GsonConverterFactory</span> <span class="kd">extends</span> <span class="nc">Converter</span><span class="o">.</span><span class="na">Factory</span> <span class="o">{</span>
+  
+ <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Converter</span><span class="o">&lt;</span><span class="nc">ResponseBody</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">responseBodyConverter</span><span class="o">(</span><span class="nc">Type</span> <span class="n">type</span><span class="o">,</span> <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span>
+                                                            <span class="nc">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">TypeAdapter</span><span class="o">&lt;?&gt;</span> <span class="n">adapter</span> <span class="o">=</span> <span class="n">gson</span><span class="o">.</span><span class="na">getAdapter</span><span class="o">(</span><span class="nc">TypeToken</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">type</span><span class="o">));</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">GsonResponseBodyConverter</span><span class="o">&lt;&gt;(</span><span class="n">gson</span><span class="o">,</span> <span class="n">adapter</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">final</span> <span class="kd">class</span> <span class="nc">GsonResponseBodyConverter</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="nc">Converter</span><span class="o">&lt;</span><span class="nc">ResponseBody</span><span class="o">,</span> <span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Gson</span> <span class="n">gson</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="nc">TypeAdapter</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">adapter</span><span class="o">;</span>
+
+  <span class="nc">GsonResponseBodyConverter</span><span class="o">(</span><span class="nc">Gson</span> <span class="n">gson</span><span class="o">,</span> <span class="nc">TypeAdapter</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">adapter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">gson</span> <span class="o">=</span> <span class="n">gson</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">adapter</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span> <span class="kd">public</span> <span class="no">T</span> <span class="nf">convert</span><span class="o">(</span><span class="nc">ResponseBody</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+    <span class="nc">JsonReader</span> <span class="n">jsonReader</span> <span class="o">=</span> <span class="n">gson</span><span class="o">.</span><span class="na">newJsonReader</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">charStream</span><span class="o">());</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">adapter</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">jsonReader</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">value</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>当我们定义了Response的类型为AnImplementation/AnInterface时，通过Gson库将服务端返回的json数据转换成AnImplementation/AnInterface对象</p>
+
+<div class="language-protobuf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">retrofit2</span><span class="o">.</span><span class="n">converter.protobuf</span><span class="p">;</span>
+
+<span class="k">option</span> <span class="na">java_package</span> <span class="o">=</span> <span class="s">"retrofit2.converter.protobuf"</span><span class="p">;</span>
+<span class="k">option</span> <span class="na">java_outer_classname</span> <span class="o">=</span> <span class="s">"PhoneProtos"</span><span class="p">;</span>
+
+<span class="kd">message</span> <span class="nc">Phone</span> <span class="p">{</span>
+  <span class="k">optional</span> <span class="kt">string</span> <span class="na">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+  <span class="k">extensions</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">extend</span> <span class="nc">Phone</span> <span class="p">{</span>
+  <span class="k">optional</span> <span class="kt">bool</span> <span class="na">voicemail</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">interface</span> <span class="nc">Service</span> <span class="o">{</span>
+    <span class="nd">@GET</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">Phone</span><span class="o">&gt;</span> <span class="nf">get</span><span class="o">();</span>
+    <span class="nd">@POST</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">Phone</span><span class="o">&gt;</span> <span class="nf">post</span><span class="o">(</span><span class="nd">@Body</span> <span class="nc">Phone</span> <span class="n">impl</span><span class="o">);</span>
+    <span class="nd">@GET</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">wrongClass</span><span class="o">();</span>
+    <span class="nd">@GET</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="nf">wrongType</span><span class="o">();</span>
+  <span class="o">}</span>
+  <span class="kd">interface</span> <span class="nc">ServiceWithRegistry</span> <span class="o">{</span>
+    <span class="nd">@GET</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="nc">Call</span><span class="o">&lt;</span><span class="nc">Phone</span><span class="o">&gt;</span> <span class="nf">get</span><span class="o">();</span>
+  <span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">ProtoConverterFactory</span> <span class="kd">extends</span> <span class="nc">Converter</span><span class="o">.</span><span class="na">Factory</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">Converter</span><span class="o">&lt;</span><span class="nc">ResponseBody</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">responseBodyConverter</span><span class="o">(</span><span class="nc">Type</span> <span class="n">type</span><span class="o">,</span> <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span>
+      <span class="nc">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(!(</span><span class="n">type</span> <span class="k">instanceof</span> <span class="nc">Class</span><span class="o">&lt;?&gt;))</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Class</span><span class="o">&lt;?&gt;)</span> <span class="n">type</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="nc">MessageLite</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">c</span><span class="o">))</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nc">Parser</span><span class="o">&lt;</span><span class="nc">MessageLite</span><span class="o">&gt;</span> <span class="n">parser</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="nc">Method</span> <span class="n">method</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">"parser"</span><span class="o">);</span>
+      <span class="c1">//noinspection unchecked</span>
+      <span class="n">parser</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Parser</span><span class="o">&lt;</span><span class="nc">MessageLite</span><span class="o">&gt;)</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InvocationTargetException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getCause</span><span class="o">());</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">NoSuchMethodException</span> <span class="o">|</span> <span class="nc">IllegalAccessException</span> <span class="n">ignored</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// If the method is missing, fall back to original static field for pre-3.0 support.</span>
+      <span class="k">try</span> <span class="o">{</span>
+        <span class="nc">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"PARSER"</span><span class="o">);</span>
+        <span class="c1">//noinspection unchecked</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Parser</span><span class="o">&lt;</span><span class="nc">MessageLite</span><span class="o">&gt;)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">NoSuchFieldException</span> <span class="o">|</span> <span class="nc">IllegalAccessException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Found a protobuf message but "</span>
+            <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span>
+            <span class="o">+</span> <span class="s">" had no parser() method or PARSER field."</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nc">ProtoResponseBodyConverter</span><span class="o">&lt;&gt;(</span><span class="n">parser</span><span class="o">,</span> <span class="n">registry</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="nc">ProtoResponseBodyConverter</span><span class="o">&lt;</span><span class="no">T</span> <span class="kd">extends</span> <span class="nc">MessageLite</span><span class="o">&gt;</span>
+    <span class="kd">implements</span> <span class="nc">Converter</span><span class="o">&lt;</span><span class="nc">ResponseBody</span><span class="o">,</span> <span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Parser</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">parser</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="nd">@Nullable</span> <span class="nc">ExtensionRegistryLite</span> <span class="n">registry</span><span class="o">;</span>
+
+  <span class="nc">ProtoResponseBodyConverter</span><span class="o">(</span><span class="nc">Parser</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">parser</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nc">ExtensionRegistryLite</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">parser</span> <span class="o">=</span> <span class="n">parser</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">registry</span> <span class="o">=</span> <span class="n">registry</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span> <span class="kd">public</span> <span class="no">T</span> <span class="nf">convert</span><span class="o">(</span><span class="nc">ResponseBody</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="na">parseFrom</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">byteStream</span><span class="o">(),</span> <span class="n">registry</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InvalidProtocolBufferException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span> <span class="c1">// Despite extending IOException, this is data mismatch.</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">value</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="adapter">Adapter</h4>
+<hr />
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CallAdapter</span><span class="o">&lt;</span><span class="no">R</span><span class="o">,</span> <span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+ 
+  <span class="nc">Type</span> <span class="nf">responseType</span><span class="o">();</span>
+
+  <span class="no">T</span> <span class="nf">adapt</span><span class="o">(</span><span class="nc">Call</span><span class="o">&lt;</span><span class="no">R</span><span class="o">&gt;</span> <span class="n">call</span><span class="o">);</span>
+
+  
+  <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Factory</span> <span class="o">{</span>
+    
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="nd">@Nullable</span> <span class="nc">CallAdapter</span><span class="o">&lt;?,</span> <span class="o">?&gt;</span> <span class="n">get</span><span class="o">(</span><span class="nc">Type</span> <span class="n">returnType</span><span class="o">,</span> <span class="nc">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span>
+        <span class="nc">Retrofit</span> <span class="n">retrofit</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>通过抽象工程模式创建Adapter。然后将Call适配成其他类型。</p>
+
+<h4 id="原理">原理</h4>
+<p>Retrofit通过动态代理，代理网络请求的接口。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Method</span><span class="o">,</span> <span class="nc">ServiceMethod</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">serviceMethodCache</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ConcurrentHashMap</span><span class="o">&lt;&gt;();</span>
+  <span class="kd">public</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="no">T</span> <span class="nf">create</span><span class="o">(</span><span class="kd">final</span> <span class="nc">Class</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">validateServiceInterface</span><span class="o">(</span><span class="n">service</span><span class="o">);</span>
+    <span class="k">return</span> <span class="o">(</span><span class="no">T</span><span class="o">)</span> <span class="nc">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">service</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">Class</span><span class="o">&lt;?&gt;[]</span> <span class="o">{</span> <span class="n">service</span> <span class="o">},</span>
+        <span class="k">new</span> <span class="nf">InvocationHandler</span><span class="o">()</span> <span class="o">{</span>
+          <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Platform</span> <span class="n">platform</span> <span class="o">=</span> <span class="nc">Platform</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+          <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">emptyArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Object</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+
+          <span class="nd">@Override</span> <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="nc">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="nc">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span>
+              <span class="nd">@Nullable</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+            <span class="c1">// If the method is a method from Object then defer to normal invocation.</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">method</span><span class="o">.</span><span class="na">getDeclaringClass</span><span class="o">()</span> <span class="o">==</span> <span class="nc">Object</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+              <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">platform</span><span class="o">.</span><span class="na">isDefaultMethod</span><span class="o">(</span><span class="n">method</span><span class="o">))</span> <span class="o">{</span>
+              <span class="k">return</span> <span class="n">platform</span><span class="o">.</span><span class="na">invokeDefaultMethod</span><span class="o">(</span><span class="n">method</span><span class="o">,</span> <span class="n">service</span><span class="o">,</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="nf">loadServiceMethod</span><span class="o">(</span><span class="n">method</span><span class="o">).</span><span class="na">invoke</span><span class="o">(</span><span class="n">args</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">args</span> <span class="o">:</span> <span class="n">emptyArgs</span><span class="o">);</span>
+          <span class="o">}</span>
+        <span class="o">});</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+<p>通过RequestFactory#parseAnnotations解析定义在接口中的具备描述API的注解,invoke调用请求接口。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">CallAdapted</span><span class="o">&lt;</span><span class="nc">ResponseT</span><span class="o">,</span> <span class="nc">ReturnT</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">HttpServiceMethod</span><span class="o">&lt;</span><span class="nc">ResponseT</span><span class="o">,</span> <span class="nc">ReturnT</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">CallAdapter</span><span class="o">&lt;</span><span class="nc">ResponseT</span><span class="o">,</span> <span class="nc">ReturnT</span><span class="o">&gt;</span> <span class="n">callAdapter</span><span class="o">;</span>
+    <span class="o">...</span>
+
+    <span class="nd">@Override</span> <span class="kd">protected</span> <span class="nc">ReturnT</span> <span class="nf">adapt</span><span class="o">(</span><span class="nc">Call</span><span class="o">&lt;</span><span class="nc">ResponseT</span><span class="o">&gt;</span> <span class="n">call</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">callAdapter</span><span class="o">.</span><span class="na">adapt</span><span class="o">(</span><span class="n">call</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+<p>通过Adapter模式，将Call转换成其他类。Adapter需要有Factor构建</p>
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-04-03/network-retrofit-elementary" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-04-03/network-retrofit-elementary&text=网络 --- Retrofit的使用" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-04-03/network-retrofit-elementary&title=网络 --- Retrofit的使用&summary=&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=网络 --- Retrofit的使用&body= https://jamesfchen.github.io/2018-04-03/network-retrofit-elementary" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

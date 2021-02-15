@@ -1,0 +1,716 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-02-11/2017summary">2017年总结</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Sun, 11 Feb 2018 23:50:00 +0000</time> -->
+                  <time datetime='2018-02-11'>Sun, Feb 11 2018, 23:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :5701</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/呓语">呓语</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <p><img src="/blog/asset/avatar.png" alt="" class="center-image" /><em><code class="language-plaintext highlighter-rouge">我眼中的世界</code></em></p>
+<audio class="center-image" controls="controls" autoplay="autoplay" loop="loop" preload="metadata">
+    <source src="/blog/asset/summary/2017/1967.mp3" type="audio/mpeg" />
+    <b>Your browser does not support HTML5 audio element</b>
+</audio>
+<p><code class="language-plaintext highlighter-rouge">Revision</code></p>
+
+<ol>
+  <li>这篇文章第一次被修改
+    <ul>
+      <li>调整整体的年份，去掉 2016 之前的年份，从 2016 年开始论述。</li>
+      <li>去掉了一些消极的文字，增加文章整体的可读性。</li>
+    </ul>
+  </li>
+  <li>这篇文章第二次被修改
+    <ul>
+      <li>修改一些语法问题。</li>
+    </ul>
+  </li>
+  <li>由于强迫症所致，这篇文章第三次被修改
+    <ul>
+      <li>增加图片，使得整体更具观赏性。</li>
+      <li>调整 2016 年的部分表达，去掉一些口水文字。</li>
+      <li>增加 2017 年的<code class="language-plaintext highlighter-rouge">"旅游 &amp; 音乐 &amp; 动漫"</code>板块，去掉 2017 年<code class="language-plaintext highlighter-rouge">"价值观"</code>板块。</li>
+    </ul>
+  </li>
+  <li>强迫症 V4.0 版本，这篇文章第四次被我修改
+    <ul>
+      <li>由于还没有系统的深入调查，所以去掉动漫的评价，以免误人子弟。</li>
+      <li>重新整理 2018 年的任务表单。<br />
+  <!-- - 增加2017年的`"杂念"`板块 --></li>
+    </ul>
+  </li>
+  <li>这篇文章第五次被我修改
+    <ul>
+      <li>2017 年末尾，孑然一身的时候听到一句最为伤感的话<code class="language-plaintext highlighter-rouge">生而为人，我很抱歉</code></li>
+    </ul>
+  </li>
+  <li>这篇文章第六次被我修改
+    <ul>
+      <li>2018 年的 5 月 20 号，一个人在家中，想最近的很多事，没想通，然后就来这里看看我之前留下来的总结，看完心里就有了这个曲子。</li>
+      <li>添加背景音乐。</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<p>  都说万事开头难，写这种文章也是一样的，由于第一次试水，所以给这篇文章定基调、定内容显得格外的生疏。既不能像文科生那样优雅的开头，也不能像理科生那样过于严肃的开头。想了很久，最后打算用这样一种不三不四的开头来定基调。</p>
+
+<p>  我自己就很喜欢古文学，但却不适合做文艺相关的工作。小学写日记，初高中写空间日志，大学就荒废了写字的习惯。现在又想重新写点东西，写文艺内容自己又不爱做梦，写推理内容脑子又不够用，思来想去，写总结就成了一种退无可退的最合适的选择。既然想法已经有了，那就在自己搭建的博客网站试验一下吧，也希望通过这一次的试验，能把这件事情坚持下去。流年太快容易遗忘一些东西，写点东西记录一下，孰好孰坏坦然面对才不至于忘得太快。</p>
+
+<p>  由于我是从 2016 年开始步入社会参加工作，所以就从 2016 年开始讲起吧。</p>
+
+<h1 id="2016-年"><em class="header2-font">2016 年</em></h1>
+
+<hr />
+
+<p><img src="/blog/asset/summary/2017/2018-02-11-school.jpeg" alt="" class="center-image" /><em>(°0°)</em></p>
+
+<p>  2016 年是人生一个重要的跨度，结束学生时代，开始工作生涯，象征着一种身份的转变，理应承担更多的责任，这一年里发生了很多事情。</p>
+
+<h2 id="学习"><em class="header3-font">学习</em></h2>
+
+<p>  开始搭建自己的博客网站，希望用来记录自己的技术知识，追求质量注入自己的思考，而不是一味地追求数量，搬移别人的内容和停留在认识层面。但是由于缺乏合理的时间管理，结果这一年产量不高。这一年说来也挺忙，在忙实习，忙毕业论文，忙考证，忙着看书，忙送别。现在细细想来已经不如大一大二那样轻松自在、任性自由。</p>
+
+<p>  也是这一年才明白，大学应该有自己的知识管理。在大学前二分之一的时光里，无目的无组织无计划无主题地看了很多杂书、电影、动漫、纪录片，走过很多省份的路，喝过很多地方的酒，认识很多火车上的异乡人，听了很多语种的歌，收藏了很多乐器的音乐，虽然说开拓了视野但是并没有形成系统性的知识，都在消费碎片，却没有总结碎片，所以认识事物必然存在局限性。不过好在这些人生经验也给我以后的道路和性格提供了猪养料。</p>
+
+<p>  2016 年，最渴望的就是看更多的书，从而改变自身的地位以及自己的见识。<del>（文科生忽略这一条：不过 2017 年否定了这个观点，它俩不是充分条件，而是具有相关性的离散点，点在方程式可能成立可能不成立。但是如果不努力学习其中的规律又怎么能让自己这个已偏离的点到达具有相关性的位置）</del></p>
+
+<h2 id="毕业"><em class="header3-font">毕业</em></h2>
+
+<p>  这一年最为压抑的莫过于毕业，这个地方承载了大学四年的回忆。地域文化不同的矛盾，个性不同的矛盾，共同经历离别的不舍，还有那些在 xxx 中心狗了日的日子等等。反正自己没有走过的都去尝试了一下，结果确实不合适。现在觉得尽力做些力所能及的事就是一种知足。这里小小吹个牛逼，最爱的、最让我不舍的就是图书馆里的书和桌子，她们不辞辛苦、任劳任怨地陪我度过了孤独而又彷徨的四年。说实话睡了四年，没有感情是不可能的。说到这里，我的床指定会不服，她才是陪我最长的。说得都对都是我的挚爱，但是我的口水却是桌子和书帮我擦的。</p>
+
+<p><del>举个栗子，刚进大学，就想着去兼职，结果被中介坑骗了两百多块。当时交完钱以为自己以后就要步入社会挣钱是件很幸福的事情，现在想想真是年少无知，不过这样也好，这算是我这个 sb 给上帝交的学费。自己被陌生人坑还能忍受，但是被身边的人坑却是一件让你怀疑人生的事情。所以那会开始看书找寻答案，天天泡在图书馆，自己能不能适应这个社会都是个未知数。这一年，面对过去的大学四年，面对社会，我仍然保留初心，不要因为社会对你怎么样你就变成他那个样子，尽管我的外表已经变化了，我的底线被拉低了，但是还是会留有一份净土。感谢老罗的话让我找到了答案。</del></p>
+
+<h2 id="行业"><em class="header3-font">行业</em></h2>
+
+<p>  2016 年的后半年开始新的生活，新的工作，亦如很多新人一样，对于新事物还是会有很多好奇心。花了很多时间给自己规划了多条学习路线，不过后来由于繁忙的工作很多计划没有按照时间完成，这是比较遗憾的事情。在这半年里，没有时间再给自己做饭，所以每顿饭也就变得比较简单，打球的时间也用来看代码看书，所以已经过了青春期的人，还会长痘，当时都怀疑是不是身体要逆生长。</p>
+
+<p><img src="/blog/asset/summary/2017/2018-02-11-fall.jpeg" alt="" class="center-image" /><em><code class="language-plaintext highlighter-rouge">2016年秋游</code></em></p>
+
+<p>  在 2016 年快进入下一年的时候给自己定了很多的任务，结果由于时间问题，采用碎片化的方式执行着这些任务，导致 2017 年末尾才快要完成。</p>
+
+<h1 id="2017-年"><em class="header2-font">2017 年</em></h1>
+
+<hr />
+
+<h2 id="学习-1"><em class="header3-font">学习</em></h2>
+
+<p>  2017 年，这一年买了好多书，以至于搬家的时候最不好处理的就是书。由于工作忙，看书的时间越来越少了，自己也没怎么写博客，写代码能力也下降了很多。不过好在强迫自己去参加一些技术分享会，了解这个行业的很多变化，感受别人对于技术的态度。也在网上看了很多有质量的博客，其中有一位同龄女工程师的博客让我很佩服，坚持做好、做出色一件事情确实不是一件容易的事情。所以还算是有失有得吧，期望 2018 年能多写点代码多思考问题，而不要停留在只看到事物的表面。</p>
+
+<p>  不过在临近 2018 年的时候，看了几部不错的片子和疯狂地看了几本书。</p>
+
+<ul>
+  <li>《 Genius 爱因斯坦 》</li>
+  <li>今敏导演电影系列</li>
+  <li>白夜追凶</li>
+  <li>网络相关的书</li>
+  <li>数据库相关的书</li>
+  <li>构建相关的书</li>
+  <li>架构相关的书<br />
+。。。</li>
+</ul>
+
+<p>  收获最大的就是今敏导演的电影，主要讲的是人精神方面的，有讲人的执念，有讲人的蜕变。哦对了，还看了几本不错的书，并且利用豆瓣进行了管理，觉得以后可以用豆瓣列个书单做主题式的学习计划，所以在 2017 年基本常常登入到豆瓣。如果你也是热爱学习的人，欢迎关注我的豆瓣—<a href="https://www.douban.com/people/weizhiend/">未知</a>，没事可以给我写豆邮哦，也可以给我推荐书籍或者有趣的影片等等。</p>
+
+<h2 id="旅游--音乐--动漫"><em class="header3-font">旅游 &amp; 音乐 &amp; 动漫</em></h2>
+
+<p>  2017 年和堂弟去了几个地方旅游，但是计划做得不够充分，很多美丽的景色没有看到。不过这趟旅途下来还是收获不小，也非常不要脸的蹭了几个朋友的饭，酒足饭饱之后就随便去些地方走走，感触还是蛮多的。</p>
+
+<ul>
+  <li>南京<br />
+由于去的时候正好在下雨，而且加上之前已经去过几次，没有什么让人非常印象深刻，除了到处都是坟墓。生活成本高，生活节奏相对杭州快。</li>
+  <li>杭州<br />
+由于没什么计划，在杭州就瞎逛，整个城市给人的印象很干净，生活很有趣，西湖我只想给差评，不过好在在杭州发现一个很不错的书店，书店面积很大，天花板上面吊着黄色的灯，有几个座位旁边有一个 3-4 米可以看到城市夜景的玻璃窗，整体氛围很不错。杭州的发展速度确实很快，房价也是涨的吓人，在二线城市里面算是名列前茅了。</li>
+  <li>上海<br />
+没什么好说的，穷人呆不起的地方。</li>
+</ul>
+
+<p>  这一年听最多的歌应该是日语歌和民谣歌，华语歌曲还处在周杰伦许嵩的阶段，已经很久没有听新歌了，也没有像在大学的时候利用业余时间淘歌了，所以就依赖网易云音乐智能推荐。</p>
+
+<p>  <del>这一年看了很多的国漫，《秦时明月》追了四季之后我决定放弃再追，太他妈商业化了，跟《火影忍者》一个德行，一直在期许国漫什么时候能够出像《钢之炼金术师》、《灌篮高手》等一样优秀的作品。不要每次出个《大鱼海棠》、《大圣归来》就说国漫崛起，媒体就剩这点词语了。现如今的日漫简直没法看，都在搞 IP 电影。啥时候能再有个宫崎骏、今敏这样，虽然说新海诚也不错，但是怎么让我想起尊享版的郭敬明，<code class="language-plaintext highlighter-rouge">他的电影每一帧都能当做壁纸</code>。《秒速五厘米》、《你的名字》。这一年坚持追得最长的国漫就是画江湖团队出的一些系列作品，每部作品的风格都不同，很值得品味，不像《武庚纪》能看到《秦时明月》的影子，不好就是总在挖坑，然后让我苦等下一季，结果光一个《灵主》就等了一年。还看来《镇魂街》，有点过于煽情；《少年锦衣卫》，不想追第二季了，主角光环太严重。很多事情不值得推敲；《墓王之王 麒麟决》，还不错。</del></p>
+
+<p><del><em class="header3-font">价值观</em></del><br />
+  <del>看待生老病死：我始终相信，庄周梦蝶，从一个世界消失，不过是去了另一个世界。《钢之炼金术师》动漫中有这么一句话，”等价交换”，即佛家说的”舍离”。</del></p>
+
+<p>  <del>乐观生活：从上高中到现在，一到夏天和秋天都会有种想死的感觉，但是现在才发现不是 TMD 还活着好好的吗。现在倒推这种感觉，应该是当时第一次接触了校园文学《夏至未至》以及后续的《悲伤逆流成河》导致的，所以当时疯狂迷恋婉约派的古诗词、仙剑奇侠传系列游戏、致郁系的日本动漫。就像《火影忍者》鸣人童年的心态《孤独》这首歌。不过好在后来看了《三重门》之后，反倒喜欢了豪放派的古诗词，算是让我从消极的情绪中部分挣脱了出来，就像杜牧，在青楼泡妞十年，最后恍然大悟，十年一觉扬州梦。所以就成为了一个消极的乐观者。路越走越长酒越喝越多，消极看待事物，乐观的处理问题。不追求电视剧里面要死要活的生活，只求平平淡淡的生活。</del></p>
+
+<p>  <del>冷静客观看待事物：互联网没有兴起的时候，21 世纪也被誉为生物学的世纪，所以很多生物学专业大热，这算是媒体在放屁；爱因斯坦的天赋在中国被很多媒体曝光，让我们只看到了他的天赋，却忽略他生活中的自私，极致的人必然会有缺陷，客观理解整个人才能不让我们过度崇拜；周杰伦的牛逼之处在于原创编曲，而不在于唱歌。</del></p>
+
+<h2 id="行业-1"><em class="header3-font">行业</em></h2>
+
+<p>  2017 年，Android 手机行业过得不怎么好，Android 已经由原来的简单暴力敛财，到现在的稳定发展，初级 Android 工程师岗位相对以前要来得少，高级工程师越来越得到重视。不过这一年被媒体炒作得最火的当然是人工智能，各个企业都在拼了命地进入这个风口，成为风口的猪，时刻准备起飞。所以程序员又在慌张，学 Android 还有啥用，赶紧学人工智能，还有什么大数据、云计算。写到这里就不知道咋写了，身处在这个世界谁都想不被主流淘汰，所以我们顺势而为。顺势而为没有什么不好，但是盲目就让自己迷失了方向。早几年我经常逛知乎，随着知乎上面的用户体量越来越大，现在总能在知乎看到大量浮躁的帖子，所以大部分时间是在过滤这些信息，获取有效有趣的信息变得越来越少，所以先如今用今日头条比较多，不过最近发现，用户量大了之后，今天头条给我的智能推荐变得让我崩溃。</p>
+
+<p>  迷茫的自己给了自己一句很清高的话<code class="language-plaintext highlighter-rouge">但行好事，莫问前程</code></p>
+
+<!-- ## *杂念*{:.header3-font} -->
+
+<h1 id="2018-年"><em class="header2-font">2018 年</em></h1>
+
+<hr />
+
+<p><img src="/blog/asset/summary/2017/2018-02-11-jock.jpg" alt="" /></p>
+
+<p>  转眼 2018 年终于要来了，经历了三个坎坷的本命年，终于又要从新零开始。对于新的一年还是心存很多期待，也给自己规划了很多自己想要去做的事情。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>豆瓣书单：经济学豆单、有趣的豆单、技术豆单、推理小说豆单
+少用朋友圈，多看外面的世界；少看娱乐，多看纪实。
+不要活的过于老道，适当的逗比
+努力挣钱，多多锻炼
+多写点技术博客/多写点代码/写作
+旅行
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>少用朋友圈，少看娱乐<br />
+处在这个信息大爆炸的时代，碎片化地切割着我们的生活。还是应该多花时间去些有意思的地方，看看美丽的风景，记录一些美好的事物；多花点时间看书多思考。总结一句话就是<code class="language-plaintext highlighter-rouge">旅行看书</code>，瞬间逼格就被拔高了。讲到这里耳边又听到室友用着山西地方腔调拔高嗓音，尖尖地说“爱学习的小伙子”，而我总是谦虚而又友善地回答“学无止境啊”。</p>
+  </li>
+  <li>
+    <p>努力挣钱，多多锻炼<br />
+说实话，现在感觉都快揭不开锅了，穷得叮当响，所以只能努力挣钱，但是自己又给自己提出另外一种选择“找富婆被包养”，并且提出了实现这一理想的纲要。不过热心的室友提醒了我一句“就你这老脸”，而我也回怼了一句“那的看跟谁比”。不过逻辑中的漏洞就是富婆的选择范围不可能在我两之间，即使我走心不走肾也无济于事。<br />
+在 2017 年突然胖了 20 斤，之前的体重一直都比较稳定。以前都是可以随便吃都不胖，但是今年突然却打破了这个平衡，仔细想了想，应该是今年工作久坐而且缺少锻炼造成的，希望 2018 年能够多多锻炼。</p>
+  </li>
+  <li>
+    <p>写字<br />
+博客中的好多文章站了个坑但还没有写，争取 2018 年多吧这些坑填上。对于写作我还是有很多不懂，之前并没有感觉到，写完这一篇文章的时候就会觉得有点吃力，比如，如何构思，如何分层次等等。如果你对文字敏感，对写字有自己的心得，欢迎给我提意见，也可以给我推荐几本书学习。<code class="language-plaintext highlighter-rouge">'(°0°)'</code></p>
+  </li>
+  <li>
+    <p>旅行<br />
+之前听一哥们说自己裸辞之后，瞒着家里，毫无计划的去了趟西北旅行，感受了很多淳朴的民风。想想确实挺疯狂的，年轻就是任性的资本，不要等有了家庭之后再想去任性。这又让我想起鲁迅那篇《少年闰土》的文章，关于碰壁一说。所以希望 2018 年能有钱买个相机，去体验一个人的穷游。突然想起一个关于旅行的笑话，说一趟有意义的旅行就是，一个人出去三个人回来；而一趟经常发生的旅行就是，两个人出去一个人回来。</p>
+  </li>
+</ol>
+
+<!-- 博客的内容的计划
+```
+  React Native系列笔记整理
+  Android framework层笔记整理
+  FileDownloader系列整理
+  Android平台进程、线程通讯方式整理。
+
+``` -->
+
+<p>  说了这么多，如果要给即将到来的 2018 年自己一句话，还是那句话老话吧<code class="language-plaintext highlighter-rouge">但行好事，莫问前程</code><br />
+  说完这些，正好听到火车来到的鸣笛声，车身标记着”Hello World for 2018 年“，起身拍拍身上这一年的尘土，急匆匆地登上火车之后，看到两个青年人的谈话。</p>
+
+<ul>
+  <li>地瓜：</li>
+  <li>土豆：。。。</li>
+</ul>
+
+<p>  好吧，我继续往前走，期待下一个故事。</p>
+
+<hr />
+
+<!-- <br/>
+
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="536" height="472" id="passing" >
+    <param name="movie" value="http://www.douban.com/doushow/weizhiend/wishlist_random_drama|movie|book|music_20_6_small_logo_self/doushow.swf" />
+    <param name="quality" value="high" />
+    <param name="scale" value="noscale"/>
+    <param name="align" value="tl"/>
+    <param name="wmode" value="transparent"/>
+    <embed src="http://www.douban.com/doushow/weizhiend/wishlist_random_drama|movie|book|music_20_6_small_logo_self/doushow.swf" wmode="transparent" quality="high"  width="536" height="472" name="passing" scale="noscale" align="tl" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+</object>
+
+<br/> -->
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-02-11/2017summary" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-02-11/2017summary&text=2017年总结" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-02-11/2017summary&title=2017年总结&summary=第一次写的年度总结，表达有点生涩，有待提高，再接再厉。&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=2017年总结&body=第一次写的年度总结，表达有点生涩，有待提高，再接再厉。 https://jamesfchen.github.io/2018-02-11/2017summary" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

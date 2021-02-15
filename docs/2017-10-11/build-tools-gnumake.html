@@ -1,0 +1,2595 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2017-10-11/build-tools-gnumake">构建工具GNU make</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Wed, 11 Oct 2017 22:50:00 +0000</time> -->
+                  <time datetime='2017-10-11'>Wed, Oct 11 2017, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :35601</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/build-tools">build-tools</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  在阅读GNU make构建工具相关资料的时候，一直在思考几个问题，</p>
+<ul>
+  <li>“ build system ” 是翻译成构建系统还是编译系统 ？</li>
+  <li>make是什么 ？ make可能是构建系统，make也可能是是构建系统中的一部分构建工具。</li>
+  <li>make的使用场景 ？</li>
+</ul>
+
+<p>  其实如果不回答上面三个问题，并不会对我们学习Makefile语言有什么障碍。但是笔者个性使然，就是想要把这些关系梳理清楚再去学习其中的语法。</p>
+
+<p>  先来回答第一个问题，阮一峰在他的博文中认为build叫做构建，compile叫做编译，参考这个<a href="http://www.ruanyifeng.com/blog/2015/02/make.html">Make 命令教程</a>。所以我认为“ build system ” 叫做构建系统，而构建工具是构建系统中的一部分。构建工具有很多种 ：成熟大型项目常用的make ，Android平台开发应用的gradle ，人工智能TensorFlow的bazel。</p>
+
+<p>  那么接下来回答第二个问题，make是什么 ？make是构建系统中的一部分，是一种构建工具。用于规划如何编译项目。就好比汽车制造厂的组装器，调配汽车的各个零部件资源，并且进行合理的组装形成一辆完整的汽车。由于平台不同编译器不同等原因，它分为好多种 ：GNU make，Visual C++的nmake ，cmake ，qmake 。想了解其差异，可以参考这个<a href="https://www.zhihu.com/question/27455963">make makefile cmake qmake都是什么，有什么区别？</a></p>
+
+<p>  最后回答第三个问题，make相对于其他构建工具的历史来的悠久，其稳定性自然不言而喻。它是c/c++项目的必备工具，由于c/c++的语言特性导致很多大型项目的底层都离不开它，致使像“ Android Open Source Project ”这样的大型项目使用make来完成这个系统的编译、打包等工作 。就连阮一峰也在博文中推荐使用make来构建Node.js这种大型项目，参考这个<a href="http://www.ruanyifeng.com/blog/2015/03/build-website-with-make.html">使用 Make 构建网站</a></p>
+<h2 id="2about"><em class="header2-font">2.About</em></h2>
+<p>  make是一个构建工具，我们要书写Makefile文件，才能让这个工具按照规则执行，所以讲解Makefile是这篇文章的核心。本文是GNU make，所以Makefile语言格式跟其他的make工具有点区别，不过我们主要是了解其精髓，掌握GNU make也就自然会达到触类旁通的效果。</p>
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+<p>  想要快速学习make这个构建工具，就需要从“熟悉Makefile的语法”和“Makefile在大型项目的使用“这两个方面来入手。</p>
+
+<h3 id="初步认识makefile语言"><strong class="header3-font">初步认识Makefile语言</strong></h3>
+<p>  如果是有ROM工作经验的工程师一定用过<code class="language-plaintext highlighter-rouge">make snod</code>这条命令.它会重新打包生成system.img。执行<code class="language-plaintext highlighter-rouge">make snod</code>后经过一系列的流程到达下面的代码。</p>
+
+<p>build/core/Makefile</p>
+
+<figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"> <span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">systemimage-nodeps snod</span>
+ <span class="nl">systemimage-nodeps snod</span><span class="o">:</span> <span class="nf">$(filter-out systemimage-nodeps snod</span><span class="p">,</span><span class="nf">$(MAKECMDGOALS)) </span>\
+<span class="nf">                     | $(INTERNAL_USERIMAGES_DEPS)</span>
+         <span class="nl">@echo "make $@</span><span class="o">:</span> <span class="nf">ignoring dependencies"</span>
+         <span class="err">$(call</span> <span class="err">build-systemimage-target,$(INSTALLED_SYSTEMIMAGE))</span>
+         <span class="err">$(hide)</span> <span class="err">$(call</span> <span class="err">assert-max-image-size,$(INSTALLED_SYSTEMIMAGE),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE))</span></code></pre></figure>
+
+<p>  上面的代码基本说明了Makefile语言的使用。snod是一个标识，也是一个伪目标（phony target），与之相对的就是目标，是一个文件（目标文件、可执行文件）。而冒号右边，是左边的预备条件。他们的下一行就是编译指令或者是控制指令。比如这样</p>
+
+<figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"><span class="nl">main</span><span class="o">:</span> <span class="nf">main.o</span>
+    <span class="err">gcc</span> <span class="err">...</span> <span class="c">#编译生成main文件
+</span><span class="nl">main.o</span><span class="o">:</span><span class="nf">main.c main.h</span>
+    <span class="err">gcc</span> <span class="err">...</span> <span class="err">#编译生成main.o</span></code></pre></figure>
+
+<p>  这个就是一个规则（rule），定义了如何编译的规则。可以用一个通用公式来表达，就是下面这个</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>target … : prerequisites …
+[ TAB ]recipe
+[ TAB ]…
+[ TAB ]…
+</code></pre></div></div>
+
+<p>  当然Makefile语言也会有变量、函数。这个文章就不详细讲解Makefile语法了，因为已经有好多人都写过相关的文章，可以参考权威的”<a href="http://www.gnu.org/software/make/manual/html_node/index.html?cm_mc_uid=45784307156114982261855&amp;cm_mc_sid_50200000=1506734444">GNU make</a>“,如果看不懂英文或者看英文吃力，可以参考这个中文文章”<a href="http://wiki.ubuntu.org.cn/%E8%B7%9F%E6%88%91%E4%B8%80%E8%B5%B7%E5%86%99Makefile">跟我一起写Makefile</a>“。还有我最喜欢的博主老罗对Makefile的理解“<a href="http://blog.csdn.net/luoshengyang/article/details/18466779">Android编译系统简要介绍和学习计划</a>”</p>
+
+<h3 id="make在android平台的运用"><strong class="header3-font">make在Android平台的运用</strong></h3>
+<p>  为了加快AOSP项目的编译速度，Android团队在N版本添加了ninja构建工具，ninja构建工具相对于make构建工具更底层。通过开源项目kati(kati是项目名，但是最终编译生成的程序名却是叫做ckati，后续我们将使用ckati这个名字)将Makefile文件翻译成ninja文件。make和ninja的关系就像cmake和make。还有一点要注意的，由于7.1以后部分使用的是Soong+Buleprint这套构建工具，将bp文件转换成ninja文件，所以Makefile文件和Buleprint文件是混合使用的，分析Makefile文件要小心一点。不过Blueprint+Soong这套构建工具代替make、kati这套构建工具只是时间问题。想了解Buleprint+Soong这套构建工具可以参考这一篇<a href="/blog/blog/2017-09-23/2017-09-23-translate-blueprint-soong">Android源码解析之AOSP新的构建系统</a>。 那么我们就来大致了解一下这个转换的流程</p>
+
+<p>build/core/main.mk</p>
+
+<figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"><span class="err">...</span>
+<span class="k">ifndef</span> <span class="nv">KATI</span>
+
+<span class="nv">host_prebuilts</span> <span class="o">:=</span> linux-x86
+<span class="k">ifeq</span> <span class="nv">($(shell uname),Darwin)</span>
+<span class="nv">host_prebuilts</span> <span class="o">:=</span> darwin-x86
+<span class="k">endif</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">run_soong_ui</span>
+<span class="nl">run_soong_ui</span><span class="o">:</span>
+	+@prebuilts/build-tools/<span class="nv">$(host_prebuilts)</span>/bin/makeparallel <span class="nt">--ninja</span> build/soong/soong_ui.bash <span class="nt">--make-mode</span> <span class="nv">$(MAKECMDGOALS)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">$(MAKECMDGOALS)</span>
+<span class="nl">$(sort $(MAKECMDGOALS)) </span><span class="o">:</span> <span class="nf">run_soong_ui</span>
+	<span class="p">@</span><span class="c">#empty</span>
+
+<span class="k">else </span><span class="c">#KATI 
+</span><span class="err">...</span> 
+<span class="k">endif </span><span class="err">#KATI</span> </code></pre></figure>
+
+<p>  当我们在项目顶级目录执行make命令时，在顶级目录有个Makefile文件include build/core/main.mk。所以主要的内容都在main.mk这个文件里面。由于KATI一开始并没有定义，所以会执行<code class="language-plaintext highlighter-rouge">+@prebuilts/build-tools/$(host_prebuilts)/bin/makeparallel --ninja build/soong/soong_ui.bash --make-mode $(MAKECMDGOALS)</code>语句。makeparallel程序会fork出一个子进程执行soong_ui.bash，参数为<code class="language-plaintext highlighter-rouge">--make-mode $(MAKECMDGOALS)</code>。soong_ui.bash也很简单，就是执行soong_ui程序，该程序使用go语言写的。</p>
+
+<p>我们来看看入库文件main.go<br />
+build/core/soong/cmd/soong_ui/main.go</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="o">...</span>
+
+	<span class="n">build</span><span class="o">.</span><span class="n">Build</span><span class="p">(</span><span class="n">buildCtx</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">build</span><span class="o">.</span><span class="n">BuildAll</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>build文件中Build函数就是执行ckati或者ninja程序的关键函数,</p>
+
+<p>build/core/soong/ui/build/build.go</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="o">...</span>
+
+<span class="k">const</span> <span class="p">(</span>
+	<span class="n">BuildNone</span>          <span class="o">=</span> <span class="no">iota</span>
+	<span class="n">BuildProductConfig</span> <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>
+	<span class="n">BuildSoong</span>         <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>
+	<span class="n">BuildKati</span>          <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>
+	<span class="n">BuildNinja</span>         <span class="o">=</span> <span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="no">iota</span>
+	<span class="n">BuildAll</span>           <span class="o">=</span> <span class="n">BuildProductConfig</span> <span class="o">|</span> <span class="n">BuildSoong</span> <span class="o">|</span> <span class="n">BuildKati</span> <span class="o">|</span> <span class="n">BuildNinja</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">Build</span><span class="p">(</span><span class="n">ctx</span> <span class="n">Context</span><span class="p">,</span> <span class="n">config</span> <span class="n">Config</span><span class="p">,</span> <span class="n">what</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">ctx</span><span class="o">.</span><span class="n">Verboseln</span><span class="p">(</span><span class="s">"Starting build with args:"</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">Arguments</span><span class="p">())</span>
+	<span class="n">ctx</span><span class="o">.</span><span class="n">Verboseln</span><span class="p">(</span><span class="s">"Environment:"</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">Environment</span><span class="p">()</span><span class="o">.</span><span class="n">Environ</span><span class="p">())</span>
+
+	<span class="k">if</span> <span class="n">inList</span><span class="p">(</span><span class="s">"help"</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">Arguments</span><span class="p">())</span> <span class="p">{</span>
+		<span class="n">cmd</span> <span class="o">:=</span> <span class="n">exec</span><span class="o">.</span><span class="n">CommandContext</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="s">"make"</span><span class="p">,</span> <span class="s">"-f"</span><span class="p">,</span> <span class="s">"build/core/help.mk"</span><span class="p">)</span>
+		<span class="n">cmd</span><span class="o">.</span><span class="n">Env</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">Environment</span><span class="p">()</span><span class="o">.</span><span class="n">Environ</span><span class="p">()</span>
+		<span class="n">cmd</span><span class="o">.</span><span class="n">Stdout</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">Stdout</span><span class="p">()</span>
+		<span class="n">cmd</span><span class="o">.</span><span class="n">Stderr</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">Stderr</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">Run</span><span class="p">();</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">ctx</span><span class="o">.</span><span class="n">Fatalln</span><span class="p">(</span><span class="s">"Failed to run make:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="n">SetupOutDir</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">what</span><span class="o">&amp;</span><span class="n">BuildProductConfig</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="c">// Run make for product config</span>
+		<span class="n">runMakeProductConfig</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">what</span><span class="o">&amp;</span><span class="n">BuildSoong</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="c">// Run Soong</span>
+		<span class="n">runSoongBootstrap</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+		<span class="n">runSoong</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">what</span><span class="o">&amp;</span><span class="n">BuildKati</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="c">// Run ckati</span>
+		<span class="n">runKati</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">what</span><span class="o">&amp;</span><span class="n">BuildNinja</span> <span class="o">!=</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="c">// Write combined ninja file</span>
+		<span class="n">createCombinedBuildNinjaFile</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+		<span class="c">// Run ninja</span>
+		<span class="n">runNinja</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>  从main.go传过来的what参数为build.BuildAll，而BuildAll在build.go的定义就可以知道Build函数会一次执行run make、run Soong、run ckati、run ninja。每个工具的使用对应着一个go文件，比如run make，有make.go;run soong ，有soong.go。但是只有在run ckati时，ckati工具会再次执行build/core/main.mk文件。为什么要在这里执行main.mk，我们后面会讲到。先来看看看ckati的调用逻辑</p>
+
+<p>build/soong/ui/build</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code"><pre><span class="o">...</span>
+
+<span class="k">func</span> <span class="n">runKati</span><span class="p">(</span><span class="n">ctx</span> <span class="n">Context</span><span class="p">,</span> <span class="n">config</span> <span class="n">Config</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">ctx</span><span class="o">.</span><span class="n">BeginTrace</span><span class="p">(</span><span class="s">"kati"</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="n">ctx</span><span class="o">.</span><span class="n">EndTrace</span><span class="p">()</span>
+
+	<span class="n">genKatiSuffix</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+	<span class="n">executable</span> <span class="o">:=</span> <span class="s">"prebuilts/build-tools/"</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">HostPrebuiltTag</span><span class="p">()</span> <span class="o">+</span> <span class="s">"/bin/ckati"</span>
+	<span class="n">args</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span>
+		<span class="s">"--ninja"</span><span class="p">,</span>
+		<span class="s">"--ninja_dir="</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">OutDir</span><span class="p">(),</span>
+		<span class="s">"--ninja_suffix="</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">KatiSuffix</span><span class="p">(),</span>
+		<span class="s">"--regen"</span><span class="p">,</span>
+		<span class="s">"--ignore_optional_include="</span> <span class="o">+</span> <span class="n">filepath</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">OutDir</span><span class="p">(),</span> <span class="s">"%.P"</span><span class="p">),</span>
+		<span class="s">"--detect_android_echo"</span><span class="p">,</span>
+		<span class="s">"--color_warnings"</span><span class="p">,</span>
+		<span class="s">"--gen_all_targets"</span><span class="p">,</span>
+		<span class="s">"-f"</span><span class="p">,</span> <span class="s">"build/core/main.mk"</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="o">!</span><span class="n">config</span><span class="o">.</span><span class="n">Environment</span><span class="p">()</span><span class="o">.</span><span class="n">IsFalse</span><span class="p">(</span><span class="s">"KATI_EMULATE_FIND"</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">args</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s">"--use_find_emulator"</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="n">args</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">KatiArgs</span><span class="p">()</span><span class="o">...</span><span class="p">)</span>
+
+	<span class="n">args</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">args</span><span class="p">,</span>
+		<span class="s">"BUILDING_WITH_NINJA=true"</span><span class="p">,</span>
+		<span class="s">"SOONG_ANDROID_MK="</span><span class="o">+</span><span class="n">config</span><span class="o">.</span><span class="n">SoongAndroidMk</span><span class="p">(),</span>
+		<span class="s">"SOONG_MAKEVARS_MK="</span><span class="o">+</span><span class="n">config</span><span class="o">.</span><span class="n">SoongMakeVarsMk</span><span class="p">())</span>
+
+	<span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">UseGoma</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">args</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s">"-j"</span><span class="o">+</span><span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">Parallel</span><span class="p">()))</span>
+	<span class="p">}</span>
+
+	<span class="n">cmd</span> <span class="o">:=</span> <span class="n">exec</span><span class="o">.</span><span class="n">CommandContext</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">executable</span><span class="p">,</span> <span class="n">args</span><span class="o">...</span><span class="p">)</span>
+	<span class="o">...</span>
+<span class="p">}</span>
+
+<span class="o">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  很简单的几句话，就是执行ckati命令。</p>
+
+<p>build/kati/main.cc</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="p">...</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">"--realpath"</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">HandleRealpath</span><span class="p">(</span><span class="n">argc</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">argv</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">Init</span><span class="p">();</span>
+  <span class="n">string</span> <span class="n">orig_args</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+      <span class="n">orig_args</span> <span class="o">+=</span> <span class="sc">' '</span><span class="p">;</span>
+    <span class="n">orig_args</span> <span class="o">+=</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="n">g_flags</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+  <span class="n">FindFirstMakefie</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">makefile</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="n">ERROR</span><span class="p">(</span><span class="s">"*** No targets specified and no makefile found."</span><span class="p">);</span>
+  <span class="c1">// This depends on command line flags.</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">use_find_emulator</span><span class="p">)</span>
+    <span class="n">InitFindEmulator</span><span class="p">();</span>
+  <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">Run</span><span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">g_flags</span><span class="p">.</span><span class="n">cl_vars</span><span class="p">,</span> <span class="n">orig_args</span><span class="p">);</span>
+  <span class="n">Quit</span><span class="p">();</span>
+  <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  对于ckati命令的解析，我们只要看<code class="language-plaintext highlighter-rouge">g_flags.Parse(argc, argv);</code>,g_flags是一个拥有Parse方法的结构体变量</p>
+
+<p>build/kati/flags.cc</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+</pre></td><td class="code"><pre><span class="p">...</span>
+
+<span class="kt">void</span> <span class="n">Flags</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">subkati_args</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="n">num_jobs</span> <span class="o">=</span> <span class="n">num_cpus</span> <span class="o">=</span> <span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_NPROCESSORS_ONLN</span><span class="p">);</span>
+  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_jobs_str</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">makeflags</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s">"MAKEFLAGS"</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">StringPiece</span> <span class="n">tok</span> <span class="o">:</span> <span class="n">WordScanner</span><span class="p">(</span><span class="n">makeflags</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">HasPrefix</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="s">"-"</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">tok</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">'='</span><span class="p">)</span> <span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+        <span class="n">cl_vars</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tok</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="kt">bool</span> <span class="n">should_propagate</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">pi</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"-f"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">makefile</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="o">++</span><span class="n">i</span><span class="p">];</span>
+      <span class="n">should_propagate</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"-c"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">is_syntax_check_only</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"-i"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">is_dry_run</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"-s"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">is_silent_mode</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"-d"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">enable_debug</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--kati_stats"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">enable_stat_logs</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--warn"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">enable_kati_warnings</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--ninja"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">generate_ninja</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--gen_all_targets"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">gen_all_targets</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--regen"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="c1">// TODO: Make this default.</span>
+      <span class="n">regen</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--regen_debug"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">regen_debug</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--regen_ignoring_kati_binary"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">regen_ignoring_kati_binary</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--dump_kati_stamp"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">dump_kati_stamp</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+      <span class="n">regen_debug</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--detect_android_echo"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">detect_android_echo</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--detect_depfiles"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">detect_depfiles</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--color_warnings"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">color_warnings</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"-j"</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">num_jobs_str</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">num_jobs</span> <span class="o">=</span> <span class="n">strtol</span><span class="p">(</span><span class="n">num_jobs_str</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">num_jobs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ERROR</span><span class="p">(</span><span class="s">"Invalid -j flag: %s"</span><span class="p">,</span> <span class="n">num_jobs_str</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--remote_num_jobs"</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">num_jobs_str</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">remote_num_jobs</span> <span class="o">=</span> <span class="n">strtol</span><span class="p">(</span><span class="n">num_jobs_str</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">remote_num_jobs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ERROR</span><span class="p">(</span><span class="s">"Invalid -j flag: %s"</span><span class="p">,</span> <span class="n">num_jobs_str</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--ninja_suffix"</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ninja_suffix</span><span class="p">))</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--ninja_dir"</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ninja_dir</span><span class="p">))</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">"--use_find_emulator"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">use_find_emulator</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--goma_dir"</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">goma_dir</span><span class="p">))</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--ignore_optional_include"</span><span class="p">,</span>
+        <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ignore_optional_include_pattern</span><span class="p">))</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--ignore_dirty"</span><span class="p">,</span>
+        <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ignore_dirty_pattern</span><span class="p">))</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ParseCommandLineOptionWithArg</span><span class="p">(</span>
+        <span class="s">"--no_ignore_dirty"</span><span class="p">,</span>
+        <span class="n">argv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">no_ignore_dirty_pattern</span><span class="p">))</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'-'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">ERROR</span><span class="p">(</span><span class="s">"Unknown flag: %s"</span><span class="p">,</span> <span class="n">arg</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">strchr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="sc">'='</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">cl_vars</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">should_propagate</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">targets</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Intern</span><span class="p">(</span><span class="n">arg</span><span class="p">));</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">should_propagate</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(;</span> <span class="n">pi</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">;</span> <span class="n">pi</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">subkati_args</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">pi</span><span class="p">]);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  这里我们可以看到对于命令的解析，解析完之后，开始了main.cc中的Run函数。</p>
+
+<p>build/kati/main.cc</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+</pre></td><td class="code"><pre><span class="p">...</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">Run</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">Symbol</span><span class="o">&gt;&amp;</span> <span class="n">targets</span><span class="p">,</span>
+               <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">StringPiece</span><span class="o">&gt;&amp;</span> <span class="n">cl_vars</span><span class="p">,</span>
+               <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">orig_args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">double</span> <span class="n">start_time</span> <span class="o">=</span> <span class="n">GetTime</span><span class="p">();</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">generate_ninja</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">regen</span> <span class="o">||</span> <span class="n">g_flags</span><span class="p">.</span><span class="n">dump_kati_stamp</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">ScopedTimeReporter</span> <span class="n">tr</span><span class="p">(</span><span class="s">"regen check time"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">NeedsRegen</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">orig_args</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"No need to regenerate ninja file</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">dump_kati_stamp</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">"Need to regenerate ninja file</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">ClearGlobCache</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="n">SetAffinityForSingleThread</span><span class="p">();</span>
+
+  <span class="n">MakefileCacheManager</span><span class="o">*</span> <span class="n">cache_mgr</span> <span class="o">=</span> <span class="n">NewMakefileCacheManager</span><span class="p">();</span>
+
+  <span class="n">Intern</span><span class="p">(</span><span class="s">"MAKEFILE_LIST"</span><span class="p">).</span><span class="n">SetGlobalVar</span><span class="p">(</span>
+      <span class="k">new</span> <span class="n">SimpleVar</span><span class="p">(</span><span class="n">StringPrintf</span><span class="p">(</span><span class="s">" %s"</span><span class="p">,</span> <span class="n">g_flags</span><span class="p">.</span><span class="n">makefile</span><span class="p">),</span> <span class="n">VarOrigin</span><span class="o">::</span><span class="kt">FILE</span><span class="p">));</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">**</span> <span class="n">p</span> <span class="o">=</span> <span class="n">environ</span><span class="p">;</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">SetVar</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="n">VarOrigin</span><span class="o">::</span><span class="n">ENVIRONMENT</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">Evaluator</span><span class="o">*</span> <span class="n">ev</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Evaluator</span><span class="p">();</span>
+
+  <span class="n">vector</span><span class="o">&lt;</span><span class="n">Stmt</span><span class="o">*&gt;</span> <span class="n">bootstrap_asts</span><span class="p">;</span>
+  <span class="n">ReadBootstrapMakefile</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">bootstrap_asts</span><span class="p">);</span>
+  <span class="n">ev</span><span class="o">-&gt;</span><span class="n">set_is_bootstrap</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">Stmt</span><span class="o">*</span> <span class="n">stmt</span> <span class="o">:</span> <span class="n">bootstrap_asts</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LOG</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">stmt</span><span class="o">-&gt;</span><span class="n">DebugString</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+    <span class="n">stmt</span><span class="o">-&gt;</span><span class="n">Eval</span><span class="p">(</span><span class="n">ev</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">ev</span><span class="o">-&gt;</span><span class="n">set_is_bootstrap</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+
+  <span class="n">ev</span><span class="o">-&gt;</span><span class="n">set_is_commandline</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">StringPiece</span> <span class="n">l</span> <span class="o">:</span> <span class="n">cl_vars</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Stmt</span><span class="o">*&gt;</span> <span class="n">asts</span><span class="p">;</span>
+    <span class="n">Parse</span><span class="p">(</span><span class="n">Intern</span><span class="p">(</span><span class="n">l</span><span class="p">).</span><span class="n">str</span><span class="p">(),</span> <span class="n">Loc</span><span class="p">(</span><span class="s">"*bootstrap*"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">asts</span><span class="p">);</span>
+    <span class="n">CHECK</span><span class="p">(</span><span class="n">asts</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">asts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">Eval</span><span class="p">(</span><span class="n">ev</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">ev</span><span class="o">-&gt;</span><span class="n">set_is_commandline</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+
+  <span class="p">{</span>
+    <span class="n">ScopedTimeReporter</span> <span class="n">tr</span><span class="p">(</span><span class="s">"eval time"</span><span class="p">);</span>
+    <span class="n">Makefile</span><span class="o">*</span> <span class="n">mk</span> <span class="o">=</span> <span class="n">cache_mgr</span><span class="o">-&gt;</span><span class="n">ReadMakefile</span><span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">makefile</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">Stmt</span><span class="o">*</span> <span class="n">stmt</span> <span class="o">:</span> <span class="n">mk</span><span class="o">-&gt;</span><span class="n">stmts</span><span class="p">())</span> <span class="p">{</span>
+      <span class="n">LOG</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">stmt</span><span class="o">-&gt;</span><span class="n">DebugString</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+      <span class="n">stmt</span><span class="o">-&gt;</span><span class="n">Eval</span><span class="p">(</span><span class="n">ev</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">ParseErrorStmt</span><span class="o">*</span> <span class="n">err</span> <span class="o">:</span> <span class="n">GetParseErrors</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">WARN_LOC</span><span class="p">(</span><span class="n">err</span><span class="o">-&gt;</span><span class="n">loc</span><span class="p">(),</span> <span class="s">"warning for parse error in an unevaluated line: %s"</span><span class="p">,</span>
+             <span class="n">err</span><span class="o">-&gt;</span><span class="n">msg</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+  <span class="p">}</span>
+
+  <span class="n">vector</span><span class="o">&lt;</span><span class="n">DepNode</span><span class="o">*&gt;</span> <span class="n">nodes</span><span class="p">;</span>
+  <span class="p">{</span>
+    <span class="n">ScopedTimeReporter</span> <span class="n">tr</span><span class="p">(</span><span class="s">"make dep time"</span><span class="p">);</span>
+    <span class="n">MakeDep</span><span class="p">(</span><span class="n">ev</span><span class="p">,</span> <span class="n">ev</span><span class="o">-&gt;</span><span class="n">rules</span><span class="p">(),</span> <span class="n">ev</span><span class="o">-&gt;</span><span class="n">rule_vars</span><span class="p">(),</span> <span class="n">targets</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">nodes</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">is_syntax_check_only</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">g_flags</span><span class="p">.</span><span class="n">generate_ninja</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ScopedTimeReporter</span> <span class="n">tr</span><span class="p">(</span><span class="s">"generate ninja time"</span><span class="p">);</span>
+    <span class="n">GenerateNinja</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ev</span><span class="p">,</span> <span class="n">orig_args</span><span class="p">,</span> <span class="n">start_time</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">p</span> <span class="o">:</span> <span class="n">ev</span><span class="o">-&gt;</span><span class="n">exports</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">Symbol</span> <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Var</span><span class="o">*</span> <span class="n">v</span> <span class="o">=</span> <span class="n">ev</span><span class="o">-&gt;</span><span class="n">LookupVar</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+      <span class="k">const</span> <span class="n">string</span><span class="o">&amp;&amp;</span> <span class="n">value</span> <span class="o">=</span> <span class="n">v</span><span class="o">-&gt;</span><span class="n">Eval</span><span class="p">(</span><span class="n">ev</span><span class="p">);</span>
+      <span class="n">LOG</span><span class="p">(</span><span class="s">"setenv(%s, %s)"</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">value</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+      <span class="n">setenv</span><span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">value</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">LOG</span><span class="p">(</span><span class="s">"unsetenv(%s)"</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+      <span class="n">unsetenv</span><span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="p">{</span>
+    <span class="n">ScopedTimeReporter</span> <span class="n">tr</span><span class="p">(</span><span class="s">"exec time"</span><span class="p">);</span>
+    <span class="n">Exec</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ev</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">Stmt</span><span class="o">*</span> <span class="n">stmt</span> <span class="o">:</span> <span class="n">bootstrap_asts</span><span class="p">)</span>
+    <span class="k">delete</span> <span class="n">stmt</span><span class="p">;</span>
+  <span class="k">delete</span> <span class="n">ev</span><span class="p">;</span>
+  <span class="k">delete</span> <span class="n">cache_mgr</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  Run函数会将Makefile文件翻译成ninja文件。由于这一篇文章的重心不是ckati源码的分析，所以有兴趣的话可以参考这一篇<a href="http://blog.csdn.net/chaoy1116/article/details/53063082">Android7.0 Ninja编译原理</a>。ninja文件已经有啦，接下来就是执行ninja工具了。</p>
+
+<p>  之前讲到kati.go文件中调用ckati有一个重要的参数<code class="language-plaintext highlighter-rouge">-f build/core/main.mk</code> ，也就是生成ninja文件之后会执行main.mk。之前说过为什么build/core/main.mk会在run ckati流程执行？现在我们就来回答这个问题。先来看看main.mk文件的内容</p>
+
+<p>build/core/main.mk</p>
+
+<figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"><span class="err">...</span>
+<span class="k">ifndef</span> <span class="nv">KATI</span>
+<span class="err">...</span> <span class="c">#1流程
+</span><span class="k">else </span><span class="c">#KATI 
+</span><span class="err">...</span> <span class="c">#2流程
+</span><span class="k">endif </span><span class="err">#KATI</span> </code></pre></figure>
+
+<p>  最初使用make命令，由于KATI没有定义，走的是1流程。由于执行ckati时，会导入环境变量KATI，所以当第二次执行main.mk文件，就会执行2流程。由于前期工作都准备好了，所以接下来就要开始使用ninja工具进行编译。</p>
+
+<hr />
+
+<p>  接下来我们就来看看后面的流程</p>
+
+<p>build/core/main.mk</p>
+
+<figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+</pre></td><td class="code"><pre><span class="err">...</span>
+
+<span class="k">ifndef</span> <span class="nv">KATI</span>
+
+<span class="err">...</span>
+
+<span class="k">else </span><span class="c"># KATI
+</span>
+<span class="c"># Absolute path of the present working direcotry.
+# This overrides the shell variable $PWD, which does not necessarily points to
+# the top of the source tree, for example when "make -C" is used in m/mm/mmm.
+</span><span class="nv">PWD</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> <span class="nb">pwd</span><span class="nf">)</span>
+
+<span class="nv">TOP</span> <span class="o">:=</span> .
+<span class="nv">TOPDIR</span> <span class="o">:=</span>
+
+<span class="nv">BUILD_SYSTEM</span> <span class="o">:=</span> <span class="nv">$(TOPDIR)</span>build/core
+
+<span class="c"># This is the default target.  It must be the first declared target.
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">droid</span>
+<span class="nv">DEFAULT_GOAL</span> <span class="o">:=</span> droid
+<span class="nl">$(DEFAULT_GOAL)</span><span class="o">:</span> <span class="nf">droid_targets</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">droid_targets</span>
+<span class="nl">droid_targets</span><span class="o">:</span>
+
+<span class="c"># Set up various standard variables based on configuration
+# and host information.
+</span><span class="k">include</span><span class="sx"> $(BUILD_SYSTEM)/config.mk</span>
+
+<span class="k">ifneq</span> <span class="nv">($(filter $(dont_bother_goals), $(MAKECMDGOALS)),)</span>
+<span class="nv">dont_bother</span> <span class="o">:=</span> <span class="nb">true</span>
+<span class="k">endif</span>
+
+<span class="k">include</span><span class="sx"> $(SOONG_MAKEVARS_MK)</span>
+
+<span class="k">include</span><span class="sx"> $(BUILD_SYSTEM)/clang/config.mk</span>
+
+<span class="c"># Write the build number to a file so it can be read back in
+# without changing the command line every time.  Avoids rebuilds
+# when using ninja.
+</span><span class="err">$(shell</span> <span class="err">mkdir</span> <span class="err">-p</span> <span class="err">$(OUT_DIR)</span> <span class="err">&amp;&amp;</span> <span class="err">\</span>
+    <span class="err">echo</span> <span class="err">-n</span> <span class="err">$(BUILD_NUMBER)</span> <span class="err">&gt;</span> <span class="err">$(OUT_DIR)/build_number.txt</span> <span class="err">&amp;&amp;</span> <span class="err">\</span>
+    <span class="err">echo</span> <span class="err">-n</span> <span class="err">$(BUILD_DATETIME)</span> <span class="err">&gt;</span> <span class="err">$(OUT_DIR)/build_date.txt)</span>
+<span class="nv">BUILD_NUMBER_FROM_FILE</span> <span class="o">:=</span> <span class="err">$$</span><span class="o">(</span><span class="nb">cat</span> <span class="nv">$(OUT_DIR)</span>/build_number.txt<span class="o">)</span>
+<span class="nv">BUILD_DATETIME_FROM_FILE</span> <span class="o">:=</span> <span class="err">$$</span><span class="o">(</span><span class="nb">cat</span> <span class="nv">$(OUT_DIR)</span>/build_date.txt<span class="o">)</span>
+<span class="err">...</span>
+
+<span class="c"># This allows us to force a clean build - included after the config.mk
+# environment setup is done, but before we generate any dependencies.  This
+# file does the rm -rf inline so the deps which are all done below will
+# be generated correctly
+</span><span class="k">include</span><span class="sx"> $(BUILD_SYSTEM)/cleanbuild.mk</span>
+
+<span class="err">...</span>
+
+<span class="k">ifneq</span> <span class="nv">($(VERSION_CHECK_SEQUENCE_NUMBER)$(JAVA_NOT_REQUIRED),$(VERSIONS_CHECKED)$(JAVA_NOT_REQUIRED_CHECKED))</span>
+
+    <span class="err">$(info</span> <span class="err">Checking</span> <span class="err">build</span> <span class="err">tools</span> <span class="err">versions...)</span>
+
+    <span class="c"># check for a case sensitive file system
+</span>    <span class="err">...</span>
+
+    <span class="c"># Make sure that there are no spaces in the absolute path; the
+</span>    <span class="c"># build system can't deal with them.
+</span>    <span class="err">...</span>
+
+    <span class="k">ifneq</span> <span class="nv">($(JAVA_NOT_REQUIRED),true)</span>
+        <span class="nv">java_version_str</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> <span class="nb">unset </span>_JAVA_OPTIONS <span class="o">&amp;&amp;</span> java <span class="nt">-version</span> 2&gt;&amp;1<span class="nf">)</span>
+        <span class="nv">javac_version_str</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">shell</span> <span class="nb">unset </span>_JAVA_OPTIONS <span class="o">&amp;&amp;</span> javac <span class="nt">-version</span> 2&gt;&amp;1<span class="nf">)</span>
+
+        <span class="c"># Check for the correct version of java, should be 1.8 by
+</span>        <span class="c"># default and only 1.7 if LEGACY_USE_JAVA7 is set.
+</span>        <span class="err">...</span>
+
+        <span class="c"># Check for the current JDK.
+</span>        <span class="c">#
+</span>        <span class="c"># For Java 1.7/1.8, we require OpenJDK on linux and Oracle JDK on Mac OS.
+</span>        <span class="nv">requires_openjdk</span> <span class="o">:=</span> <span class="nb">false</span>
+        <span class="k">ifeq</span> <span class="nv">($(BUILD_OS),linux)</span>
+        <span class="nv">requires_openjdk</span> <span class="o">:=</span> <span class="nb">true</span>
+        <span class="k">endif</span>
+
+
+        <span class="c"># Check for the current jdk
+</span>        <span class="err">...</span>
+
+        <span class="nv">KNOWN_INCOMPATIBLE_JAVAC_VERSIONS</span> <span class="o">:=</span> google
+        <span class="nv">incompat_javac</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">foreach</span> v,<span class="nv">$(KNOWN_INCOMPATIBLE_JAVAC_VERSIONS)</span>,<span class="nf">$(</span><span class="nb">findstring</span> <span class="nv">$(v)</span>,<span class="nv">$(javac_version_str)</span><span class="nf">))</span>
+        <span class="k">ifneq</span> <span class="nv">($(incompat_javac),)</span>
+        <span class="nv">javac_version</span> <span class="o">:=</span>
+        <span class="k">endif</span>
+
+        <span class="c"># Check for the correct version of javac
+</span>        <span class="err">...</span>
+
+    <span class="k">endif </span><span class="c"># if JAVA_NOT_REQUIRED
+</span>
+    <span class="k">ifndef</span> <span class="nv">BUILD_EMULATOR</span>
+    <span class="c"># Emulator binaries are now provided under prebuilts/android-emulator/
+</span>    <span class="nv">BUILD_EMULATOR</span> <span class="o">:=</span> <span class="nb">false</span>
+    <span class="k">endif</span>
+
+    <span class="nl">$(shell echo 'VERSIONS_CHECKED </span><span class="o">:</span><span class="nf">= $(VERSION_CHECK_SEQUENCE_NUMBER)' </span>\
+<span class="nf">            &gt; $(OUT_DIR)/versions_checked.mk)</span>
+    <span class="err">$(shell</span> <span class="err">echo</span> <span class="s1">'BUILD_EMULATOR ?= $(BUILD_EMULATOR)'</span> <span class="err">\</span>
+            <span class="err">&gt;&gt;</span> <span class="err">$(OUT_DIR)/versions_checked.mk)</span>
+    <span class="nl">$(shell echo 'JAVA_NOT_REQUIRED_CHECKED </span><span class="o">:</span><span class="nf">= $(JAVA_NOT_REQUIRED)' </span>\
+<span class="nf">            &gt;&gt; $(OUT_DIR)/versions_checked.mk)</span>
+<span class="k">endif</span>
+
+<span class="c"># These are the modifier targets that don't do anything themselves, but
+# change the behavior of the build.
+# (must be defined before including definitions.make)
+</span><span class="nv">INTERNAL_MODIFIER_TARGETS</span> <span class="o">:=</span> showcommands all
+
+<span class="c"># EMMA_INSTRUMENT_STATIC merges the static emma library to each emma-enabled module.
+</span><span class="k">ifeq</span> <span class="nv">(true,$(EMMA_INSTRUMENT_STATIC))</span>
+<span class="nv">EMMA_INSTRUMENT</span> <span class="o">:=</span> <span class="nb">true</span>
+<span class="k">endif</span>
+
+<span class="err">...</span>
+
+<span class="c">#
+# -----------------------------------------------------------------
+# Add the product-defined properties to the build properties.
+</span><span class="k">ifdef</span> <span class="nv">PRODUCT_SHIPPING_API_LEVEL</span>
+<span class="nv">ADDITIONAL_BUILD_PROPERTIES</span> <span class="o">+=</span> <span class="se">\</span>
+  ro.product.first_api_level<span class="o">=</span><span class="nv">$(PRODUCT_SHIPPING_API_LEVEL)</span>
+<span class="k">endif</span>
+
+<span class="k">ifneq</span> <span class="nv">($(BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED), true)</span>
+  <span class="nv">ADDITIONAL_BUILD_PROPERTIES</span> <span class="o">+=</span> <span class="nv">$(PRODUCT_PROPERTY_OVERRIDES)</span>
+<span class="k">else</span>
+  <span class="k">ifndef</span> <span class="nv">BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE</span>
+    <span class="nv">ADDITIONAL_BUILD_PROPERTIES</span> <span class="o">+=</span> <span class="nv">$(PRODUCT_PROPERTY_OVERRIDES)</span>
+  <span class="k">endif</span>
+<span class="k">endif</span>
+
+
+<span class="c"># Bring in standard build system definitions.
+</span><span class="k">include</span><span class="sx"> $(BUILD_SYSTEM)/definitions.mk</span>
+
+<span class="c"># Bring in dex_preopt.mk
+</span><span class="k">include</span><span class="sx"> $(BUILD_SYSTEM)/dex_preopt.mk</span>
+
+<span class="err">...</span>
+
+<span class="c"># -----------------------------------------------------------------
+# Variable to check java support level inside PDK build.
+# Not necessary if the components is not in PDK.
+# not defined : not supported
+# "sdk" : sdk API only
+# "platform" : platform API supproted
+</span><span class="nv">TARGET_BUILD_JAVA_SUPPORT_LEVEL</span> <span class="o">:=</span> platform
+
+<span class="c"># -----------------------------------------------------------------
+# The pdk (Platform Development Kit) build
+</span><span class="k">include</span><span class="sx"> build/core/pdk_config.mk</span>
+
+<span class="c">#
+# -----------------------------------------------------------------
+# Jack version configuration
+</span><span class="k">-include</span><span class="sx"> $(TOPDIR)prebuilts/sdk/tools/jack_versions.mk</span>
+<span class="k">-include</span><span class="sx"> $(TOPDIR)prebuilts/sdk/tools/jack_for_module.mk</span>
+
+<span class="c">#
+# -----------------------------------------------------------------
+# Install and start Jack server
+</span><span class="k">-include</span><span class="sx"> $(TOPDIR)prebuilts/sdk/tools/jack_server_setup.mk</span>
+
+<span class="c">#
+# -----------------------------------------------------------------
+# Jacoco package name for Jack
+</span><span class="k">-include</span><span class="sx"> $(TOPDIR)external/jacoco/config.mk</span>
+
+<span class="err">....</span>
+
+<span class="c"># -----------------------------------------------------------------
+###
+### In this section we set up the things that are different
+### between the build variants
+###
+</span>
+<span class="nv">is_sdk_build</span> <span class="o">:=</span>
+
+<span class="k">ifneq</span> <span class="nv">($(filter sdk win_sdk sdk_addon,$(MAKECMDGOALS)),)</span>
+<span class="nv">is_sdk_build</span> <span class="o">:=</span> <span class="nb">true</span>
+<span class="k">endif</span>
+
+<span class="c"># Add build properties for ART. These define system properties used by installd
+# to pass flags to dex2oat.
+</span><span class="err">...</span>
+
+<span class="c">## user/userdebug ##
+</span>
+<span class="nv">user_variant</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">filter</span> user userdebug,<span class="nv">$(TARGET_BUILD_VARIANT)</span><span class="nf">)</span>
+<span class="nv">enable_target_debugging</span> <span class="o">:=</span> <span class="nb">true</span>
+<span class="nv">tags_to_install</span> <span class="o">:=</span>
+<span class="k">ifneq</span> <span class="nv">(,$(user_variant))</span>
+  <span class="err">...</span>
+
+<span class="k">else </span><span class="c"># !user_variant
+</span>  <span class="err">...</span>
+<span class="k">endif </span><span class="c"># !user_variant
+</span>
+<span class="k">ifeq</span> <span class="nv">(true,$(strip $(enable_target_debugging)))</span>
+  <span class="c"># Target is more debuggable and adbd is on by default
+</span>  <span class="nv">ADDITIONAL_DEFAULT_PROPERTIES</span> <span class="o">+=</span> ro.debuggable<span class="o">=</span>1
+  <span class="c"># Enable Dalvik lock contention logging.
+</span>  <span class="nv">ADDITIONAL_BUILD_PROPERTIES</span> <span class="o">+=</span> dalvik.vm.lockprof.threshold<span class="o">=</span>500
+  <span class="c"># Include the debugging/testing OTA keys in this build.
+</span>  <span class="nv">INCLUDE_TEST_OTA_KEYS</span> <span class="o">:=</span> <span class="nb">true</span>
+<span class="k">else </span><span class="c"># !enable_target_debugging
+</span>  <span class="c"># Target is less debuggable and adbd is off by default
+</span>  <span class="nv">ADDITIONAL_DEFAULT_PROPERTIES</span> <span class="o">+=</span> ro.debuggable<span class="o">=</span>0
+<span class="k">endif </span><span class="c"># !enable_target_debugging
+</span>
+<span class="c">## eng ##
+</span>
+<span class="k">ifeq</span> <span class="nv">($(TARGET_BUILD_VARIANT),eng)</span>
+<span class="err">...</span>
+<span class="k">endif</span>
+
+<span class="c">## sdk ##
+</span>
+<span class="k">ifdef</span> <span class="nv">is_sdk_build</span>
+
+<span class="err">...</span>
+<span class="k">else </span><span class="c"># !sdk
+</span><span class="k">endif</span>
+
+<span class="err">...</span>
+
+<span class="c">#
+# Typical build; include any Android.mk files we can find.
+#
+</span>
+<span class="nv">FULL_BUILD</span> <span class="o">:=</span> <span class="nb">true</span>
+
+<span class="c"># Before we go and include all of the module makefiles, mark the PRODUCT_*
+# and ADDITIONAL*PROPERTIES values readonly so that they won't be modified.
+</span><span class="err">$(call</span> <span class="err">readonly-product-vars)</span>
+<span class="nv">ADDITIONAL_DEFAULT_PROPERTIES</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">strip</span> <span class="nv">$(ADDITIONAL_DEFAULT_PROPERTIES)</span><span class="nf">)</span>
+<span class="nv">.KATI_READONLY</span> <span class="o">:=</span> ADDITIONAL_DEFAULT_PROPERTIES
+<span class="nv">ADDITIONAL_BUILD_PROPERTIES</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">strip</span> <span class="nv">$(ADDITIONAL_BUILD_PROPERTIES)</span><span class="nf">)</span>
+<span class="nv">.KATI_READONLY</span> <span class="o">:=</span> ADDITIONAL_BUILD_PROPERTIES
+
+<span class="k">ifneq</span> <span class="nv">($(PRODUCT_ENFORCE_RRO_TARGETS),)</span>
+<span class="nv">ENFORCE_RRO_SOURCES</span> <span class="o">:=</span>
+<span class="k">endif</span>
+
+<span class="k">ifneq</span> <span class="nv">($(ONE_SHOT_MAKEFILE),)</span>
+<span class="c"># We've probably been invoked by the "mm" shell function
+# with a subdirectory's makefile.
+</span><span class="k">include</span><span class="sx"> $(SOONG_ANDROID_MK) $(wildcard $(ONE_SHOT_MAKEFILE))</span>
+<span class="err">...</span>
+
+<span class="k">else </span><span class="c"># ONE_SHOT_MAKEFILE
+</span>
+<span class="k">ifneq</span> <span class="nv">($(dont_bother),true)</span>
+<span class="c">#
+# Include all of the makefiles in the system
+#
+</span>
+<span class="err">...</span>
+
+<span class="k">endif </span><span class="c"># dont_bother
+</span>
+<span class="k">endif </span><span class="c"># ONE_SHOT_MAKEFILE
+</span>
+<span class="c"># -------------------------------------------------------------------
+# All module makefiles have been included at this point.
+# -------------------------------------------------------------------
+</span>
+<span class="c"># -------------------------------------------------------------------
+# Enforce to generate all RRO packages for modules having resource
+# overlays.
+# -------------------------------------------------------------------
+</span><span class="k">ifneq</span> <span class="nv">($(PRODUCT_ENFORCE_RRO_TARGETS),)</span>
+<span class="err">$(call</span> <span class="err">generate_all_enforce_rro_packages)</span>
+<span class="k">endif</span>
+
+<span class="err">...</span>
+
+<span class="c"># -------------------------------------------------------------------
+# Figure out our module sets.
+#
+# Of the modules defined by the component makefiles,
+# determine what we actually want to build.
+</span>
+<span class="c">###########################################################
+## Expand a module name list with REQUIRED modules
+###########################################################
+# $(1): The variable name that holds the initial module name list.
+#       the variable will be modified to hold the expanded results.
+# $(2): The initial module name list.
+# Returns empty string (maybe with some whitespaces).
+</span><span class="err">define</span> <span class="err">expand-required-modules</span>
+<span class="nl">$(eval _erm_new_modules </span><span class="o">:</span><span class="nf">= $(sort $(filter-out $($(1))</span><span class="p">,</span>\
+<span class="nf">  $(foreach m</span><span class="p">,</span><span class="nf">$(2)</span><span class="p">,</span><span class="nf">$(ALL_MODULES.$(m).REQUIRED)))))</span>\
+<span class="nf">$(if $(_erm_new_modules)</span><span class="p">,</span><span class="nf">$(eval $(1) += $(_erm_new_modules))</span>\
+<span class="nf">  $(call expand-required-modules</span><span class="p">,</span><span class="nf">$(1)</span><span class="p">,</span><span class="nf">$(_erm_new_modules)))</span>
+<span class="err">endef</span>
+
+<span class="k">ifdef</span> <span class="nv">FULL_BUILD</span>
+  <span class="c"># The base list of modules to build for this product is specified
+</span>  <span class="c"># by the appropriate product definition file, which was included
+</span>  <span class="c"># by product_config.mk.
+</span>  <span class="err">...</span>
+<span class="k">else</span>
+  <span class="c"># We're not doing a full build, and are probably only including
+</span>  <span class="c"># a subset of the module makefiles.  Don't try to build any modules
+</span>  <span class="c"># requested by the product, because we probably won't have rules
+</span>  <span class="c"># to build them.
+</span>  <span class="nv">product_FILES</span> <span class="o">:=</span>
+<span class="k">endif</span>
+
+<span class="nv">eng_MODULES</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">call</span> get-tagged-modules,eng<span class="nf">)</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">call</span> module-installed-files, <span class="err">$</span><span class="o">(</span>PRODUCTS.<span class="nv">$(INTERNAL_PRODUCT)</span>.PRODUCT_PACKAGES_ENG<span class="nf">))</span> <span class="se">\</span>
+    <span class="nf">)</span>
+<span class="nv">debug_MODULES</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">call</span> get-tagged-modules,debug<span class="nf">)</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">call</span> module-installed-files, <span class="err">$</span><span class="o">(</span>PRODUCTS.<span class="nv">$(INTERNAL_PRODUCT)</span>.PRODUCT_PACKAGES_DEBUG<span class="nf">))</span> <span class="se">\</span>
+    <span class="nf">)</span>
+<span class="nv">tests_MODULES</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">call</span> get-tagged-modules,tests<span class="nf">)</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">call</span> module-installed-files, <span class="err">$</span><span class="o">(</span>PRODUCTS.<span class="nv">$(INTERNAL_PRODUCT)</span>.PRODUCT_PACKAGES_TESTS<span class="nf">))</span> <span class="se">\</span>
+    <span class="nf">)</span>
+
+<span class="c"># TODO: Remove the 3 places in the tree that use ALL_DEFAULT_INSTALLED_MODULES
+# and get rid of it from this list.
+</span><span class="nv">modules_to_install</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="se">\</span>
+    <span class="nv">$(ALL_DEFAULT_INSTALLED_MODULES)</span> <span class="se">\</span>
+    <span class="nv">$(product_FILES)</span> <span class="se">\</span>
+    <span class="nf">$(</span><span class="nb">foreach</span> tag,<span class="nv">$(tags_to_install)</span>,<span class="err">$</span><span class="o">(</span><span class="nv">$(tag)</span>_MODULES<span class="nf">))</span> <span class="se">\</span>
+    <span class="nv">$(CUSTOM_MODULES)</span> <span class="se">\</span>
+  <span class="nf">)</span>
+
+<span class="c"># Some packages may override others using LOCAL_OVERRIDES_PACKAGES.
+# Filter out (do not install) any overridden packages.
+</span><span class="nv">overridden_packages</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">call</span> get-package-overrides,<span class="nv">$(modules_to_install)</span><span class="nf">)</span>
+<span class="k">ifdef</span> <span class="nv">overridden_packages</span>
+<span class="c">#  old_modules_to_install := $(modules_to_install)
+</span>  <span class="nv">modules_to_install</span> <span class="o">:=</span> <span class="se">\</span>
+      <span class="nf">$(</span><span class="nb">filter-out</span> <span class="nf">$(</span><span class="nb">foreach</span> p,<span class="nv">$(overridden_packages)</span>,<span class="nv">$(p)</span> %/<span class="nv">$(p)</span>.apk %/<span class="nv">$(p)</span>.odex %/<span class="nv">$(p)</span>.vdex<span class="nf">)</span>, <span class="se">\</span>
+          <span class="nv">$(modules_to_install)</span><span class="nf">)</span>
+<span class="k">endif</span>
+<span class="c">#$(error filtered out
+#           $(filter-out $(modules_to_install),$(old_modules_to_install)))
+</span>
+<span class="c"># Don't include any GNU General Public License shared objects or static
+# libraries in SDK images.  GPL executables (not static/dynamic libraries)
+# are okay if they don't link against any closed source libraries (directly
+# or indirectly)
+</span>
+<span class="c"># It's ok (and necessary) to build the host tools, but nothing that's
+# going to be installed on the target (including static libraries).
+</span>
+<span class="err">...</span>
+
+<span class="c"># build/core/Makefile contains extra stuff that we don't want to pollute this
+# top-level makefile with.  It expects that ALL_DEFAULT_INSTALLED_MODULES
+# contains everything that's built during the current make, but it also further
+# extends ALL_DEFAULT_INSTALLED_MODULES.
+</span><span class="nv">ALL_DEFAULT_INSTALLED_MODULES</span> <span class="o">:=</span> <span class="nv">$(modules_to_install)</span>
+<span class="k">include</span><span class="sx"> $(BUILD_SYSTEM)/Makefile</span>
+<span class="nv">modules_to_install</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="nv">$(ALL_DEFAULT_INSTALLED_MODULES)</span><span class="nf">)</span>
+<span class="nv">ALL_DEFAULT_INSTALLED_MODULES</span> <span class="o">:=</span>
+
+
+<span class="c"># These are additional goals that we build, in order to make sure that there
+# is as little code as possible in the tree that doesn't build.
+</span><span class="nv">modules_to_check</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">foreach</span> m,<span class="nv">$(ALL_MODULES)</span>,<span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.CHECKED<span class="nf">))</span>
+
+<span class="c"># If you would like to build all goals, and not skip any intermediate
+# steps, you can pass the "all" modifier goal on the commandline.
+</span><span class="k">ifneq</span> <span class="nv">($(filter all,$(MAKECMDGOALS)),)</span>
+<span class="nv">modules_to_check</span> <span class="o">+=</span> <span class="nf">$(</span><span class="nb">foreach</span> m,<span class="nv">$(ALL_MODULES)</span>,<span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.BUILT<span class="nf">))</span>
+<span class="k">endif</span>
+
+<span class="c"># for easier debugging
+</span><span class="nv">modules_to_check</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="nv">$(modules_to_check)</span><span class="nf">)</span>
+<span class="c">#$(error modules_to_check $(modules_to_check))
+</span>
+<span class="c"># -------------------------------------------------------------------
+# This is used to to get the ordering right, you can also use these,
+# but they're considered undocumented, so don't complain if their
+# behavior changes.
+# An internal target that depends on all copied headers
+# (see copy_headers.make).  Other targets that need the
+# headers to be copied first can depend on this target.
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">all_copied_headers</span>
+<span class="nl">all_copied_headers</span><span class="o">:</span> <span class="nf">;</span>
+
+<span class="nl">$(ALL_C_CPP_ETC_OBJECTS)</span><span class="o">:</span> <span class="nf">| all_copied_headers</span>
+
+<span class="c"># All the droid stuff, in directories
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">files</span>
+<span class="nl">files</span><span class="o">:</span> <span class="nf">$(modules_to_install) </span>\
+<span class="nf">       $(INSTALLED_ANDROID_INFO_TXT_TARGET)</span>
+
+<span class="c"># -------------------------------------------------------------------
+</span>
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">checkbuild</span>
+<span class="nl">checkbuild</span><span class="o">:</span> <span class="nf">$(modules_to_check) droid_targets</span>
+
+<span class="k">ifeq</span> <span class="nv">(true,$(ANDROID_BUILD_EVERYTHING_BY_DEFAULT))</span>
+<span class="nl">droid</span><span class="o">:</span> <span class="nf">checkbuild</span>
+<span class="k">endif</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">ramdisk</span>
+<span class="nl">ramdisk</span><span class="o">:</span> <span class="nf">$(INSTALLED_RAMDISK_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">systemtarball</span>
+<span class="nl">systemtarball</span><span class="o">:</span> <span class="nf">$(INSTALLED_SYSTEMTARBALL_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">boottarball</span>
+<span class="nl">boottarball</span><span class="o">:</span> <span class="nf">$(INSTALLED_BOOTTARBALL_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">userdataimage</span>
+<span class="nl">userdataimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_USERDATAIMAGE_TARGET)</span>
+
+<span class="k">ifneq</span> <span class="nv">(,$(filter userdataimage, $(MAKECMDGOALS)))</span>
+<span class="err">$(call</span> <span class="err">dist-for-goals,</span> <span class="err">userdataimage,</span> <span class="err">$(BUILT_USERDATAIMAGE_TARGET))</span>
+<span class="k">endif</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">userdatatarball</span>
+<span class="nl">userdatatarball</span><span class="o">:</span> <span class="nf">$(INSTALLED_USERDATATARBALL_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">cacheimage</span>
+<span class="nl">cacheimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_CACHEIMAGE_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">bptimage</span>
+<span class="nl">bptimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_BPTIMAGE_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">vendorimage</span>
+<span class="nl">vendorimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_VENDORIMAGE_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">systemotherimage</span>
+<span class="nl">systemotherimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_SYSTEMOTHERIMAGE_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">bootimage</span>
+<span class="nl">bootimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_BOOTIMAGE_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">vbmetaimage</span>
+<span class="nl">vbmetaimage</span><span class="o">:</span> <span class="nf">$(INSTALLED_VBMETAIMAGE_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">auxiliary</span>
+<span class="nl">auxiliary</span><span class="o">:</span> <span class="nf">$(INSTALLED_AUX_TARGETS)</span>
+
+<span class="c"># Build files and then package it into the rom formats
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">droidcore</span>
+<span class="nl">droidcore</span><span class="o">:</span> <span class="nf">files </span>\
+<span class="nf">	systemimage </span>\
+<span class="nf">	$(INSTALLED_BOOTIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_RECOVERYIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_VBMETAIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_USERDATAIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_CACHEIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_BPTIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_VENDORIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_SYSTEMOTHERIMAGE_TARGET) </span>\
+<span class="nf">	$(INSTALLED_FILES_FILE) </span>\
+<span class="nf">	$(INSTALLED_FILES_FILE_VENDOR) </span>\
+<span class="nf">	$(INSTALLED_FILES_FILE_SYSTEMOTHER)</span>
+
+<span class="c"># dist_files only for putting your library into the dist directory with a full build.
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">dist_files</span>
+
+<span class="k">ifneq</span> <span class="nv">($(TARGET_BUILD_APPS),)</span>
+  <span class="c"># If this build is just for apps, only build apps and not the full system by default.
+</span>
+  <span class="nv">unbundled_build_modules</span> <span class="o">:=</span>
+  <span class="k">ifneq</span> <span class="nv">($(filter all,$(TARGET_BUILD_APPS)),)</span>
+    <span class="c"># If they used the magic goal "all" then build all apps in the source tree.
+</span>    <span class="nv">unbundled_build_modules</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">foreach</span> m,<span class="nf">$(</span><span class="nb">sort</span> <span class="nv">$(ALL_MODULES)</span><span class="nf">)</span>,<span class="nf">$(</span><span class="nb">if</span> <span class="nf">$(</span><span class="nb">filter</span> APPS,<span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.CLASS<span class="nf">))</span>,<span class="nv">$(m)</span><span class="nf">))</span>
+  <span class="k">else</span>
+    <span class="nv">unbundled_build_modules</span> <span class="o">:=</span> <span class="nv">$(TARGET_BUILD_APPS)</span>
+  <span class="k">endif</span>
+
+  <span class="c"># Dist the installed files if they exist.
+</span>  <span class="nv">apps_only_installed_files</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">foreach</span> m,<span class="nv">$(unbundled_build_modules)</span>,<span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.INSTALLED<span class="nf">))</span>
+  <span class="err">$(call</span> <span class="err">dist-for-goals,apps_only,</span> <span class="err">$(apps_only_installed_files))</span>
+  <span class="c"># For uninstallable modules such as static Java library, we have to dist the built file,
+</span>  <span class="c"># as &lt;module_name&gt;.&lt;suffix&gt;
+</span>  <span class="nv">apps_only_dist_built_files</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">foreach</span> m,<span class="nv">$(unbundled_build_modules)</span>,<span class="nf">$(</span><span class="nb">if</span> <span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.INSTALLED<span class="nf">)</span>,,<span class="se">\</span>
+      <span class="nf">$(</span><span class="nb">if</span> <span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.BUILT<span class="nf">)</span>,<span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.BUILT<span class="nf">)</span>:<span class="nv">$(m)</span><span class="nf">$(</span><span class="nb">suffix</span> <span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.BUILT<span class="nf">)))</span><span class="se">\</span>
+      <span class="nf">$(</span><span class="nb">if</span> <span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.AAR<span class="nf">)</span>,<span class="err">$</span><span class="o">(</span>ALL_MODULES.<span class="nv">$(m)</span>.AAR<span class="nf">)</span>:<span class="nv">$(m)</span>.aar<span class="nf">)</span><span class="se">\</span>
+      <span class="nf">))</span>
+  <span class="err">$(call</span> <span class="err">dist-for-goals,apps_only,</span> <span class="err">$(apps_only_dist_built_files))</span>
+
+  <span class="k">ifeq</span> <span class="nv">($(EMMA_INSTRUMENT),true)</span>
+    <span class="nl">$(EMMA_META_ZIP) </span><span class="o">:</span> <span class="nf">$(apps_only_installed_files)</span>
+
+    <span class="err">$(call</span> <span class="err">dist-for-goals,apps_only,</span> <span class="err">$(EMMA_META_ZIP))</span>
+  <span class="k">endif</span>
+
+  <span class="nl">$(PROGUARD_DICT_ZIP) </span><span class="o">:</span> <span class="nf">$(apps_only_installed_files)</span>
+  <span class="err">$(call</span> <span class="err">dist-for-goals,apps_only,</span> <span class="err">$(PROGUARD_DICT_ZIP))</span>
+
+  <span class="nl">$(SYMBOLS_ZIP) </span><span class="o">:</span> <span class="nf">$(apps_only_installed_files)</span>
+  <span class="err">$(call</span> <span class="err">dist-for-goals,apps_only,</span> <span class="err">$(SYMBOLS_ZIP))</span>
+
+  <span class="nl">$(COVERAGE_ZIP) </span><span class="o">:</span> <span class="nf">$(apps_only_installed_files)</span>
+  <span class="err">$(call</span> <span class="err">dist-for-goals,apps_only,</span> <span class="err">$(COVERAGE_ZIP))</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">apps_only</span>
+<span class="nl">apps_only</span><span class="o">:</span> <span class="nf">$(unbundled_build_modules)</span>
+
+<span class="nl">droid_targets</span><span class="o">:</span> <span class="nf">apps_only</span>
+
+<span class="c"># Combine the NOTICE files for a apps_only build
+</span><span class="err">$(eval</span> <span class="err">$(call</span> <span class="err">combine-notice-files,</span> <span class="err">html,</span> <span class="err">\</span>
+    <span class="err">$(target_notice_file_txt),</span> <span class="err">\</span>
+    <span class="err">$(target_notice_file_html_or_xml),</span> <span class="err">\</span>
+    <span class="s2">"Notices for files for apps:"</span><span class="err">,</span> <span class="err">\</span>
+    <span class="err">$(TARGET_OUT_NOTICE_FILES),</span> <span class="err">\</span>
+    <span class="err">$(apps_only_installed_files)))</span>
+
+
+<span class="k">else </span><span class="c"># TARGET_BUILD_APPS
+</span>  <span class="err">$(call</span> <span class="err">dist-for-goals,</span> <span class="err">droidcore,</span> <span class="err">\</span>
+    <span class="err">$(INTERNAL_UPDATE_PACKAGE_TARGET)</span> <span class="err">\</span>
+    <span class="err">$(INTERNAL_OTA_PACKAGE_TARGET)</span> <span class="err">\</span>
+    <span class="err">$(BUILT_OTATOOLS_PACKAGE)</span> <span class="err">\</span>
+    <span class="err">$(SYMBOLS_ZIP)</span> <span class="err">\</span>
+    <span class="err">$(COVERAGE_ZIP)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_FILES_FILE)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_FILES_FILE_VENDOR)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_FILES_FILE_SYSTEMOTHER)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_BUILD_PROP_TARGET)</span> <span class="err">\</span>
+    <span class="err">$(BUILT_TARGET_FILES_PACKAGE)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_ANDROID_INFO_TXT_TARGET)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_RAMDISK_TARGET)</span> <span class="err">\</span>
+   <span class="err">)</span>
+
+  <span class="c"># Put a copy of the radio/bootloader files in the dist dir.
+</span>  <span class="err">$(foreach</span> <span class="err">f,$(INSTALLED_RADIOIMAGE_TARGET),</span> <span class="err">\</span>
+    <span class="err">$(call</span> <span class="err">dist-for-goals,</span> <span class="err">droidcore,</span> <span class="err">$(f)))</span>
+
+  <span class="k">ifneq</span> <span class="nv">($(ANDROID_BUILD_EMBEDDED),true)</span>
+  <span class="k">ifneq</span> <span class="nv">($(TARGET_BUILD_PDK),true)</span>
+    <span class="err">$(call</span> <span class="err">dist-for-goals,</span> <span class="err">droidcore,</span> <span class="err">\</span>
+      <span class="err">$(APPS_ZIP)</span> <span class="err">\</span>
+      <span class="err">$(INTERNAL_EMULATOR_PACKAGE_TARGET)</span> <span class="err">\</span>
+      <span class="err">$(PACKAGE_STATS_FILE)</span> <span class="err">\</span>
+    <span class="err">)</span>
+  <span class="k">endif</span>
+  <span class="k">endif</span>
+
+  <span class="k">ifeq</span> <span class="nv">($(EMMA_INSTRUMENT),true)</span>
+    <span class="nl">$(EMMA_META_ZIP) </span><span class="o">:</span> <span class="nf">$(INSTALLED_SYSTEMIMAGE)</span>
+
+    <span class="err">$(call</span> <span class="err">dist-for-goals,</span> <span class="err">dist_files,</span> <span class="err">$(EMMA_META_ZIP))</span>
+  <span class="k">endif</span>
+
+<span class="c"># Building a full system-- the default is to build droidcore
+</span><span class="nl">droid_targets</span><span class="o">:</span> <span class="nf">droidcore dist_files</span>
+
+<span class="k">endif </span><span class="c"># TARGET_BUILD_APPS
+</span>
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">docs</span>
+<span class="nl">docs</span><span class="o">:</span> <span class="nf">$(ALL_DOCS)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">sdk</span>
+<span class="nv">ALL_SDK_TARGETS</span> <span class="o">:=</span> <span class="nv">$(INTERNAL_SDK_TARGET)</span>
+<span class="nl">sdk</span><span class="o">:</span> <span class="nf">$(ALL_SDK_TARGETS)</span>
+<span class="err">$(call</span> <span class="err">dist-for-goals,sdk</span> <span class="err">win_sdk,</span> <span class="err">\</span>
+    <span class="err">$(ALL_SDK_TARGETS)</span> <span class="err">\</span>
+    <span class="err">$(SYMBOLS_ZIP)</span> <span class="err">\</span>
+    <span class="err">$(COVERAGE_ZIP)</span> <span class="err">\</span>
+    <span class="err">$(INSTALLED_BUILD_PROP_TARGET)</span> <span class="err">\</span>
+<span class="err">)</span>
+
+<span class="c"># umbrella targets to assit engineers in verifying builds
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">java native target host java-host java-target native-host native-target </span>\
+<span class="nf">        java-host-tests java-target-tests native-host-tests native-target-tests </span>\
+<span class="nf">        java-tests native-tests host-tests target-tests tests java-dex</span>
+<span class="c"># some synonyms
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">host-java target-java host-native target-native </span>\
+<span class="nf">        target-java-tests target-native-tests</span>
+<span class="nl">host-java </span><span class="o">:</span> <span class="nf">java-host</span>
+<span class="nl">target-java </span><span class="o">:</span> <span class="nf">java-target</span>
+<span class="nl">host-native </span><span class="o">:</span> <span class="nf">native-host</span>
+<span class="nl">target-native </span><span class="o">:</span> <span class="nf">native-target</span>
+<span class="nl">target-java-tests </span><span class="o">:</span> <span class="nf">java-target-tests</span>
+<span class="nl">target-native-tests </span><span class="o">:</span> <span class="nf">native-target-tests</span>
+<span class="nl">tests </span><span class="o">:</span> <span class="nf">host-tests target-tests</span>
+
+<span class="c"># Phony target to run all java compilations that use javac instead of jack.
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">javac-check</span>
+
+<span class="k">ifneq</span> <span class="nv">(,$(filter samplecode, $(MAKECMDGOALS)))</span>
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">samplecode</span>
+<span class="nv">sample_MODULES</span> <span class="o">:=</span> <span class="nf">$(</span><span class="nb">sort</span> <span class="nf">$(</span><span class="nb">call</span> get-tagged-modules,samples<span class="nf">))</span>
+<span class="nv">sample_APKS_DEST_PATH</span> <span class="o">:=</span> <span class="nv">$(TARGET_COMMON_OUT_ROOT)</span>/samples
+<span class="nv">sample_APKS_COLLECTION</span> <span class="o">:=</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">foreach</span> module,<span class="nv">$(sample_MODULES)</span>,<span class="nv">$(sample_APKS_DEST_PATH)</span>/<span class="nf">$(</span><span class="nb">notdir</span> <span class="nv">$(module)</span><span class="nf">))</span>
+<span class="err">$(foreach</span> <span class="err">module,$(sample_MODULES),$(eval</span> <span class="err">$(call</span> <span class="err">\</span>
+        <span class="err">copy-one-file,$(module),$(sample_APKS_DEST_PATH)/$(notdir</span> <span class="err">$(module)))))</span>
+<span class="nv">sample_ADDITIONAL_INSTALLED</span> <span class="o">:=</span> <span class="se">\</span>
+        <span class="nf">$(</span><span class="nb">filter-out</span> <span class="nv">$(modules_to_install)</span> <span class="nv">$(modules_to_check)</span>,<span class="nv">$(sample_MODULES)</span><span class="nf">)</span>
+<span class="nl">samplecode</span><span class="o">:</span> <span class="nf">$(sample_APKS_COLLECTION)</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"Collect sample code apks: </span><span class="nv">$^</span><span class="s2">"</span>
+	<span class="c"># remove apks that are not intended to be installed.</span>
+	<span class="nb">rm</span> <span class="nt">-f</span> <span class="nv">$(sample_ADDITIONAL_INSTALLED)</span>
+<span class="k">endif</span>  <span class="c"># samplecode in $(MAKECMDGOALS)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">findbugs</span>
+<span class="nl">findbugs</span><span class="o">:</span> <span class="nf">$(INTERNAL_FINDBUGS_HTML_TARGET) $(INTERNAL_FINDBUGS_XML_TARGET)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">clean</span>
+<span class="nl">clean</span><span class="o">:</span>
+	<span class="p">@</span><span class="nb">rm</span> <span class="nt">-rf</span> <span class="nv">$(OUT_DIR)</span>/<span class="k">*</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"Entire build directory removed."</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">clobber</span>
+<span class="nl">clobber</span><span class="o">:</span> <span class="nf">clean</span>
+
+<span class="c"># The rules for dataclean and installclean are defined in cleanbuild.mk.
+</span>
+<span class="c">#xxx scrape this from ALL_MODULE_NAME_TAGS
+</span><span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">modules</span>
+<span class="nl">modules</span><span class="o">:</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"Available sub-modules:"</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"</span><span class="nf">$(</span><span class="nb">call</span> <span class="s2">module-names-for-tag-list,</span><span class="nv">$(ALL_MODULE_TAGS)</span><span class="nf">)</span><span class="s2">"</span> | <span class="se">\</span>
+	      <span class="nb">tr</span> <span class="nt">-s</span> <span class="s1">' '</span> <span class="s1">'\n'</span> | <span class="nb">sort</span> <span class="nt">-u</span> | <span class="nv">$(COLUMN)</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">showcommands</span>
+<span class="nl">showcommands</span><span class="o">:</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="o">&gt;</span>/dev/null
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">nothing</span>
+<span class="nl">nothing</span><span class="o">:</span>
+	<span class="p">@</span><span class="nb">echo </span>Successfully <span class="nb">read </span>the makefiles.
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">tidy_only</span>
+<span class="nl">tidy_only</span><span class="o">:</span>
+	<span class="p">@</span><span class="nb">echo </span>Successfully make tidy_only.
+
+<span class="nl">ndk</span><span class="o">:</span> <span class="nf">$(SOONG_OUT_DIR)/ndk.timestamp</span>
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">ndk</span>
+
+<span class="nl">.PHONY</span><span class="o">:</span> <span class="nf">all_link_types</span>
+<span class="nl">all_link_types</span><span class="o">:</span>
+
+<span class="k">endif </span><span class="err">#</span> <span class="err">KATI</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  在main.mk中出现最早的一条规则是<code class="language-plaintext highlighter-rouge">.PHONY: droid</code>,表明了最终目标是droid这个伪目标。不过按照Makefile语言的特性，最后执行的才是规则语句，也就是droid这个依赖的推导要等到条件语句、变量赋值语句、函数语句等执行完才会开始执行。我们可以这样理解开始推导规则之前的语句大部分都是在为之后的推导做铺垫，比如设置环境变量、判断编译环境等。</p>
+
+<p>  推理到这里，真相就渐渐的浮出水面了，后面的我就不再继续了。整个编译流程我们已经有了一个大概的认识，对于更多细节还是需要读者自己去看源代码才能了解的更加透彻，这一篇文章的目的只是，让我们知道Makefile文件的使用。由于同时存在make、kati和Blueprint、Soong两套构建工具导致，在阅读Makefile文件没有那么纯粹。不过Android团队在后续应该会渐渐去掉make、kati这套构建工具，希望不要向jack，搞到一般说不搞了。</p>
+
+<p>  如果想在多了解一些Android的构建系统的话，我这里推荐几篇文章供读者阅读</p>
+
+<ul>
+  <li>
+    <p><a href="http://blog.csdn.net/luoshengyang/article/details/18466779">Android编译系统简要介绍和学习计划</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-android-build/index.html">理解 Android Build 系统</a></p>
+  </li>
+  <li>
+    <p><a href="http://android.cloudchou.com/">Android编译系统参考手册</a></p>
+  </li>
+</ul>
+
+<h2 id="4reference"><em class="header2-font">4.Reference</em></h2>
+<p><a href="http://wiki.ubuntu.org.cn/%E8%B7%9F%E6%88%91%E4%B8%80%E8%B5%B7%E5%86%99Makefile">跟我一起写Makefile</a></p>
+
+<p><a href="http://www.gnu.org/software/make/manual/html_node/index.html?cm_mc_uid=45784307156114982261855&amp;cm_mc_sid_50200000=1506734444">GNU make</a></p>
+
+<p><a href="https://www.zhihu.com/question/27455963">make makefile cmake qmake都是什么，有什么区别？</a></p>
+
+<p><a href="http://www.ruanyifeng.com/blog/2015/02/make.html">Make 命令教程</a></p>
+
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/18466779">Android编译系统简要介绍和学习计划</a></p>
+
+<p><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-android-build/index.html">理解 Android Build 系统</a></p>
+
+<p><a href="http://android.cloudchou.com/">Android编译系统参考手册</a></p>
+
+<p><a href="http://blog.csdn.net/chaoy1116/article/details/53063082">Android7.0 Ninja编译原理</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2017-10-11/build-tools-gnumake" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2017-10-11/build-tools-gnumake&text=构建工具GNU make" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2017-10-11/build-tools-gnumake&title=构建工具GNU make&summary=使用Makefile语言描述编译过程&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=构建工具GNU make&body=使用Makefile语言描述编译过程 https://jamesfchen.github.io/2017-10-11/build-tools-gnumake" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017-10-11/build-tools-gnumake";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

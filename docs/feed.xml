@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>电解质的狗窝(Electrolyte)</title>
+		<description></description>
+		<link>http://localhost:4000/blog</link>
+		<atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>文件下载系统 --- 前言</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  敬请期待&lt;/p&gt;
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+</description>
+				<pubDate>Tue, 23 Jan 2018 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2018-01-23/sn-file-download-subsystem-foreword.1</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2018-01-23/sn-file-download-subsystem-foreword.1</guid>
+			</item>
+		
+			<item>
+				<title>文件下载系统 --- DownloadProvider</title>
+				<description>&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#1summary&quot; id=&quot;markdown-toc-1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2about&quot; id=&quot;markdown-toc-2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3intoduction&quot; id=&quot;markdown-toc-3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#database-orm&quot; id=&quot;markdown-toc-database-orm&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;DataBase ORM&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#downloadprovider-uri设计&quot; id=&quot;markdown-toc-downloadprovider-uri设计&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;DownloadProvider uri设计&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#downloadprovider的下载流程&quot; id=&quot;markdown-toc-downloadprovider的下载流程&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;DownloadProvider的下载流程&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4reference&quot; id=&quot;markdown-toc-4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  为什么网上的文件下载系统那么多，我要从DownloadProvider开始呢 ? 主要有这几点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;DownloadProvider是Android团队开发的，其软件设计和代码健硕性值得我们学习。&lt;/li&gt;
+  &lt;li&gt;DownloadProvider在Android2.3的时候就有了，经历这么多的版本，我们也能从中看到被重构的痕迹，并学习代码的可维护性。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  DownloadProvider是Android团队开发的一款文件下载系统，提供给任何的应用使用。如果你的应用没有集成自己的文件下载系统的话，那么这一款刚好值得一用。如果没有使用过或者不熟练，可以参考这一篇文章&lt;a href=&quot;http://www.trinea.cn/android/android-downloadmanager/&quot;&gt;DownloadManager的使用&lt;/a&gt;。DownloadManager是一个提供给开发者的操作DownloadProvider的接口。这款文件下载系统，主要用到了关系型数据库来做数据存储（packages/providers/DownloadProvider），利用sharedUserId让DownloadProvider应用运行在media进程，可以让开发者跨进程调用，还有实现断点续传等特性&lt;br /&gt;
+知道了这些知识之后，来啃点源码看看如何设计文件下载系统。&lt;/p&gt;
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  接下来，我准备先从数据层来分析，然后在自上而下，从用户角度分析&lt;/p&gt;
+
+&lt;h3 id=&quot;database-orm&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;DataBase ORM&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;  先来看看数据的表形式和Java Bean关联。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/asset/2018-01-23/2018-01-23-DownloadProvider-orm.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;  数据库一共创建两张表：request_headers、download。通过DownloadManager$Request，向数据库插入开发者提供的数据，比如下载地址、下载到sd卡后的文件名等等。而通过将两张表的数据都保存到DownloadInfo类之后，就可以开始从服务端下载资源了，为了处理网络环境的不稳定的问题，DownloadThread$DownloadInfoDelta提供了某个时刻下载的进度，并且会将数据更新到数据库中。这样可以提供断点续传的功能。当下载完成会通过广播发送通知，提醒用户。&lt;/p&gt;
+
+&lt;h3 id=&quot;downloadprovider-uri设计&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;DownloadProvider uri设计&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;  知道了数据的关系之后，由于使用了ContentProvider来暴露数据，所以还需要设计uri，从而让外部能过安全的访问数据。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/asset/2018-01-23/2018-01-23-DownloadProvider-uri.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;  我们只要关注前四个就行，其余不做讨论。对于这个DownloadProvider uri 的设计，有些代码看起来有点丑而且没有按照官网说的来做。比如authority，官网说要采用&lt;code class=&quot;highlighter-rouge&quot;&gt;com.example.app.provider&lt;/code&gt;这种命名规则才确保唯一性，而DownloadProvider却使用了downloads；还有定义契约类并没有像官网定义的那样，以xxxContract的命名，而是叫做Downloads。&lt;/p&gt;
+
+&lt;p&gt;  对于uri我们来做个简单的划分&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;my_downloads:表示所有行&lt;/li&gt;
+  &lt;li&gt;my_downloads/# ： 表示一行&lt;/li&gt;
+  &lt;li&gt;all_downloads:表示所有行&lt;/li&gt;
+  &lt;li&gt;all_downloads/# ： 表示一行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我们就my_downloads和all_downloads来做个讨论，先来看看路径权限。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/asset/2018-01-23/2018-01-23-DownloadProvider-path-permission.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从这里我们可以看出my_downloads是给外部插入数据用的，而在数据库更新和删除的代码中all_downloads是用来更新数据、删除数据，all_downloads更多是提供给内部使用，不过DownloadManager#setAccessAllDownloads可以设置外部访问是的uri为all_downloads。&lt;/p&gt;
+
+&lt;h3 id=&quot;downloadprovider的下载流程&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;DownloadProvider的下载流程&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/asset/2018-01-23/2018-01-23-DownloadProvider-flowchart.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;  通过DownloadManager$Request类将外部数据插入到数据库中，当数据插入完成时，会调用service，并且开启相应的线程。通过&lt;code class=&quot;highlighter-rouge&quot;&gt;new Thread().start()&lt;/code&gt;调用线程利用SparseArray管理线程，说句实话看到这里我才知道，这个代码已经年代久远，现在科学管理线程的方式已经采用线程池了。这里可以说个东西，通过JobInfo内部类Builder方法setRequiredNetworkType选择在wifi下载，3g网络不下载，而开发者就是可以通过DownloadManager的内部类Request#setAllowedNetworkTypes向obInfo$Builder#setRequiredNetworkType方法提供不同的参数从而实现下载。&lt;/p&gt;
+
+&lt;p&gt;  再来说说DownloadInfoDetal这个类，主要用于实现断点续传。当数据开始传输之后，客户端已收到的数据字节大小会被写入到数据库，数据会通过ParcelFileDescriptor类进行保存操作，一旦网络断开，再次恢复网络时，通过从数据库获取到的已接收的数据字节大小，并结合http header&lt;code class=&quot;highlighter-rouge&quot;&gt;Range：bytes=当前已接收的数据字节大小&lt;/code&gt;，发送给服务端，服务端就会在之前断开的地方继续补传剩余的数据。&lt;/p&gt;
+
+&lt;p&gt;  有一点值得一说，当客户端在接受服务端数据时，通过DownloadProvider#openFile，打开一个指定路径的文件，这个路径可以通过Request#setDestinationInExternalFilesDir，指定下载到sd卡。&lt;/p&gt;
+
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.android.com/guide/topics/providers/content-provider-creating.html&quot;&gt;Creating a Content Provider&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0403/2685.html&quot;&gt;在Android 5.0中使用JobScheduler&lt;/a&gt;&lt;/p&gt;
+</description>
+				<pubDate>Tue, 23 Jan 2018 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2018-01-23/sn-file-download-subsystem-downloadmanager</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2018-01-23/sn-file-download-subsystem-downloadmanager</guid>
+			</item>
+		
+			<item>
+				<title>2017年总结</title>
+				<description>&lt;p&gt;都说忘事开头难，写这篇文章也是一样的。定基调、定内容，既不能像文科生那样“那是一个早晨”，“那是一个晚上”的开头，也不能像理科生那样三大排比的开头。思考良久，最后打算用这样一种不三不四的开头来定基调。&lt;/p&gt;
+
+&lt;p&gt;我自己就很喜欢古文学，对学习文学的人有天生的好感，尽管不是走文艺这块料，但不可及的永远是最好的。小学写日记，初高中写空间日志，大学荒废了。现在又想重新拾起，写文艺内容自己又不爱做梦，写推理内容脑子又不够用，所以写总结就成了一种退无可退的选择。希望这件事能坚持下去。&lt;/p&gt;
+
+&lt;p&gt;由于我是从2016年开始正式步入社会参加工作，所以会粗糙说一下2016.&lt;/p&gt;
+
+&lt;h1 id=&quot;2016年&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2016年&lt;/em&gt;&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;是人生的跨度，结束学生时代，开始工作生涯，象征着一种身份的转变，理应承担更多的责任，这一年发生了很多事情。&lt;/p&gt;
+
+&lt;h2 id=&quot;学习&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;学习&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;开始搭建自己的博客平台，不做宣传不做变现，只求记录自己纯粹的技术知识，追求质量，注入自己的思考，而不是一味地追求数量，搬移别人的内容和停留在认识层面。但是由于缺乏合理的时间管理，结果这一年产量不高。这一年在忙实习，忙毕业论文，忙考证，忙着看书，忙送别。&lt;/p&gt;
+
+&lt;p&gt;也是这一年才明白，大学应该有自己的知识管理。在大一大二无目的无组织无计划无主题的看了很多杂书、电影、动漫、纪录片，走过很多省份的路，喝过喝多地方的酒，认识很多做火车的异乡人，听了很多语种的歌，收藏了很多乐器的音乐，虽然说开拓了视野但是并没有形成系统性的知识，都在消费碎片，却没有总结碎片，所以认识事物必然存在局限性。不过好在这些人生经验也给我以后的道路提供了养料。&lt;/p&gt;
+
+&lt;p&gt;2016年，最渴望的就是多看书，从而改变自身的阶层。（文科生忽略这一条：不过2017年否定了这个观点，它俩不是充分条件，而是具有相关性的离散点，点在方程式可能成立可能不成立。但是如果不努力学习其中的规律又怎么能让自己这个已偏离的点到达具有相关性的位置）&lt;/p&gt;
+
+&lt;h2 id=&quot;毕业&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;毕业&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;这一年最为压抑的莫过于毕业。这个地方承载了太多的回忆。地域文化不同的矛盾，个性不同的矛盾，共同经历一件事不得不离别，还有那些在xxx中心狗了日的日子。反正自己没有走过的都去尝试了一下，结果确实不合适，只因脑子未开窍。举个栗子，刚进大学，就想着去兼职，结果被中介坑骗了两百多块。当时交完钱以为自己以后就要步入社会挣钱是件很幸福的事情，现在想想真是年少无知，不过这样也好，这算是我这个sb给上帝交的学费。自己被陌生人坑还能忍受，但是被身边的人坑却是一件让你怀疑人生的事情。所以那会开始看书找寻答案，天天泡在图书馆，自己能不能适应这个社会都是个未知数。这一年，面对过去的大学四年，面对社会，我仍然保留初心，不要因为社会对你怎么样你就变成他那个样子，尽管我的外表已经变化了，我的底线被拉低了，但是还是会留有一份净土。感谢老罗的话让我找到了答案。&lt;/p&gt;
+
+&lt;h2 id=&quot;行业&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;行业&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;2016年的后半年就是开始新的工作，新的生活，亦如很多新手一样，什么都不懂什么多想学，但是已经了解了大致骨架，规划了大致的学习路线，不过后来由于繁忙很多计划多没有时间实现。&lt;br /&gt;
+在这半年里还是很忙，在大学打球的时间用来看代码，吃饭也变得简单，没有自己做饭了，所以已经过了青春期的人，还会长痘，当时都怀疑是不是身体要逆生长了。&lt;/p&gt;
+
+&lt;h1 id=&quot;2017年&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2017年&lt;/em&gt;&lt;/h1&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;学习-1&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;学习&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;2017年，这一年买了好多书，以至于搬家的时候最不好处理的就是书 ，但是由于时间工作忙，看书的时间少了，博客闲置，写代码能力下降了。不过好在强迫自己去参加了技术分享会，感受这个行业的变化，感受别人对于技术的态度,明白自己应该成为一个怎样的工程师，也在网上看了很多有质量的博客，其中有一位叫做张秋怡的同龄女工程师很让我佩服，让我明白了比你聪明的人还比你努力的道理，所以还算是有得有失吧。期望2018年能多写点代码多思考，而不是停留在阅读代码的层面。&lt;/p&gt;
+
+&lt;p&gt;不过在快临近2018年的时候，看了几部不错的片子，《Genius》让我明白了，爱因斯坦其实也是个情场老手。他在物理学上面的成就被媒体过度放大，以至于让我们忽略了生活中的他是个不称职的父亲、丈夫。在没有工作的迷茫时候，看了今敏导演的几部电影，有讲人的执念，有讲人的蜕变。哦对了，还看了几本书，并且利用豆瓣进行了知识管理，觉得以后每年可以用豆瓣列个书单，为下一年的学习内容做主题式的学习计划。如果你也是热爱学习的人，欢迎关注我的豆瓣&lt;a href=&quot;https://www.douban.com/people/weizhiend/&quot;&gt;未知&lt;/a&gt;，欢迎讨论。&lt;/p&gt;
+
+&lt;h2 id=&quot;价值观&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;价值观&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;看待生老病死：我始终相信，庄周梦蝶，从一个世界消失，不过是去了另一个世界。《钢之炼金术师》动漫中有这么一句话，”等价交换”，即佛家说的”舍离”。&lt;/p&gt;
+
+&lt;p&gt;乐观生活：从上高中到现在，一到夏天和秋天都会有种想死的感觉，但是现在才发现不是TMD还活着好好的吗。现在倒推这种感觉，应该是当时第一次接触了校园文学《夏至未至》以及后续的《悲伤逆流成河》导致的，所以当时疯狂迷恋婉约派的古诗词、仙剑奇侠传系列游戏、致郁系的日本动漫。就像《火影忍者》鸣人童年的心态《孤独》这首歌。不过好在后来看了《三重门》之后，反倒喜欢了豪放派的古诗词，算是让我从消极的情绪中部分挣脱了出来，就像杜牧，在青楼泡妞十年，最后恍然大悟，十年一觉扬州梦。所以就成为了一个消极的乐观者。路越走越长酒越喝越多，消极看待事物，乐观的处理问题。不追求电视剧里面要死要活的生活，只求平平淡淡的生活。&lt;/p&gt;
+
+&lt;p&gt;冷静客观看待事物：互联网没有兴起的时候，21世纪也被誉为生物学的世纪，所以很多生物学专业大热，这算是媒体在放屁；爱因斯坦的天赋在中国被很多媒体曝光，让我们只看到了他的天赋，却忽略他生活中的自私，极致的人必然会有缺陷，客观理解整个人才能不让我们过度崇拜；周杰伦的牛逼之处在于原创编曲，而不在于唱歌。&lt;/p&gt;
+
+&lt;h2 id=&quot;行业-1&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;行业&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;2017年，Android手机整体行业过得确实不怎么好，Android已经由原来的简单暴力敛财，到现在的稳定发展，所以要求工程师的水平提高了。不过这一年被媒体炒作得最火的当然是人工智能，各个企业都在进入这个风口，成为风口的猪，时刻准备起飞。所以程序员又在慌张，学Android还有啥用，赶紧学人工智能，还有什么大数据、云计算。写到这里就不知道咋写了，身处在这个世界谁都想挣大钱，谁都想不被主流淘汰，所以我们顺势而为。&lt;/p&gt;
+
+&lt;h1 id=&quot;2018年&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2018年&lt;/em&gt;&lt;/h1&gt;
+&lt;hr /&gt;
+&lt;p&gt;转眼2018年终于要来了，坎坷的本命年终于要过去了，经历了三个本命年，终于又要从新开始。对于2018年还是心存很多期待，但是不管经历什么，始终要提醒自己“但行好事，莫问前程”&lt;br /&gt;
+列举一下期待的内容：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;书单：[豆瓣]
+少用朋友圈，多看外面的世界
+多听多看多思考，不要活的过于老道
+努力挣钱
+传播自己的技术积累，多写技术博客
+学习金融
+多锻炼
+旅游
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;说完这些，起身拍拍身上的尘土，听到了2018年火车到来的鸣笛声，慌慌张张的登上了火车之后，看到的第一个故事就是两个青年人。&lt;br /&gt;
+地瓜：&lt;br /&gt;
+土豆：。。。&lt;/p&gt;
+
+&lt;p&gt;我继续往前走，期待一下个故事。&lt;/p&gt;
+</description>
+				<pubDate>Wed, 10 Jan 2018 22:50:00 +0000</pubDate>
+				<link>http://localhost:4000/blog/2018-01-10/2017summary</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2018-01-10/2017summary</guid>
+			</item>
+		
+			<item>
+				<title>Location系统 --- 前言</title>
+				<description>&lt;!-- | Left-Aligned  | Center Aligned  | Right Aligned |
+| :------------ |:---------------:| -----:|
+| col 3 is      | some wordy text | $1600 |
+| col 2 is      | centered        |   $12 |
+| zebra stripes | are neat        |    $1 |
+
+----- --&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;getActivity&lt;/td&gt;
+      &lt;td&gt;获得一个可以启动Activity的PendingIntent&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;getService&lt;/td&gt;
+      &lt;td&gt;获得一个可以启动Activity的PendingIntent&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;getBroadcast&lt;/td&gt;
+      &lt;td&gt;获得一个可以发送广播的PendingIntent&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;由于现在的共享单车、滴滴打车、外卖等LBS应用的持续火热和烧钱，导致定位技术在这些行业中担当着举足轻重的角色，定位技术之于LBS应用，就像音视频编解码技术之于视频应用。所以研究定位能让我们更加适应这个社会的变化，而我相信采集有效的定位数据是这些行业实现智能化（人工智能）的基石。&lt;/p&gt;
+
+&lt;p&gt;首先我们需要普及一下定位系统的相关知识。&lt;/p&gt;
+
+&lt;h3 id=&quot;gps&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;GPS&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;国际性组织GNSS，有四大成员：美国GPS、俄罗斯格洛纳斯GLONASS、中国北斗COMPASS、欧洲伽利略GALILEO。&lt;br /&gt;
+现如今的共享单车都在使用中国北斗，比如摩拜、小黄车，也不能说它的技术已经远超GPS，而是政府对于北斗的推广确实上心了，在加上北斗在中国大陆上空确实布局的不错，所以卫星数据准确性高。有兴趣可以看看这篇文章&lt;br /&gt;
+&lt;a href=&quot;https://mp.weixin.qq.com/s/UJCN71SfGIKBlMVH0IFmtw&quot;&gt;GPS 对比 北斗&lt;/a&gt;，补充一下知识。&lt;/p&gt;
+
+&lt;p&gt;但是尽管如此，手机设备毕竟是属于全球化的产品，而且GPS比起北斗确实比较成熟，所以GSP成了首选。为了优化GPS，芯片厂商提供标准的在线辅助工具AGPS，MTK还提供了离线辅助手段（Hot still和EPO）。&lt;/p&gt;
+
+&lt;p&gt;下面表格表明它们的差异性&lt;br /&gt;
+辅助手段 |	机理|	数据来源（流量）|	有效时间|	好处	|改善措施&lt;br /&gt;
+—-|—|—|—|—|—-&lt;br /&gt;
+Hotstill|利用解调出来的卫星星历预测其7天内的星历|已解调卫星的星历（0 KB）|7天|极大缩小定位时间、有助于弱信号环境的定位、无需连网|打上最新的补丁、默认开启辅助手段。&lt;br /&gt;
+EPO	|从MTK 服务器下载EPO file，预测未来30天所有GPS卫星的星历|网络（270KB/次，可利用有wifi链接时进行更新）|30天|极大缩小定位时间、有助于弱信号环境的定位、离线辅助（辅助数据有效时间内）|	&lt;br /&gt;
+AGPS|从AGPS 服务器获取辅助数据（包括参考时间，参考位置，星历和历书|网络（4KB）|2小时|	极大缩小定位时间、有助于弱信号环境的定位&lt;/p&gt;
+
+&lt;p&gt;这些辅助工具能够提供什么呢？答案是：时间、位置、星历。&lt;br /&gt;
+有了这三个参数中的几个，就可以极大的增加Location系统的启动速度。&lt;/p&gt;
+
+&lt;p&gt;下面来看看启动方式。&lt;br /&gt;
+启动方式|介绍&lt;br /&gt;
+—|—&lt;br /&gt;
+FULL start|没有任何的辅助资讯。相当于end user第一次买到手机后使用定位应用的场景。&lt;br /&gt;
+COLD start|有时间辅助资讯，end user不会遇到该场景。&lt;br /&gt;
+WARM start|有时间、位置辅助资讯，end user此次定位距离上次定位超过2～4个小时。&lt;br /&gt;
+HOT start|有所有的辅助资讯，end user此次定位距离上次定位小于2～4小时。&lt;/p&gt;
+
+&lt;h3 id=&quot;cellid&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;CellID&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;这个就是我们常见的基站定位。&lt;/p&gt;
+&lt;h3 id=&quot;wifi-macid&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;WiFi MACID&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;主要采用无线AP的MAC地址定位。手机会保存用户一周之内的数据，通过网络将数据传给服务器，服务器会检索每一个AP地址并结合RSSI（接收信号强度），计算出一个合理的位置。&lt;/p&gt;
+
+&lt;h3 id=&quot;其他&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;其他&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;除了以上几种还有蓝牙、传感器定位。但在手机端较为少用。&lt;/p&gt;
+
+&lt;p&gt;对于这些定位方式如果有兴趣的话可以参考这一篇文章。http://www.cnblogs.com/lesliexong/p/7050360.html 由于本文的重点是讲解Location系统，上面的内容只是作为一个背景知识，所以不进行深入挖掘。&lt;/p&gt;
+
+&lt;p&gt;在Android的Location框架API里，为开发者提供了三种位置提供者：gps(GPS, AGPS)、network(AGPS, CellID, WiFi MACID)、passive(CellID, WiFi MACID)&lt;/p&gt;
+
+&lt;p&gt;下面我们就来罗列一下学习计划&lt;/p&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Location系统—入门&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Location系统—框架概述&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Location系统—启动流程&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Location系统—学习总结&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Location系统—项目实战&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.Reference&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://developerlife.com/2010/10/20/gps/&quot;&gt;Android Location Providers – gps, network, passive – Tutorial&lt;/a&gt;&lt;/p&gt;
+
+</description>
+				<pubDate>Tue, 12 Dec 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-12-12/location-system-foreword</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-12-12/location-system-foreword</guid>
+			</item>
+		
+			<item>
+				<title>React Native ---  前言</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;  讲React Native之前，我们应该知道这么一些故事。React是由Facebook公司开发，并且开源到了github，与Vue都是现在很火的前端开发库。之后Facebook觉得这套库在前端使用的效果很是不错，就想让移动端也支持，从而实现如他们的口号一样“Learn Once，Write Anywhere”—学习一次，任何平台都能写。这不就是大前端吗，所以React Native孕育而生。在编码方面React不同于传统的HTML+CSS+JavaScript这一套开发方式，而是采用组件化的形式，让开发者在组件里面可以混写HTML+JavaScript，即JSX代码。而原来的HTML直接解析成真实DOM树，现在也变成了组件先成为虚拟DOM，在插入文档之后才会变成真实DOM。React利用了一个叫做DOM diff的算法提高了网页的性能，所以我们在移动端上面看到很多用React Native实现的应用性能比用HTML5库实现的好很多。看看京东金融和微信。关于HTML5 VS React ，这两者孰优孰劣可以参考这一篇文章&lt;a href=&quot;http://www.ruanyifeng.com/blog/2015/02/future-of-dom.html&quot;&gt;也许，DOM 不是答案&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;  不过React Native现在还没有出1.0版本，各种坑还没有被修复。比如网络请求ajax并不能适配移动端的，所以使用了web标准fetch。但是却不妨碍它能带来的效益，所以很多大厂也适配了。不过由于其License，很多大厂也不敢用了。&lt;/p&gt;
+
+&lt;p&gt;  而不论使用何种实现都离不开浏览器的引擎WebKit。由于Apple想要开发自己的浏览器（Safari），所以就从KHTML分支fork出了WebKit项目，和KHTML引擎同期还有一款Gecko引擎（Firefox）。由于外界压力，最终将WebKit开源了。随着项目开源，越来越多的公司加入进来，Google就是其中一个。但是由于跟KDE一样和Apple相处不恰，Google决定自己在WebCore上面开发Blink,再结合自主研发的v8（JavaScript引擎），共同研制了开源项目Chromium，该引擎就是现如今Android平台的浏览器引擎。其实在Android4.4之前使用的是Webkit引擎去实现WebView，而现在使用的是Chromium引擎。博主也会在后续跟随老罗的脚步学习这方面知识，如果有兴趣的同学欢迎讨论。推荐一篇博文，先让大家入个门&lt;a href=&quot;http://blog.csdn.net/luoshengyang/article/details/46569161&quot;&gt;Android Chromium WebView学习启动篇&lt;/a&gt;。不过话说回来，Apple也不甘示弱，为了提高JavaScript引擎的性能，重写了JavaScriptCore，并且命名SquirrelFish，后来这个项目演变成了SquirrelFish  Extreme（SFX）。主要原因就是前者是一个字节码解释权，而后者却是直接将JavaScript代码编译成机器码,这样可以提高执行速度，所以导致了项目名变更的情况。&lt;/p&gt;
+
+&lt;p&gt;  React Native在iOS平台使用的是WebKit，而在Android平台目前使用的也是Webkit，并不是平台提供的Chromium。Facebook对于JavaScriptCore引擎又进行了客制化。在github可以找到&lt;a href=&quot;https://github.com/facebook/android-jsc&quot;&gt;facebook android-jsc&lt;/a&gt;。知道了这些事之后，我们可以来做个大概的总结，其实React Native框架就是我们平时的原生开发通过libjsc.so等库去解析bundle（许多JavaScript文件的打包文件，为了提高性能所以进行了打包），而Java和JavaScript的交互就是通过这一层所谓的bridge完成的。所以由c/c++编写的库就像媒婆一样，为两者牵线搭桥。而我们想要去使用动态库libjsc,就需要知道它提供的API。Apple已经为我们提供了它的API文档&lt;a href=&quot;https://developer.apple.com/documentation/javascriptcore&quot;&gt;framework JavaScriptCore&lt;/a&gt;。也可以通过这一篇文章&lt;a href=&quot;https://www.raywenderlich.com/124075/javascriptcore-tutorial&quot;&gt;JavaScriptCore Tutorial for iOS: Getting Started&lt;/a&gt;简单了解一下JavaScriptCore引擎中的一些知识。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/asset/2017-11-10-react-native-foreword-arch.jpeg&quot; alt=&quot;arch&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;  说完这些知识点，我们就知道了其实React Native的存在就是为了让原生开发的一套规范转换到Web开发规范，既然换了一种开发方式就意味着你要学习Web开发的相关知识，这里推荐一篇博文供大家入门前端开发，&lt;a href=&quot;http://www.ruanyifeng.com/blog/2015/03/react.html&quot;&gt;React 入门实例教程&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;  之后我们将要学习的内容有如下：&lt;/p&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—入门&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—框架概述&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;React Native—启动流程&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—开发者调试工具&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—智能指针实现&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—基于JavaScriptCore引擎的封装&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—基于JNI的封装&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—Java和JavaScript通信机制&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—学习总结&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;React Native—项目实战&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.Reference&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://36kr.com/p/202396.html&quot;&gt;历史在重演：从KHTML到WebKit，再到Blink&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://www.ruanyifeng.com/blog/2015/02/future-of-dom.html&quot;&gt;也许，DOM 不是答案&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://reactjs.org/docs/hello-world.html&quot;&gt;React官网&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://www.ruanyifeng.com/blog/2015/03/react.html&quot;&gt;React 入门实例教程&lt;/a&gt;&lt;/p&gt;
+</description>
+				<pubDate>Fri, 10 Nov 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-11-10/react-native-foreword</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-11-10/react-native-foreword</guid>
+			</item>
+		
+			<item>
+				<title>【实践篇】Android Studio插件工具</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  敬请期待&lt;/p&gt;
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/Skykai521/ECTranslation&quot;&gt;ECTranslation&lt;/a&gt;&lt;/p&gt;
+</description>
+				<pubDate>Sun, 22 Oct 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-10-22/tools-as-product-plugin</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-10-22/tools-as-product-plugin</guid>
+			</item>
+		
+			<item>
+				<title>【理论篇】 Android Studio插件工具</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  敬请期待&lt;/p&gt;
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+
+</description>
+				<pubDate>Sun, 22 Oct 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-10-22/tools-as-intro-plugin</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-10-22/tools-as-intro-plugin</guid>
+			</item>
+		
+			<item>
+				<title>TensorFlow --- 前言</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  敬请期待&lt;/p&gt;
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+</description>
+				<pubDate>Sun, 22 Oct 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-10-22/tensorflow-foreword</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-10-22/tensorflow-foreword</guid>
+			</item>
+		
+			<item>
+				<title>TensorFlow --- 构建工具Bazel</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  Bazel is a build tool which coordinates builds and runs tests&lt;/p&gt;
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  &lt;/p&gt;
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+</description>
+				<pubDate>Sun, 22 Oct 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-10-22/tensorflow-build-tools-bazel</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-10-22/tensorflow-build-tools-bazel</guid>
+			</item>
+		
+			<item>
+				<title>构建工具Gradle</title>
+				<description>&lt;h2 id=&quot;1summary&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;1.Summary&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  从Android团队开始宣布放弃Eclipse，使用Android Studio时，构建工具Gradle进入了Android开发者的视野。而随着热修复、插件化、编译时注解的流行，深入了解Gradle就变得很有必要了。那么什么是Gradle ？&lt;/p&gt;
+&lt;h2 id=&quot;2about&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;2.About&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  Gradle是一个基于Ant构建工具，用Groovy DSL描述依赖关系的jar包。我们都知道早期的Android开发使用的是Eclipse,而Eclipse的构建工具使用的是Ant，用XML描述依赖关系，而XML存在太多的弊端，不如动态语言。所以动态语言Groovy代替了XML，最后集成为Gradle。而Groovy诞生就是由于在后端Java是一门静态语言，对于配置信息处理比较差，所以Apache开发了这门语言。说道后端Java，必然要说道Android端Java，与之搭配的就是最近很火的Kotlin，Kotlin也是一门动态语言，而且Kotlin和Groovy一样也可以写build.gradle文件，它们都是基于JVM的动态语言，都可以使用DSL去描述项目依赖关系。&lt;/p&gt;
+
+&lt;h2 id=&quot;3intoduction&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;3.Intoduction&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;  我们会从Groovy DSL和Gradle框架来分析。&lt;/p&gt;
+&lt;h3 id=&quot;groovy-dsl&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;Groovy DSL&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;  首先Groovy语言的基本知识我们不进行探讨，网上与之相关的资料有很多。我们来讲讲它的DSL，因为Gradle提供的build.gradle配置文件就是用DSL来写的。那么什么是DSL？&lt;a href=&quot;https://en.wikipedia.org/wiki/Domain-specific_language&quot;&gt;维基百科&lt;/a&gt;里面描述的很清楚，但是具体到代码有哪些呢?就像Android里面的AIDL，前端的JQUERY。由于DSL是一种为解决某种问题的领域指定语言，所以Android团队写了解析AIDL代码，Gradle团队写了解析Groovy DSL的代码。&lt;/p&gt;
+
+&lt;h3 id=&quot;gradle框架&quot;&gt;&lt;em class=&quot;header3-font&quot;&gt;Gradle框架&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;  我们都知道Gradle的生命流程要经历三个部分：初始化、配置、执行。&lt;/p&gt;
+
+&lt;p&gt;初始化：settings.gradle&lt;br /&gt;
+配置：build.gradle&lt;br /&gt;
+执行：task&lt;/p&gt;
+
+&lt;h2 id=&quot;4reference&quot;&gt;&lt;em class=&quot;header2-font&quot;&gt;4.Reference&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.groovy-lang.org/learn.html&quot;&gt;Groovy官网&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://blog.csdn.net/innost/article/details/48228651&quot;&gt;深入理解Android之Gradle&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gradle.org/&quot;&gt;Gradle的官网&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://tools.android.com/build&quot;&gt;Build Overview&lt;/a&gt;&lt;/p&gt;
+</description>
+				<pubDate>Sun, 22 Oct 2017 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/blog/2017-10-22/build-tools-gradle-foreword</link>
+				<guid isPermaLink="true">http://localhost:4000/blog/2017-10-22/build-tools-gradle-foreword</guid>
+			</item>
+		
+	</channel>
+</rss>

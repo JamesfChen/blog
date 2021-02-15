@@ -1,0 +1,635 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-01-25/location-foreword">Location系统 --- 前言</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Thu, 25 Jan 2018 22:50:00 +0000</time> -->
+                  <time datetime='2018-01-25'>Thu, Jan 25 2018, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :2106</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/framework-design/location">framework-design/location</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+
+<p>由于现在的共享单车、滴滴打车、外卖等LBS应用的持续火热和烧钱，导致定位技术在这些行业中担当着举足轻重的角色，定位技术之于LBS应用，就像音视频编解码技术之于视频应用。所以研究定位能让我们更加适应这个社会的变化，而我相信采集有效的定位数据是这些行业实现智能化（人工智能）的基石。</p>
+
+<p>首先我们需要普及一下定位系统的相关知识。</p>
+
+<h3 id="gps"><em class="header3-font">GPS</em></h3>
+
+<p>国际性组织GNSS，有四大成员：美国GPS、俄罗斯格洛纳斯GLONASS、中国北斗COMPASS、欧洲伽利略GALILEO。<br />
+现如今的共享单车都在使用中国北斗，比如摩拜、小黄车，也不能说它的技术已经远超GPS，而是政府对于北斗的推广确实上心了，在加上北斗在中国大陆上空确实布局的不错，所以卫星数据准确性高。有兴趣可以看看这篇文章<br />
+<a href="https://mp.weixin.qq.com/s/UJCN71SfGIKBlMVH0IFmtw">GPS 对比 北斗</a>，补充一下知识。</p>
+
+<p>但是尽管如此，手机设备毕竟是属于全球化的产品，而且GPS比起北斗确实比较成熟，所以GSP成了首选。为了优化GPS，芯片厂商提供标准的在线辅助工具AGPS，MTK还提供了离线辅助手段（Hot still和EPO）。</p>
+
+<p>下面表格表明它们的差异性</p>
+
+<table class="inner-borders">
+  <thead>
+    <tr>
+      <th>辅助手段</th>
+      <th>机理</th>
+      <th>数据来源（流量）</th>
+      <th>有效时间</th>
+      <th>好处</th>
+      <th>改善措施</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hot still</td>
+      <td>利用解调出来的卫星星历预测其7天内的星历</td>
+      <td>已解调卫星的星历（0 KB）</td>
+      <td>7天</td>
+      <td>极大缩小定位时间、有助于弱信号环境的定位、无需连网</td>
+      <td>打上最新的补丁、默认开启辅助手段。</td>
+    </tr>
+    <tr>
+      <td>EPO</td>
+      <td>从MTK 服务器下载EPO file，预测未来30天所有GPS卫星的星历</td>
+      <td>网络（270KB/次，可利用有wifi链接时进行更新）</td>
+      <td>30天</td>
+      <td>极大缩小定位时间、有助于弱信号环境的定位、离线辅助（辅助数据有效时间内）</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>AGPS</td>
+      <td>从AGPS 服务器获取辅助数据（包括参考时间，参考位置，星历和历书</td>
+      <td>网络（4KB）</td>
+      <td>2小时</td>
+      <td>极大缩小定位时间、有助于弱信号环境的定位</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>这些辅助工具能够提供什么呢？答案是：时间、位置、星历（ephemeris）、年历（almanac）。<br />
+有了这几个参数中的几个，就可以极大的增加Location系统的启动速度。</p>
+
+<p>下面来看看启动方式。</p>
+
+<table class="inner-borders">
+  <thead>
+    <tr>
+      <th>启动方式</th>
+      <th>介绍</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FULL start</td>
+      <td>没有任何的辅助资讯。相当于end user第一次买到手机后使用定位应用的场景。</td>
+    </tr>
+    <tr>
+      <td>COLD start</td>
+      <td>有时间辅助资讯，end user不会遇到该场景。</td>
+    </tr>
+    <tr>
+      <td>WARM start</td>
+      <td>有时间、位置辅助资讯，end user此次定位距离上次定位超过2～4个小时。</td>
+    </tr>
+    <tr>
+      <td>HOT start</td>
+      <td>有所有的辅助资讯，end user此次定位距离上次定位小于2～4小时。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>以上几种我们并不总会遇到，最为常见的就是warm start和hot start。那么如何衡量各种启动类型的响应时间。答案是TTFF（Time to first fix）,可以看看维基百科上面的解释<a href="https://en.wikipedia.org/wiki/Time_to_first_fix">Time to first fix</a>。最需要理解的就是fix这个单词，维基百科上面的解释是，计算出地球上点的解决方案。</p>
+
+<p>MTK给出了它们在open sky,有6颗卫星SNR》40db的条件下的测量数据</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FULL start TTFF：小于50s。
+
+COLD start TTFF：小于40s。
+
+WARM start TTFF：小于35s。
+
+HOT start TTFF：小于5s。
+</code></pre></div></div>
+
+<h3 id="cellid"><em class="header3-font">CellID</em></h3>
+<p>这个就是我们常见的基站定位。</p>
+<h3 id="wifi-macid"><em class="header3-font">WiFi MACID</em></h3>
+
+<p>主要采用无线AP的MAC地址定位。手机会保存用户一周之内的数据，通过网络将数据传给服务器，服务器会检索每一个AP地址并结合RSSI（接收信号强度），计算出一个合理的位置。</p>
+
+<h3 id="其他"><em class="header3-font">其他</em></h3>
+<p>除了以上几种还有蓝牙、传感器定位。但在手机端较为少用。</p>
+
+<p>对于这些定位方式如果有兴趣的话可以参考这一篇文章<a href="http://www.cnblogs.com/lesliexong/p/7050360.html">室内定位（总结：种类，方法，特点）</a>, 由于本文的重点是讲解Location系统，上面的内容只是作为一个背景知识，所以不进行深入挖掘。</p>
+
+<p>在Android的Location API里，为开发者提供了三种位置提供者：gps(GPS, AGPS)、network(CellID, WiFi MACID)、passive(从其他的软件获取)</p>
+
+<p>下面我们就来罗列一下学习计划</p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="/blog/2018-01-25/location-system-elementary">Location系统—入门</a></li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="/blog/2018-01-30/location-system-arich">Location系统—架构概述</a></li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="/blog/2018-01-29/location-system-launch">Location系统—启动流程</a></li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="/blog/2018-01-25/location-system-map">Location系统—Map</a></li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="/blog/2018-01-25/location-system-practice">Location系统—项目实战</a></li>
+</ul>
+
+<h2 id="2reference"><em class="header2-font">2.Reference</em></h2>
+
+<p><a href="https://developerlife.com/2010/10/20/gps/">Android Location Providers – gps, network, passive – Tutorial</a></p>
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-01-25/location-foreword" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-01-25/location-foreword&text=Location系统 --- 前言" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-01-25/location-foreword&title=Location系统 --- 前言&summary=这是一篇计划文，描述了我们如何学习LBS&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=Location系统 --- 前言&body=这是一篇计划文，描述了我们如何学习LBS https://jamesfchen.github.io/2018-01-25/location-foreword" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

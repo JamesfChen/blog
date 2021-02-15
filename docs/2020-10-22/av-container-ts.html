@@ -1,0 +1,1240 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Thu, 22 Oct 2020 22:50:00 +0000</time> -->
+                  <time datetime='2020-10-22'>Thu, Oct 22 2020, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :14251</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/app-design/av">app-design/av</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>MPEG transport stream(short as TS)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                       4bytes               184bytes         
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Packet | =  | Packet header |      Packet data                        |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre></div></div>
+<h3 id="ts-headersize--4bytes">TS Header(size : 4bytes)</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bit)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>sync_byte</td>
+      <td>8</td>
+      <td>同步字节，固定为0x47</td>
+    </tr>
+    <tr>
+      <td>transport_error_indicator</td>
+      <td>1</td>
+      <td>传输错误指示符，表明在ts头的adapt域后由一个无用字节，通常都为0，这个字节算在adapt域长度内</td>
+    </tr>
+    <tr>
+      <td>payload_unit_start_indicator</td>
+      <td>1</td>
+      <td>负载单元起始标示符，一个完整的数据包开始时标记为1</td>
+    </tr>
+    <tr>
+      <td>transport_priority</td>
+      <td>1</td>
+      <td>传输优先级，0为低优先级，1为高优先级，通常取0</td>
+    </tr>
+    <tr>
+      <td>pid</td>
+      <td>13</td>
+      <td>pid值</td>
+    </tr>
+    <tr>
+      <td>transport_scrambling_control</td>
+      <td>2</td>
+      <td>传输加扰控制，00表示未加密</td>
+    </tr>
+    <tr>
+      <td>adaptation_field_control</td>
+      <td>2</td>
+      <td>是否包含自适应区，‘00’保留；‘01’为无自适应域，仅含有效负载；‘10’为仅含自适应域，无有效负载；‘11’为同时带有自适应域和有效负载。</td>
+    </tr>
+    <tr>
+      <td>continuity_counter</td>
+      <td>4</td>
+      <td>递增计数器，从0-f，起始值不一定取0，但必须是连续的</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>表</th>
+      <th>PID 值</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PAT</td>
+      <td>0x0000</td>
+    </tr>
+    <tr>
+      <td>CAT</td>
+      <td>0x0001</td>
+    </tr>
+    <tr>
+      <td>TSDT</td>
+      <td>0x0002</td>
+    </tr>
+    <tr>
+      <td>EIT,ST</td>
+      <td>0x0012</td>
+    </tr>
+    <tr>
+      <td>RST,ST</td>
+      <td>0x0013</td>
+    </tr>
+    <tr>
+      <td>TDT,TOT,ST</td>
+      <td>0x0014</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="ts-bodysize--184bytes">TS Body(size : 184bytes)</h3>
+<p>TS包固定文件为188字节,TS包主要有PSI和PES之分。PSI是什么？</p>
+
+<blockquote>
+  <p>Program-specific information (PSI) is metadata about a program (channel) and part of an MPEG transport stream.<br />
+The PSI data as defined by ISO/IEC 13818-1 (MPEG-2 Part 1: Systems) includes four tables:</p>
+  <ul>
+    <li>PAT (Program Association Table)</li>
+    <li>CAT (Conditional Access Table)</li>
+    <li>PMT (Program Mapping Table)</li>
+    <li><a href="https://baike.baidu.com/item/NIT%E8%A1%A8">NIT (Network Information Table)</a></li>
+  </ul>
+</blockquote>
+
+<p>其中需要关注的是PAT和PMT这两个包,下面通过一个流程图讲解从而理解PAT、PMT</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    PAT packet               PMT  packet              PES packet
+program_number=0x0001            
+program_map_PID=10   ----&gt;  TS header pid=10
+                            stream_type=0x0f audio
+                            elementary_PID=20  ----&gt;  TS header pid=20(PES被切成多个固定size的ts包)
+                            stream_type=0x1b vedio
+                            elementary_PID=22 ----&gt;   TS header pid=22
+
+program_number=0x0001 
+program_map_PID=11  ----&gt;  TS header pid=11
+                            ....
+                            NIT  packet 
+program_number=0x0000   
+program_map_PID=12  ----&gt;  ...                    
+</code></pre></div></div>
+<p>从H264编解码器输出的数据，我们叫做Elemental Stream,数据可能是I帧，P帧或者B帧，ES数据头部会加入pts、dts等信息打包为Packet Elemental Stream(PES)。由于PES可能是音频数据也可能是视频数据或者其他种类的数据，这些PES数据可能是同一个节目产生的也可能是其他节目产生的，通过PMT就可以将这些庞杂紊乱的数据进行重新规划，将同一个节目的视频数据流、音频数据流等规划到一起。PAT注册了所有不同PMT，也可以说PAT表示了所有的节目。</p>
+
+<p>理解了这些那么接一下我们就可以来看看PAT 、 PMT 、 PES</p>
+
+<h2 id="2introduction"><em class="header2-font">2.Introduction</em></h2>
+
+<h3 id="patprogram-associate-table-packet">PAT((Program Associate Table) Packet</h3>
+<p>ts头字段pid固定为0x0000</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                         4bytes                 184bytes         
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Packet | =  | TS header |    Packet data                              |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                      
+                     4bytes     1byte,0x00表示负载的开始                      
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Packet | =  | TS header |      0x00      |PAT header |   filled 0xff  |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bit)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>table_id</td>
+      <td>8</td>
+      <td>PAT表固定为0x00</td>
+    </tr>
+    <tr>
+      <td>section_syntax_indicator</td>
+      <td>1</td>
+      <td>固定为二进制1</td>
+    </tr>
+    <tr>
+      <td>zero</td>
+      <td>1</td>
+      <td>固定为二进制0</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>2</td>
+      <td>固定为二进制11(3)</td>
+    </tr>
+    <tr>
+      <td>section_length</td>
+      <td>12</td>
+      <td>后面数据的长度</td>
+    </tr>
+    <tr>
+      <td>transport_stream_id</td>
+      <td>16</td>
+      <td>传输流ID，固定为0x0001</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>2</td>
+      <td>固定为二进制11(3)</td>
+    </tr>
+    <tr>
+      <td>version_number</td>
+      <td>5</td>
+      <td>版本号，固定为二进制00000，如果PAT有变化则版本号加1</td>
+    </tr>
+    <tr>
+      <td>current_next_indicator</td>
+      <td>1</td>
+      <td>固定为二进制1，表示这个PAT表可以用，如果为0则要等待下一个PAT表</td>
+    </tr>
+    <tr>
+      <td>section_number</td>
+      <td>8</td>
+      <td>固定为0x00</td>
+    </tr>
+    <tr>
+      <td>last_section_number</td>
+      <td>8</td>
+      <td>固定为0x00</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>开始循环</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bit)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>program_number</td>
+      <td>16</td>
+      <td>节目号为0x0000时表示这是NIT，节目号为0x0001时,表示这是PMT</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>3</td>
+      <td>固定为二进制111(7)</td>
+    </tr>
+    <tr>
+      <td>network_id(节目号为0时) program_map_PID(节目号为其他时)</td>
+      <td>13</td>
+      <td>节目号为0x0000时,表示这是NIT，PID=0x001f，即31节目号为0x0001时,表示这是PMT，PID=0x100，即256</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>结束循环</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bit)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CRC32</td>
+      <td>32</td>
+      <td>前面数据的CRC32校验码</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="pmtprogram-map-table-packet">PMT(Program Map Table) Packet</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                         4bytes                 184bytes         
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Packet | =  | TS header |    Packet data                              |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                                1byte,0x00表示负载的开始
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Packet | =  | TS header |   0x00         |PMT header | filled 0xff    |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bit)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>table_id</td>
+      <td>8</td>
+      <td>PMT表取值随意，0x02</td>
+    </tr>
+    <tr>
+      <td>section_syntax_indicator</td>
+      <td>1</td>
+      <td>固定为二进制1</td>
+    </tr>
+    <tr>
+      <td>zero</td>
+      <td>1</td>
+      <td>固定为二进制0</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>2</td>
+      <td>固定为二进制11(3)</td>
+    </tr>
+    <tr>
+      <td>section_length</td>
+      <td>12</td>
+      <td>后面数据的长度</td>
+    </tr>
+    <tr>
+      <td>program_number</td>
+      <td>16</td>
+      <td>频道号码，表示当前的PMT关联到的频道，取值0x0001</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>2</td>
+      <td>固定为二进制11(3)</td>
+    </tr>
+    <tr>
+      <td>version_number</td>
+      <td>5</td>
+      <td>版本号，固定为00000，如果PAT有变化则版本号加1</td>
+    </tr>
+    <tr>
+      <td>current_next_indicator</td>
+      <td>1</td>
+      <td>固定为二进制1</td>
+    </tr>
+    <tr>
+      <td>section_number</td>
+      <td>8</td>
+      <td>固定为0x00</td>
+    </tr>
+    <tr>
+      <td>last_section_number</td>
+      <td>8</td>
+      <td>固定为0x00</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>3</td>
+      <td>固定为二进制111(7)</td>
+    </tr>
+    <tr>
+      <td>PCR_PID</td>
+      <td>13</td>
+      <td>PCR(节目参考时钟)所在TS分组的PID，指定为视频PID</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>4</td>
+      <td>固定为二进制1111(15)</td>
+    </tr>
+    <tr>
+      <td>program_info_length</td>
+      <td>12</td>
+      <td>节目描述信息，指定为0x000表示没有</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>开始循环</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bit)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>stream_type</td>
+      <td>8</td>
+      <td>流类型，标志是Video还是Audio还是其他数据，h.264编码对应0x1b，aac编码对应0x0f，mp3编码对应0x03</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>3</td>
+      <td>固定为二进制111(7)</td>
+    </tr>
+    <tr>
+      <td>elementary_PID</td>
+      <td>13</td>
+      <td>与stream_type对应的PID</td>
+    </tr>
+    <tr>
+      <td>reserved</td>
+      <td>4</td>
+      <td>固定为二进制1111(15)</td>
+    </tr>
+    <tr>
+      <td>ES_info_length</td>
+      <td>12</td>
+      <td>描述信息，指定为0x000表示没有</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>结束循环</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bits)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CRC32</td>
+      <td>32</td>
+      <td>前面数据的CRC32校验码</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="pespacket-elemental-stream-packet">PES(Packet Elemental Stream) Packet</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                     4bytes               184bytes         
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  TS     | =  | TS header|  adaptation field| 0x00 |  Packet data(PES)  |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                    6Byte          3~259Byte           max 65526Byte
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  PES    | =  |PES header |  optional PES header  |  Packet data(ES)    |
+  +-+-+-+-+-+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | pes header| nalu(0x09)| 1byte |  nalu |     | nalu(0x67)|     | nalu(0x68)|     | nalu(0x65)|     |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                             随意     其他   内容       SPS     内容     PPS       内容      I帧      内容
+                             
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  | pes header| nalu(0x09)| 1byte |  nalu |     | nalu(0x41)|     |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                             随意     其他   内容       P帧     内容
+</code></pre></div></div>
+<h4 id="adaptation-field">adaptation field</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bytes)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>adaptation_field_length</td>
+      <td>1</td>
+      <td>自适应域长度，后面的字节数</td>
+    </tr>
+    <tr>
+      <td>flag</td>
+      <td>1</td>
+      <td>取0x50表示包含PCR或0x40表示不包含PCR</td>
+    </tr>
+    <tr>
+      <td>pcr</td>
+      <td>5</td>
+      <td>Program Clock Reference，节目时钟参考，用于恢复出与编码端一致的系统时序时钟STC（System Time Clock）。</td>
+    </tr>
+    <tr>
+      <td>stuffing_bytes</td>
+      <td>xByte</td>
+      <td>填充字节，取值0xff</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>什么是PCR？</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="n">pcr</span> <span class="o">=</span> <span class="n">decode_timescale</span>  <span class="c1"># 节目时钟参考
+</span>      <span class="n">ts_packet</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">byte</span><span class="p">(</span><span class="n">pcr</span> <span class="o">&gt;&gt;</span> <span class="mi">25</span><span class="p">)</span>
+      <span class="n">ts_packet</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">byte</span><span class="p">((</span><span class="n">pcr</span> <span class="o">&gt;&gt;</span> <span class="mi">17</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+      <span class="n">ts_packet</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">byte</span><span class="p">((</span><span class="n">pcr</span> <span class="o">&gt;&gt;</span> <span class="mi">9</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+      <span class="n">ts_packet</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">byte</span><span class="p">((</span><span class="n">pcr</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+      <span class="n">ts_packet</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">byte</span><span class="p">(((</span><span class="n">pcr</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">)</span> <span class="o">|</span> <span class="mh">0x7e</span><span class="p">)</span>
+</code></pre></div></div>
+<p>很多文章中说pts、dts是显示时间戳，解码时间戳，但是确切地说应该叫做显示时间刻度和解码时间刻度。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#decode_timestamp、presentation_timestamp : unit millisecond
+#decode_timescale、presentation_timescale : unit timescale
+</span><span class="n">decode_timescale</span> <span class="o">=</span> <span class="n">decode_timestamp</span> <span class="o">*</span> <span class="mi">90</span>
+<span class="n">presentation_timescale</span> <span class="o">=</span> <span class="n">presentation_timestamp</span> <span class="o">*</span> <span class="mi">90</span>
+</code></pre></div></div>
+<p>dts与pts的区别</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ------------------------------&gt;
+    I     P     B     B     B     P
+    1     2     3     4     5     6   读取顺序
+    1     2     3     4     5     6   dts顺序
+    1     5     3     2     4     6   pts顺序
+点播视频dts算法:
+dts = 初始值 + 90000 / video_frame_rate，初始值可以随便指定，但是最好不要取0，video_frame_rate就是帧率，比如23、30。
+pts和dts是以timescale为单位的，1s = 90000 time scale , 一帧就应该是90000/video_frame_rate 个timescale。
+用一帧的timescale除以采样频率就可以转换为一帧的播放时长
+
+点播音频dts算法：
+dts = 初始值 + (90000 * audio_samples_per_frame) / audio_sample_rate，audio_samples_per_frame这个值与编解码相关，aac取值1024，mp3取值1158，audio_sample_rate是采样率，比如24000、41000。AAC一帧解码出来是每声道1024个sample，也就是说一帧的时长为1024/sample_rate秒。所以每一帧时间戳依次0，1024/sample_rate，...，1024*n/sample_rate秒。
+
+直播视频的dts和pts应该直接用直播数据流中的时间，不应该按公式计算。
+</code></pre></div></div>
+<h4 id="pes-packet-header">PES packet header</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bytes)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Packet start code prefix</td>
+      <td>3</td>
+      <td>0x000001</td>
+    </tr>
+    <tr>
+      <td>Stream id</td>
+      <td>1</td>
+      <td>Examples: Audio streams (0xC0-0xDF), Video streams (0xE0-0xEF) [4][5]</td>
+    </tr>
+    <tr>
+      <td>PES Packet length</td>
+      <td>2</td>
+      <td>Specifies the number of bytes remaining in the packet after this field. Can be zero. If the PES packet length is set to zero, the PES packet can be of any length. A value of zero for the PES packet length can be used only when the PES packet payload is a video elementary stream.[6]</td>
+    </tr>
+    <tr>
+      <td>Optional PES header</td>
+      <td>variable length (length &gt;= 3)</td>
+      <td>not present in case of Padding stream &amp; Private stream 2 (navigation data)</td>
+    </tr>
+    <tr>
+      <td>Data</td>
+      <td> </td>
+      <td>See elementary stream. In the case of private streams the first byte of the payload is the sub-stream number.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Optional PES header</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>size(bits)</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Marker bits</td>
+      <td>2</td>
+      <td>10 binary or 0x8 hex</td>
+    </tr>
+    <tr>
+      <td>Scrambling control</td>
+      <td>2</td>
+      <td>00 implies not scrambled</td>
+    </tr>
+    <tr>
+      <td>Priority</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>Data alignment indicator</td>
+      <td>1</td>
+      <td>1 indicates that the PES packet header is immediately followed by the video start code or audio syncword</td>
+    </tr>
+    <tr>
+      <td>Copyright</td>
+      <td>1</td>
+      <td>1 implies copyrighted</td>
+    </tr>
+    <tr>
+      <td>Original or Copy</td>
+      <td>1</td>
+      <td>1 implies original</td>
+    </tr>
+    <tr>
+      <td>PTS DTS indicator</td>
+      <td>2</td>
+      <td>11 = both present, 01 is forbidden, 10 = only PTS, 00 = no PTS or DTS</td>
+    </tr>
+    <tr>
+      <td>ESCR flag</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>ES rate flag</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>DSM trick mode flag</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>Additional copy info flag</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>CRC flag</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>extension flag</td>
+      <td>1</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>PES header length</td>
+      <td>8</td>
+      <td>gives the length of the remainder of the PES header in bytes</td>
+    </tr>
+    <tr>
+      <td>Optional fields</td>
+      <td>variable</td>
+      <td>length	presence is determined by flag bits above</td>
+    </tr>
+    <tr>
+      <td>Stuffing Bytes</td>
+      <td>variable</td>
+      <td>length	0xff</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>由于ts要求包大小固定为188bytes，所以这一帧会被切割成为多个188bytes的ts包，当然这些被切片化的碎片在打包为ts包之前，会进行加工处理，在头部加入pts dts 、pcr(如果是视频关键帧)等信息，已让解码器知道如何解析播放</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            视频/音频类型包(Packet),一帧视频/音频数据被拆分成N个Packet
+          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          | ts header |   adaptation field    |      payload(pes 1)     |--&gt;第1个Packet
+          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          | ts header |              payload(pes 2)                     |--&gt;第2个Packet
+          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          | ts header |                   ...                           |
+          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          | ts header |             payload(pes n-1)                    |--&gt;第n-1个Packet
+          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          | ts header |   adaptation field    |      payload(pes n)     |--&gt;第n个Packet
+          +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre></div></div>
+<h3 id="打包">打包</h3>
+<p>代码来源项目<a href="https://github.com/JamesfChen/river/blob/master/server4py/app/container/ts.py">JamesfChen/river</a>,欢迎star</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">muxe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PacketList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">frame</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">is_keyframe</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">__cur_keyframe</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="n">dts</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">dts</span>
+        <span class="n">pts</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">pts</span>
+        <span class="n">dts_timescale</span> <span class="o">=</span> <span class="n">dts</span> <span class="o">*</span> <span class="mi">90</span>  <span class="c1"># unit:timescale
+</span>        <span class="n">pts_timescale</span> <span class="o">=</span> <span class="n">pts</span> <span class="o">*</span> <span class="mi">90</span>
+        <span class="n">is_video</span> <span class="o">=</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">frame</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">is_video_packet</span><span class="p">()</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="c1"># print('%d dts:%d , pts:%d,is_keyframe:%s,is_video:%s,es packet size:%d' % (
+</span>        <span class="c1">#     self.__i, dts, pts, frame.header.is_keyframe(), is_video, len(frame.payload)))
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">__i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+        <span class="n">h</span><span class="p">.</span><span class="n">packet_type</span> <span class="o">=</span> <span class="n">Packet_Type_VIDEO</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">pts</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">__base_time</span>
+        <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;=</span> <span class="n">max_duration</span> <span class="ow">and</span> <span class="n">frame</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">is_keyframe</span><span class="p">():</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">'&gt;&gt;&gt;生成ts文件'</span><span class="p">,</span><span class="s">'ts file:</span><span class="se">\u001B</span><span class="s">[31m%s</span><span class="se">\u001B</span><span class="s">[0m duration:</span><span class="se">\u001B</span><span class="s">[31m%s</span><span class="se">\u001B</span><span class="s">[0m'</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">__ts_file</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">delta</span><span class="o">/</span><span class="mi">1000</span><span class="p">)))</span>
+            <span class="c1"># self.__writer = open(self.path % time.time(), 'ab') if self.path else self.sw
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">__ts_file</span><span class="p">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">delta</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">cache</span><span class="p">.</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">__ts_file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">__seqnum_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">allocate_ts_file</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">path_template</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">__seqnum_count</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">__seqnum_count</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">__base_time</span> <span class="o">=</span> <span class="n">pts</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">__is_first</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c1"># PAT表和PMT表需要定期插入ts流，因为用户随时可能加入ts流,这个间隔比较小，通常每隔几个视频帧就要加入PAT和PMT
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">__is_first</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">ts_pat_packet</span><span class="p">())</span>
+            <span class="n">payload</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">ts_pmt_packet</span><span class="p">(</span><span class="n">is_video</span><span class="p">))</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">__is_first</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">ts_pes_packets_size</span><span class="p">,</span> <span class="n">ps</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">ts_pes_packets</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">.</span><span class="n">payload</span><span class="p">,</span>
+            <span class="n">is_video</span><span class="p">,</span>
+            <span class="n">frame</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">is_keyframe</span><span class="p">(),</span>
+            <span class="n">pts_timescale</span><span class="p">,</span> <span class="n">dts_timescale</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ps</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">PacketList</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="3reference"><em class="header2-font">3.Reference</em></h2>
+<p><a href="https://blog.csdn.net/Kayson12345/article/details/81266587">MPEG-TS 格式解析</a><br />
+<a href="https://blog.csdn.net/rootusers/article/details/42772657">MPEG2-TS基础</a><br />
+<a href="https://blog.csdn.net/rootusers/article/details/42970859">MPEG-TS基础2</a><br />
+<a href="https://en.wikipedia.org/wiki/MPEG_transport_stream">MPEG transport stream</a><br />
+<a href="https://en.wikipedia.org/wiki/Program-specific_information">Program-specific information</a><br />
+<a href="https://en.wikipedia.org/wiki/Packetized_elementary_stream#:~:text=PES%20packet%20header,-Name&amp;text=Specifies%20the%20number%20of%20bytes,Optional%20PES%20header">Packetized elementary stream</a><br />
+<a href="https://www.jianshu.com/p/d6311f03b81f">HLS协议及TS封装</a><br />
+<a href="https://zhuanlan.zhihu.com/p/38411551">MD5、SHA1、CRC32值是干什么的？</a><br />
+<a href="https://blog.csdn.net/wanglf1986/article/details/52944884">h264封装ts</a><br />
+<a href="https://winddoing.github.io/post/10069.html">视频流基础知识 1-PSI/SI</a><br />
+<a href="https://www.cnblogs.com/yongdaimi/p/10676309.html#:~:text=GOP%20(%20Group%20of%20Pictures)%20%E6%98%AF,%E5%B8%A7%EF%BC%88%E5%8F%8C%E5%90%91%E5%8F%82%E8%80%83%E5%B8%A7%EF%BC%89%E3%80%82">I帧、P帧、B帧、GOP、IDR 和PTS, DTS之间的关系</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2020-10-22/av-container-ts" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2020-10-22/av-container-ts&text=AV --- TS Container" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2020-10-22/av-container-ts&title=AV --- TS Container&summary=MPEG transport stream&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=AV --- TS Container&body=MPEG transport stream https://jamesfchen.github.io/2020-10-22/av-container-ts" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2020-10-22/av-container-ts";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

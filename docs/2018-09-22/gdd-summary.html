@@ -1,0 +1,586 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-09-22/gdd-summary">初次参加Google Developer Days</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Sat, 22 Sep 2018 23:50:00 +0000</time> -->
+                  <time datetime='2018-09-22'>Sat, Sep 22 2018, 23:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :2294</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/呓语">呓语</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <p><img src="/blog/asset/2018-09-22/gdd-3.jpg" alt="" /></p>
+
+<blockquote>
+  <p>想了很久要不要写这么一篇记账文，其中所见所得皆有局限性。但是仔细想了想，工程师的分享也并不都是每片都是精品，光靠想和看并不能有所得，踏出第一步，才能有第二步，谁叫我的勇气是梁静茹给的。</p>
+</blockquote>
+
+<p>  今年gdd的开始时间选定在9月下旬（ 20号~21号 ），相比于去年的12月份来得更早些。整个活动占据五层楼，比之前更大。大部分的演讲会场都在一楼，二楼是展台，不仅有google自己的软件推广展台，还有一些国内公司自家产品的展台，参观展台的过程还可以获得礼物，三楼是休息处，四楼也是演讲会场，五楼是餐厅，第一天的五楼在晚上有google 游乐园活动。<br />
+  在结束完开幕主题演讲之后，我就直奔二楼展台来收割一波礼物。结果光顾着拿礼物，却忘记了其他演讲已经开始了。所以在展台的时间和听演讲的时间总是相冲突的，所以第二天就更有针对性去体验和听演讲。</p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-4.jpeg" alt="" class="center-image" /><em><code class="language-plaintext highlighter-rouge">图中绿色机器人是参加google 游乐园的游戏获得</code></em></p>
+
+<p>  展台的内容和演讲内容比较一致，有AI方向的TensorFlow，IoT方向的穿戴设备、Android Things，当然还有ARCore和跨平台技术Flutter ( 这里有个猜测，在演讲的内容中PWA也是跨平台的一种，但是在展台却没有看到，可能google自己对于这个也不是很看好吧，尽管在演讲的时候总能听到高效、便捷这些词。)，等一些其他的，比如营销策略、工具，产品设计。</p>
+
+<h1 id="tensorflow"><em class="header2-font">TensorFlow</em></h1>
+<p>  展台里面除了有TensorFlow的礼物之外，google还提供了很多机器学习的资源，有汉化的<a href="https://developers.google.com/machine-learning/crash-course/ml-intro?hl=zh-cn">机器学习</a>网站；面向在校学生的机器学习冬令营；还有一些机器学习的具体应用场景，比如猜画小歌、在Android Things上面的应用、其他大厂的应用。在演讲方面，机器学习也是受到了高度重视，包括了从入门到深入的分享。这里说一个题外话，当时有个叫做“编写机器学习的7个步骤”的分享，我晚到了5分钟，结果门口挤满了人在听演讲。可见对于这样一个实操性强的、能有大神带你入门的机器学习分享是多么受到欢迎。以及午餐的时候也听到旁人都讨论关于机器学习的方方面面。所以相对于Android，google对于TensorFlow的推广来的更加重视，Android这位宠儿正在渐渐地被TensorFlow这位新宠取代。不光是google在大力推广，市场上的媒体争相报道，培训机构的AI课程越来越多，所以很多的工程师都在学习AI，拥抱AI。</p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-10.jpg" alt="" class="center-image" /><em><code class="language-plaintext highlighter-rouge">机器学习应用</code></em></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-57.jpg" alt="" /></p>
+
+<h1 id="arcore"><em class="header2-font">ARCore</em></h1>
+<p>  我在体验ARCore时，最为尴尬的莫过于软件突然卡住了，在场的人都面面相觑，然后仔细一看手机型号vivo nex，升降摄像头。当时差点没有憋住笑出来，这款手机竟然没能驾驭得了google的软件。工作人员还一顿解释道，之前是不会这样的可能是由于使用时间过长了。对于AR的推广不光有google自己在shopping方面的软件，还有其他公司，比如网易云推出的AR游戏。除了这些，这次还有ARCore Codelab,偏向于实操性的。需要提前报名现场签到才能进入，我对于这个并不是很感兴趣所以就没有报名。不过有朋友进去之后据她说可以拿到礼物，才感觉自己错过什么。<br />
+<img src="/blog/asset/2018-09-22/gdd-11.jpg" alt="" /></p>
+
+<h1 id="iot"><em class="header2-font">IoT</em></h1>
+<p>  google在穿戴方面主要是推广一些设备制造公司和一些手表公司的穿戴设备。在演讲内容也有这部分的分享，比如wear OS应用的设计、表盘的设计。正好自己对于这方面也想多了解一下，所以在智能手表展台体验了很久。现如今的Android手机市场并不如前些年那么暴力挣钱，市场更多趋于正常，当时在风口飞翔的猪，有的掉下来，有的长了翅膀。大部分手机厂商都在求变，做智能穿戴设备、做智能硬件等，都希望在落地之前长出翅膀或者拥抱另外一个风口。有人，有市场，所以穿戴设备还是有很多的发展空间的。<br />
+  在体验<code class="language-plaintext highlighter-rouge">Wear OS 家居管理</code>时，可以通过手表的按钮控制房间里的灯，突然想到有没有一种可能，是通过一些定义好的手势或者定义好的约定来唤醒房间里的灯。比如，拍个掌、或者轻轻敲击手表两下等。当然了，手表应该不会发展到《名侦探柯南》里面那种能够发射麻醉针的地步吧，然后给医务人员使用。</p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-56.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-36.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-1.jpeg" alt="" /></p>
+
+<h1 id="flutter"><em class="header2-font">Flutter</em></h1>
+<p>  终于说到这里了，Flutter想必才是现如今Android开发者最为关心的。有的人说赶紧学，有的人说先不要学，那么到底学不学？先保持关注，感受感受风口有没有风吧。不过说到学，google在这次大会中也从入门到深入的为我们讲解了Flutter，就是不知道Flutter是<code class="language-plaintext highlighter-rouge">扶不起的阿斗</code>还是<code class="language-plaintext highlighter-rouge">生子当如孙仲谋</code>。而在国内闲鱼对于lutter的使用是首当其冲的，还是挺配这种愿意踩坑的勇气。 现如今的大前端趋势越来越明显了，只会一门java语言会越来越限制自身的发展，还需要学习HTML、CSS、JavaScript这些前端知识。这真的是学无止境了。</p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-23.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-35.jpg" alt="" /></p>
+
+<h1 id="google-游乐园"><em class="header2-font">google 游乐园</em></h1>
+<p>  第一天晚上的google游乐园，有打碟的小姐姐，有精美的礼物，有各种游戏，还有各种吃的。<br />
+<img src="/blog/asset/2018-09-22/gdd-38.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-39.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-40.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-41.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-43.jpg" alt="" /></p>
+
+<h1 id="饮食"><em class="header2-font">饮食</em></h1>
+<p><img src="/blog/asset/2018-09-22/gdd-52.jpg" alt="" class="header2-font" /><em>午餐</em></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-53.jpg" alt="" class="header2-font" /><em>午餐场地</em></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-59.jpg" alt="" class="header2-font" /><em>茶歇</em></p>
+
+<h1 id="其他"><em class="header2-font">其他</em></h1>
+<p>  放一些妹子和有趣的照片，让大家感受一下，我眼里看到的程序员和媒体看到的程序员是两种群体，工程师也可以生活得有趣。<br />
+<img src="/blog/asset/2018-09-22/gdd-54.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-55.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-60.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-62.jpg" alt="" class="center-image" /><em>朋友偷偷拍的小姐姐</em></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-64.jpg" alt="" /></p>
+
+<p><img src="/blog/asset/2018-09-22/gdd-68.jpg" alt="" class="center-image" /><em>如果说我对google是一种什么感情，应该是这张图的这种感情</em></p>
+
+<p>  最后说点题外话，很感谢朋友提醒我参加这一次<code class="language-plaintext highlighter-rouge">Google Developer Days</code>，这些年太过于关注技术，闭门造车，不是在学习技术就是在学习技术的路上，除了加班就是加班，而忽视了生活忽视了周边，因此也碰到了很多的槛。如朋友说地出来见见世面。技术归根到底还是要服务于生活，从生活出发，学习生活。用一句鞭策一下自己，<code class="language-plaintext highlighter-rouge">驽马十驾功在不舍 --- 《劝学》</code></p>
+
+<hr />
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-09-22/gdd-summary" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-09-22/gdd-summary&text=初次参加Google Developer Days" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-09-22/gdd-summary&title=初次参加Google Developer Days&summary=多多见见世面&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=初次参加Google Developer Days&body=多多见见世面 https://jamesfchen.github.io/2018-09-22/gdd-summary" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

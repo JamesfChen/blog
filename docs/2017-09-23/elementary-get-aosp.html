@@ -1,0 +1,602 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2017-09-23/elementary-get-aosp">用正确的姿势下载和编译AOSP</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Sat, 23 Sep 2017 22:50:00 +0000</time> -->
+                  <time datetime='2017-09-23'>Sat, Sep 23 2017, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :3129</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/elementary/others">elementary/others</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  在获取和编译AOSP代码遇到了一些坑，所以特意来写个文章记录一下，不然回头又忘记当初怎么解决坑的。健忘真是程序员的专长，今天出门之前提醒自己要带伞，结果出了门才发现没带。</p>
+
+<h2 id="2about"><em class="header2-font">2.About</em></h2>
+<p>  其实AOSP官方已经有详细的教程不过针对的是Linux（Ubuntu版本），MacOS并没有。所以本文针对的是在macOS环境下获取和编译AOSP。可是在Linux和macOS中获取和编译AOSP操作步骤是一样的，只是存在一些库版本或者库类型问题。这里推荐AOSP官网的<a href="https://source.android.com/source/requirements">“Downloading and Building”</a>文章供初学者学习，需要自带梯子。外面的世界还是不错的，有一些只能通过肢体语言来表达情感的内容还是值得一看的。如果看不懂英文，没关系，我这里在推荐几个中文的网站，如：<a href="https://lug.ustc.edu.cn/wiki/mirrors/help/aosp">中科大</a>、<a href="https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/">清华</a>。我用的是中科大的镜像。知道怎么获取和编译AOSP之后，接下来就开始分析会遇到有哪些坑吧。说个提问话，如果不知道什么是repo的话可以看看这一篇文章<a href="/blog/2017-04/study-repo">Android源码解析之repo仓库</a></p>
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+<p>  通过观看了上面提供的的资料之后，我们终于知道了怎么来获取和编译AOSP。下面主要从两方面入手：获取AOSP的过程和编译AOSP的过程</p>
+
+<p>配置环境：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>系统：macOS Sierra Version 10.12.6
+macOS SDK：10.12
+build: Android 8.0 r1
+java version：java 1.8.0_144
+python version：python 2.7.10
+</code></pre></div></div>
+
+<h3 id="获取aosp的过程"><em class="header3-font">获取AOSP的过程</em></h3>
+
+<h3 id="repo-sync被莫名终止">repo sync被莫名终止</h3>
+<p>  使用repo工具过程中可能由于网络不稳定或者其他原因导致repo sync终止，其实大可不用担心，重新repo sync即可，并且会在断掉的地方继续获取AOSP源码。这里说个题外话。获取代码的顺序是从.repo/manifest.xml文件来的(.repo/manifest.xml是.repo/manifests/default.xml的符号链接,任意修改任何一处都会使得两个文件有变化，Linux下的符号链接存在的意义可以理解为Windows下的快捷方式，但是功能不同于Windows下的快捷方式)，仔细观察可以发现manifest.xml文件中目录的排序规则就是按照字母表顺序来的，所以当拉取源码到tools目录时，我们就知道快要完事了。</p>
+
+<h3 id="编译aosp的过程"><em class="header3-font">编译AOSP的过程</em></h3>
+
+<h3 id="需要使用设置aosp目录的文件系统">需要使用设置AOSP目录的文件系统</h3>
+<p>  主要是AOSP文件系统区分大小写，于是创建一块区分大小的分区供AOSP使用。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hdiutil create <span class="nt">-type</span> SPARSE <span class="nt">-fs</span> <span class="s1">'Case-sensitive Journaled HFS+'</span> <span class="nt">-size</span> 70g ~/android.dmg
+hdiutil attach ~/android.dmg.sparseimage <span class="nt">-mountpoint</span> /Volumes/android<span class="p">;</span>
+</code></pre></div></div>
+
+<p>由于网上有人推荐70g(android 6.0),但是没想到在编译Android 8.0(Pixel XL)时，分区大小不足，这时候可以使用这条命令来修改分区大小<code class="language-plaintext highlighter-rouge">hdiutil resize -size &lt;new-size-you-want&gt;g ~/android.dmg.sparseimage</code>,修改分区的时候记得先detach镜像，在重新attach，如果detach失败就到finder应用中detach。编译Android 8.0（Pixel XL）时需要用到109g的分区，所以我创建了115g的分区。</p>
+
+<h3 id="macos-sdk的版本">macOS SDK的版本</h3>
+<p>  编译过程中由于找不到macOS SDK 10.10、10.11、10.12这三个版本中其中一个导致编译失败，最后定位到了x86_darwin_host.go文件才知道原因所在。Android 8.0使用了soong和blueprint编译工具，详细可以观看AOSP中<a href="https://android.googlesource.com/platform/build/soong/">build/soong/README.md的解释</a>，如果不能接受英文的话可以看看中文翻译<a href="/blog/blog/2017-09-23/2017-09-23-translate-blueprint-soong">Android源码解析之AOSP新的构建系统</a>。x86_darwin_host.go文件表明了当前的AOSP编译系统支持三个sdk版本.</p>
+
+<p>build/soong/cc/config/x86_darwin_host.go</p>
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="m">88</span>         <span class="n">darwinSupportedSdkVersions</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span>
+ <span class="m">89</span>                 <span class="s">"10.10"</span><span class="p">,</span>
+ <span class="m">90</span>                 <span class="s">"10.11"</span><span class="p">,</span>
+ <span class="m">91</span>                 <span class="s">"10.12"</span><span class="p">,</span>
+ <span class="m">92</span>         <span class="c">//        "10.13",</span>
+ <span class="m">93</span>         <span class="p">}</span>
+</code></pre></div></div>
+<p>但是我自作聪明添加了一个目前系统自带的版本（10.13），结果可想而知当然是不能使用了。所以我们要在macOS系统中添加darwinSupportedSdkVersions列表中的某一个。从这个网站下载你需要的sdk：https://github.com/phracker/MacOSX-SDKs ,如果你下载的是tar.xz格式的文件，可以使用<code class="language-plaintext highlighter-rouge">tar -vxjf 文件名</code>命令行解压tar.xz格式的文件。将解压后的文件添加到/macOS_SDK/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/或者/Library/Developer/CommandLineTools/SDKs/MacOSX，都可以，前者是后者的符号链接。对了，只要添加进去就可以，不用做其他处理，编译过程中会自动去查询10.12这个macOS SDK。如果报错，最好检查一下sdk的路径文件，使用brew doctor。如果有报错信息，使用<code class="language-plaintext highlighter-rouge">sudo xcode-select -switch /</code>。</p>
+
+<h3 id="curl版本">curl版本</h3>
+<p>macOS使用的curl是基于SecureTransport，而jack使用的curl是基于OpenSSL，所以使用brew安装之后要在~/.profile文件添加<code class="language-plaintext highlighter-rouge">export PATH=$(brew --prefix curl)/bin:$PATH</code>,并source ~/.profile，或者直接在终端执行<code class="language-plaintext highlighter-rouge">export PATH=$(brew --prefix curl)/bin:$PATH</code>。两者使用差异自行google。</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>curl <span class="nt">--with-openssl</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="si">$(</span>brew <span class="nt">--prefix</span> curl<span class="si">)</span>/bin:<span class="nv">$PATH</span>
+</code></pre></div></div>
+
+<h3 id="安装xz">安装xz</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install xz
+</code></pre></div></div>
+<p>如果期间是由于缺少像xz这种工具性的东西，安装一下继续编译就行。</p>
+
+<h3 id="jack报错">jack报错</h3>
+<p>编译时会在~/目录下生成两个重要的配置文件：~/.jack-server/config.properties文件和~/.jack-settings文件。其中~/.jack-server/config.properties文件会在~/.jack-settings文件之后生成，而且会出现编译报错。报错我们大可不必理会，检查一下两个文件的端口号一致的话，继续编译就行。</p>
+
+<p>如果后续还有问题在继续写，continue。。。</p>
+
+<h3 id="其他"><em class="header3-font">其他</em></h3>
+<p>如果编译完成，想使用Android Studio阅读源码可以观看这一篇文章<a href="/blog/2017-04-29/elementary-using-AS-reading-code">使用Android Studio阅读AOSP源码</a></p>
+
+<h2 id="4reference"><em class="header2-font">4.Reference</em></h2>
+<p><a href="weibo.com/u/1785464290/home?wvr=5">在 OS X 上编译 AOSP 源码</a></p>
+
+<p><a href="http://blog.zhaiyifan.cn/2015/11/24/BuildAndroid6OnMacElCapitan/">在Mac 10.11编译最新的Android 6.0</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2017-09-23/elementary-get-aosp" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2017-09-23/elementary-get-aosp&text=用正确的姿势下载和编译AOSP" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2017-09-23/elementary-get-aosp&title=用正确的姿势下载和编译AOSP&summary=如果有兴趣在自己的Mac电脑下载和编译一套Android源码的话，可以查看这一篇文章，帮助你跳过一些坑&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=用正确的姿势下载和编译AOSP&body=如果有兴趣在自己的Mac电脑下载和编译一套Android源码的话，可以查看这一篇文章，帮助你跳过一些坑 https://jamesfchen.github.io/2017-09-23/elementary-get-aosp" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017-09-23/elementary-get-aosp";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

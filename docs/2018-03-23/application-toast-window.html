@@ -1,0 +1,824 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-03-23/application-toast-window">这些Window们 --- Toast的Window创建</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Fri, 23 Mar 2018 00:00:00 +0000</time> -->
+                  <time datetime='2018-03-23'>Fri, Mar 23 2018, 00:00</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :11000</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/framework-design/ui">framework-design/ui</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1introduction" id="markdown-toc-1introduction"><em class="header2-font">1.Introduction</em></a>    <ul>
+      <li><a href="#addview" id="markdown-toc-addview"><em class="header3-font">addView</em></a></li>
+      <li><a href="#removeview" id="markdown-toc-removeview"><em class="header3-font">removeView</em></a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="1introduction"><em class="header2-font">1.Introduction</em></h2>
+
+<h3 id="addview"><em class="header3-font">addView</em></h3>
+
+<p>frameworks/base/core/java/android/widget/Toast.java<br />
+  当调用show时，就能显示弹出Toas，所以看看它是如何show的。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">show</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mNextView</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"setView must have been called"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">INotificationManager</span> <span class="n">service</span> <span class="o">=</span> <span class="n">getService</span><span class="o">();</span>
+        <span class="nc">String</span> <span class="n">pkg</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">.</span><span class="na">getOpPackageName</span><span class="o">();</span>
+        <span class="no">TN</span> <span class="n">tn</span> <span class="o">=</span> <span class="n">mTN</span><span class="o">;</span>
+        <span class="n">tn</span><span class="o">.</span><span class="na">mNextView</span> <span class="o">=</span> <span class="n">mNextView</span><span class="o">;</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">service</span><span class="o">.</span><span class="na">enqueueToast</span><span class="o">(</span><span class="n">pkg</span><span class="o">,</span> <span class="n">tn</span><span class="o">,</span> <span class="n">mDuration</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Empty</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>  主要是通过Binder将数据传给NMS，NMS将这些数据封装成ToastRecord，而这一些ToastRecord被保存在mToastQueue里面。通过showNextToastLocked来完成Toast显示。</p>
+
+<p>frameworks/base/services/core/java/com/android/server/notification/NotificationManagerService.java</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NotificationManagerService</span> <span class="kd">extends</span> <span class="nc">SystemService</span> <span class="o">{</span>
+
+   <span class="kd">private</span> <span class="kd">final</span> <span class="nc">IBinder</span> <span class="n">mService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">INotificationManager</span><span class="o">.</span><span class="na">Stub</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Toasts</span>
+        <span class="c1">// ============================================================================</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enqueueToast</span><span class="o">(</span><span class="nc">String</span> <span class="n">pkg</span><span class="o">,</span> <span class="nc">ITransientNotification</span> <span class="n">callback</span><span class="o">,</span> <span class="kt">int</span> <span class="n">duration</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="o">...</span>
+
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mToastQueue</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">callingPid</span> <span class="o">=</span> <span class="nc">Binder</span><span class="o">.</span><span class="na">getCallingPid</span><span class="o">();</span>
+                <span class="kt">long</span> <span class="n">callingId</span> <span class="o">=</span> <span class="nc">Binder</span><span class="o">.</span><span class="na">clearCallingIdentity</span><span class="o">();</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="nc">ToastRecord</span> <span class="n">record</span><span class="o">;</span>
+                    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">indexOfToastLocked</span><span class="o">(</span><span class="n">pkg</span><span class="o">,</span> <span class="n">callback</span><span class="o">);</span>
+                    <span class="c1">// If it's already in the queue, we update it in place, we don't</span>
+                    <span class="c1">// move it to the end of the queue.</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">record</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
+                        <span class="n">record</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">duration</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="c1">// Limit the number of toasts that any given package except the android</span>
+                        <span class="c1">// package can enqueue.  Prevents DOS attacks and deals with leaks.</span>
+                        <span class="k">if</span> <span class="o">(!</span><span class="n">isSystemToast</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                            <span class="kd">final</span> <span class="kt">int</span> <span class="no">N</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+                            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="no">N</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                                 <span class="kd">final</span> <span class="nc">ToastRecord</span> <span class="n">r</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                                 <span class="k">if</span> <span class="o">(</span><span class="n">r</span><span class="o">.</span><span class="na">pkg</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">pkg</span><span class="o">))</span> <span class="o">{</span>
+                                     <span class="n">count</span><span class="o">++;</span>
+                                     <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="no">MAX_PACKAGE_NOTIFICATIONS</span><span class="o">)</span> <span class="o">{</span>
+                                         <span class="nc">Slog</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span> <span class="s">"Package has already posted "</span> <span class="o">+</span> <span class="n">count</span>
+                                                <span class="o">+</span> <span class="s">" toasts. Not showing more. Package="</span> <span class="o">+</span> <span class="n">pkg</span><span class="o">);</span>
+                                         <span class="k">return</span><span class="o">;</span>
+                                     <span class="o">}</span>
+                                 <span class="o">}</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+
+                        <span class="nc">Binder</span> <span class="n">token</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Binder</span><span class="o">();</span>
+                        <span class="n">mWindowManagerInternal</span><span class="o">.</span><span class="na">addWindowToken</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="no">TYPE_TOAST</span><span class="o">,</span> <span class="no">DEFAULT_DISPLAY</span><span class="o">);</span>
+                        <span class="n">record</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ToastRecord</span><span class="o">(</span><span class="n">callingPid</span><span class="o">,</span> <span class="n">pkg</span><span class="o">,</span> <span class="n">callback</span><span class="o">,</span> <span class="n">duration</span><span class="o">,</span> <span class="n">token</span><span class="o">);</span>
+                        <span class="n">mToastQueue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">record</span><span class="o">);</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                        <span class="n">keepProcessAliveIfNeededLocked</span><span class="o">(</span><span class="n">callingPid</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="c1">// If it's at index 0, it's the current toast.  It doesn't matter if it's</span>
+                    <span class="c1">// new or just been updated.  Call back and tell it to show itself.</span>
+                    <span class="c1">// If the callback fails, this will remove it from the list, so don't</span>
+                    <span class="c1">// assume that it's valid after this.</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">showNextToastLocked</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+                    <span class="nc">Binder</span><span class="o">.</span><span class="na">restoreCallingIdentity</span><span class="o">(</span><span class="n">callingId</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  不过为了防止DOS攻击，限制了50次发送Toast。接下来让我们来看看showNextToastLocked方法。</p>
+
+<p>frameworks/base/services/core/java/com/android/server/notification/NotificationManagerService.java</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NotificationManagerService</span> <span class="kd">extends</span> <span class="nc">SystemService</span> <span class="o">{</span>
+   <span class="nd">@GuardedBy</span><span class="o">(</span><span class="s">"mToastQueue"</span><span class="o">)</span>
+    <span class="kt">void</span> <span class="nf">showNextToastLocked</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">ToastRecord</span> <span class="n">record</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">record</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="no">DBG</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span> <span class="s">"Show pkg="</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="na">pkg</span> <span class="o">+</span> <span class="s">" callback="</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="na">callback</span><span class="o">);</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">record</span><span class="o">.</span><span class="na">callback</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="n">record</span><span class="o">.</span><span class="na">token</span><span class="o">);</span>
+                <span class="n">scheduleTimeoutLocked</span><span class="o">(</span><span class="n">record</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="o">...</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  看到这里已经很清楚了吧，其实在Application层通过enqueueToast方法，已经将Application层的TN(Binder)传给了Framework层，当时机成熟之时就会回调给Application层。</p>
+
+<p>frameworks/base/core/java/android/widget/Toast.java</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TN</span> <span class="kd">extends</span> <span class="nc">ITransientNotification</span><span class="o">.</span><span class="na">Stub</span> <span class="o">{</span>
+
+
+    <span class="no">TN</span><span class="o">(</span><span class="nc">String</span> <span class="n">packageName</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nc">Looper</span> <span class="n">looper</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+        <span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Handler</span><span class="o">(</span><span class="n">looper</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="nc">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">switch</span> <span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">what</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">case</span> <span class="nl">SHOW:</span> <span class="o">{</span>
+                            <span class="nc">IBinder</span> <span class="n">token</span> <span class="o">=</span> <span class="o">(</span><span class="nc">IBinder</span><span class="o">)</span> <span class="n">msg</span><span class="o">.</span><span class="na">obj</span><span class="o">;</span>
+                            <span class="n">handleShow</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="k">case</span> <span class="nl">HIDE:</span> <span class="o">{</span>
+                            <span class="n">handleHide</span><span class="o">();</span>
+                            <span class="c1">// Don't do this in handleHide() because it is also invoked by</span>
+                            <span class="c1">// handleShow()</span>
+                            <span class="n">mNextView</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="k">case</span> <span class="nl">CANCEL:</span> <span class="o">{</span>
+                            <span class="n">handleHide</span><span class="o">();</span>
+                            <span class="c1">// Don't do this in handleHide() because it is also invoked by</span>
+                            <span class="c1">// handleShow()</span>
+                            <span class="n">mNextView</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                            <span class="k">try</span> <span class="o">{</span>
+                                <span class="n">getService</span><span class="o">().</span><span class="na">cancelToast</span><span class="o">(</span><span class="n">mPackageName</span><span class="o">,</span> <span class="no">TN</span><span class="o">.</span><span class="na">this</span><span class="o">);</span>
+                            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="o">}</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">};</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  Application层通过Handler调度到了在show出Toas的线程。</p>
+
+<p>frameworks/base/core/java/android/widget/Toast.java</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleShow</span><span class="o">(</span><span class="nc">IBinder</span> <span class="n">windowToken</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">...</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mView</span> <span class="o">!=</span> <span class="n">mNextView</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// remove the old view if necessary</span>
+                <span class="n">handleHide</span><span class="o">();</span>
+                <span class="n">mView</span> <span class="o">=</span> <span class="n">mNextView</span><span class="o">;</span>
+                <span class="nc">Context</span> <span class="n">context</span> <span class="o">=</span> <span class="n">mView</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getApplicationContext</span><span class="o">();</span>
+                <span class="nc">String</span> <span class="n">packageName</span> <span class="o">=</span> <span class="n">mView</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getOpPackageName</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">context</span> <span class="o">=</span> <span class="n">mView</span><span class="o">.</span><span class="na">getContext</span><span class="o">();</span>
+                <span class="o">}</span>
+                <span class="n">mWM</span> <span class="o">=</span> <span class="o">(</span><span class="nc">WindowManager</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getSystemService</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="na">WINDOW_SERVICE</span><span class="o">);</span>
+                <span class="c1">// We can resolve the Gravity here by using the Locale for getting</span>
+                <span class="c1">// the layout direction</span>
+                <span class="kd">final</span> <span class="nc">Configuration</span> <span class="n">config</span> <span class="o">=</span> <span class="n">mView</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getResources</span><span class="o">().</span><span class="na">getConfiguration</span><span class="o">();</span>
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">gravity</span> <span class="o">=</span> <span class="nc">Gravity</span><span class="o">.</span><span class="na">getAbsoluteGravity</span><span class="o">(</span><span class="n">mGravity</span><span class="o">,</span> <span class="n">config</span><span class="o">.</span><span class="na">getLayoutDirection</span><span class="o">());</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">gravity</span> <span class="o">=</span> <span class="n">gravity</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">gravity</span> <span class="o">&amp;</span> <span class="nc">Gravity</span><span class="o">.</span><span class="na">HORIZONTAL_GRAVITY_MASK</span><span class="o">)</span> <span class="o">==</span> <span class="nc">Gravity</span><span class="o">.</span><span class="na">FILL_HORIZONTAL</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">mParams</span><span class="o">.</span><span class="na">horizontalWeight</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">gravity</span> <span class="o">&amp;</span> <span class="nc">Gravity</span><span class="o">.</span><span class="na">VERTICAL_GRAVITY_MASK</span><span class="o">)</span> <span class="o">==</span> <span class="nc">Gravity</span><span class="o">.</span><span class="na">FILL_VERTICAL</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">mParams</span><span class="o">.</span><span class="na">verticalWeight</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">mX</span><span class="o">;</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">mY</span><span class="o">;</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">verticalMargin</span> <span class="o">=</span> <span class="n">mVerticalMargin</span><span class="o">;</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">horizontalMargin</span> <span class="o">=</span> <span class="n">mHorizontalMargin</span><span class="o">;</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">packageName</span> <span class="o">=</span> <span class="n">packageName</span><span class="o">;</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">hideTimeoutMilliseconds</span> <span class="o">=</span> <span class="n">mDuration</span> <span class="o">==</span>
+                    <span class="nc">Toast</span><span class="o">.</span><span class="na">LENGTH_LONG</span> <span class="o">?</span> <span class="no">LONG_DURATION_TIMEOUT</span> <span class="o">:</span> <span class="no">SHORT_DURATION_TIMEOUT</span><span class="o">;</span>
+                <span class="n">mParams</span><span class="o">.</span><span class="na">token</span> <span class="o">=</span> <span class="n">windowToken</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">mView</span><span class="o">.</span><span class="na">getParent</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">localLOGV</span><span class="o">)</span> <span class="nc">Log</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span> <span class="s">"REMOVE! "</span> <span class="o">+</span> <span class="n">mView</span> <span class="o">+</span> <span class="s">" in "</span> <span class="o">+</span> <span class="k">this</span><span class="o">);</span>
+                    <span class="n">mWM</span><span class="o">.</span><span class="na">removeView</span><span class="o">(</span><span class="n">mView</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="o">...</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="n">mWM</span><span class="o">.</span><span class="na">addView</span><span class="o">(</span><span class="n">mView</span><span class="o">,</span> <span class="n">mParams</span><span class="o">);</span>
+                    <span class="n">trySendAccessibilityEvent</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">WindowManager</span><span class="o">.</span><span class="na">BadTokenException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="cm">/* ignore */</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+<p>  到这里我们就知道了，如何show出一个Toast，那么如何remove掉的。其实是通过NotificationManagerService的scheduleTimeoutLocked方法。</p>
+
+<h3 id="removeview"><em class="header3-font">removeView</em></h3>
+
+<p>frameworks/base/services/core/java/com/android/server/notification/NotificationManagerService.java</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">WorkerHandler</span><span class="o">(</span><span class="nc">Looper</span> <span class="n">looper</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">looper</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="nc">Message</span> <span class="n">msg</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">switch</span> <span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">what</span><span class="o">)</span>
+            <span class="o">{</span>
+                <span class="k">case</span> <span class="nl">MESSAGE_TIMEOUT:</span>
+                    <span class="n">handleTimeout</span><span class="o">((</span><span class="nc">ToastRecord</span><span class="o">)</span><span class="n">msg</span><span class="o">.</span><span class="na">obj</span><span class="o">);</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">case</span> <span class="nl">MESSAGE_SAVE_POLICY_FILE:</span>
+                    <span class="n">handleSavePolicyFile</span><span class="o">();</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">case</span> <span class="nl">MESSAGE_SEND_RANKING_UPDATE:</span>
+                    <span class="n">handleSendRankingUpdate</span><span class="o">();</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">case</span> <span class="nl">MESSAGE_LISTENER_HINTS_CHANGED:</span>
+                    <span class="n">handleListenerHintsChanged</span><span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">arg1</span><span class="o">);</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">case</span> <span class="nl">MESSAGE_LISTENER_NOTIFICATION_FILTER_CHANGED:</span>
+                    <span class="n">handleListenerInterruptionFilterChanged</span><span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">arg1</span><span class="o">);</span>
+                    <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+    <span class="o">...</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">handleTimeout</span><span class="o">(</span><span class="nc">ToastRecord</span> <span class="n">record</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="no">DBG</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span> <span class="s">"Timeout pkg="</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="na">pkg</span> <span class="o">+</span> <span class="s">" callback="</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="na">callback</span><span class="o">);</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mToastQueue</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">indexOfToastLocked</span><span class="o">(</span><span class="n">record</span><span class="o">.</span><span class="na">pkg</span><span class="o">,</span> <span class="n">record</span><span class="o">.</span><span class="na">callback</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cancelToastLocked</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="o">...</span>
+    <span class="nd">@GuardedBy</span><span class="o">(</span><span class="s">"mToastQueue"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">scheduleTimeoutLocked</span><span class="o">(</span><span class="nc">ToastRecord</span> <span class="n">r</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">mHandler</span><span class="o">.</span><span class="na">removeCallbacksAndMessages</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+        <span class="nc">Message</span> <span class="n">m</span> <span class="o">=</span> <span class="nc">Message</span><span class="o">.</span><span class="na">obtain</span><span class="o">(</span><span class="n">mHandler</span><span class="o">,</span> <span class="no">MESSAGE_TIMEOUT</span><span class="o">,</span> <span class="n">r</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">delay</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="na">duration</span> <span class="o">==</span> <span class="nc">Toast</span><span class="o">.</span><span class="na">LENGTH_LONG</span> <span class="o">?</span> <span class="no">LONG_DELAY</span> <span class="o">:</span> <span class="no">SHORT_DELAY</span><span class="o">;</span>
+        <span class="n">mHandler</span><span class="o">.</span><span class="na">sendMessageDelayed</span><span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">delay</span><span class="o">);</span>
+    <span class="o">}</span>
+
+        <span class="nd">@GuardedBy</span><span class="o">(</span><span class="s">"mToastQueue"</span><span class="o">)</span>
+    <span class="kt">void</span> <span class="nf">cancelToastLocked</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ToastRecord</span> <span class="n">record</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">record</span><span class="o">.</span><span class="na">callback</span><span class="o">.</span><span class="na">hide</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Slog</span><span class="o">.</span><span class="na">w</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span> <span class="s">"Object died trying to hide notification "</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="na">callback</span>
+                    <span class="o">+</span> <span class="s">" in package "</span> <span class="o">+</span> <span class="n">record</span><span class="o">.</span><span class="na">pkg</span><span class="o">);</span>
+            <span class="c1">// don't worry about this, we're about to remove it from</span>
+            <span class="c1">// the list anyway</span>
+        <span class="o">}</span>
+
+        <span class="nc">ToastRecord</span> <span class="n">lastToast</span> <span class="o">=</span> <span class="n">mToastQueue</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
+        <span class="n">mWindowManagerInternal</span><span class="o">.</span><span class="na">removeWindowToken</span><span class="o">(</span><span class="n">lastToast</span><span class="o">.</span><span class="na">token</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="no">DEFAULT_DISPLAY</span><span class="o">);</span>
+
+        <span class="n">keepProcessAliveIfNeededLocked</span><span class="o">(</span><span class="n">record</span><span class="o">.</span><span class="na">pid</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mToastQueue</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Show the next one. If the callback fails, this will remove</span>
+            <span class="c1">// it from the list, so don't assume that the list hasn't changed</span>
+            <span class="c1">// after this point.</span>
+            <span class="n">showNextToastLocked</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>这回就明白了，原来是通过NMS中的Handler发送延时remove view的消息。然后通过TN会回到给Application层的应用，然后调用WindowManager的removeView方法。</p>
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-03-23/application-toast-window" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-03-23/application-toast-window&text=这些Window们 --- Toast的Window创建" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-03-23/application-toast-window&title=这些Window们 --- Toast的Window创建&summary=系统窗口&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=这些Window们 --- Toast的Window创建&body=系统窗口 https://jamesfchen.github.io/2018-03-23/application-toast-window" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2018-03-23/application-toast-window";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

@@ -1,0 +1,648 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Mon, 02 Nov 2020 22:50:00 +0000</time> -->
+                  <time datetime='2020-11-02'>Mon, Nov 02 2020, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :3895</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/app-design/network">app-design/network</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>这一篇文章我们来讲讲HTTP1 &amp;&amp; HTTP2 &amp;&amp; QUIC</p>
+
+<h2 id="2introduction"><em class="header2-font">2.Introduction</em></h2>
+
+<p>OkHttp中将编码request和解码response抽到<code class="language-plaintext highlighter-rouge">ExchangeCodec</code>类,HTTP1协议的实现类为Http1ExchangeCodec，HTTP2协议的实现类为Http2ExchangeCodec。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** Encodes HTTP requests and decodes HTTP responses. */</span>
+<span class="kd">interface</span> <span class="nc">ExchangeCodec</span> <span class="o">{</span>
+  <span class="cm">/** Returns the connection that carries this codec. */</span>
+  <span class="n">val</span> <span class="nl">connection:</span> <span class="nc">RealConnection</span>
+
+  <span class="cm">/** Returns an output stream where the request body can be streamed. */</span>
+  <span class="nd">@Throws</span><span class="o">(</span><span class="nl">IOException:</span><span class="o">:</span><span class="kd">class</span><span class="err">)</span>
+  <span class="nc">fun</span> <span class="n">createRequestBody</span><span class="o">(</span><span class="nl">request:</span> <span class="nc">Request</span><span class="o">,</span> <span class="nl">contentLength:</span> <span class="nc">Long</span><span class="o">):</span> <span class="nc">Sink</span>
+
+  <span class="cm">/** This should update the HTTP engine's sentRequestMillis field. */</span>
+  <span class="nd">@Throws</span><span class="o">(</span><span class="nl">IOException:</span><span class="o">:</span><span class="kd">class</span><span class="err">)</span>
+  <span class="nc">fun</span> <span class="n">writeRequestHeaders</span><span class="o">(</span><span class="nl">request:</span> <span class="nc">Request</span><span class="o">)</span>
+
+  <span class="cm">/**
+   * Parses bytes of a response header from an HTTP transport.
+   *
+   * @param expectContinue true to return null if this is an intermediate response with a "100"
+   * response code. Otherwise this method never returns null.
+   */</span>
+  <span class="nd">@Throws</span><span class="o">(</span><span class="nl">IOException:</span><span class="o">:</span><span class="kd">class</span><span class="err">)</span>
+  <span class="nc">fun</span> <span class="n">readResponseHeaders</span><span class="o">(</span><span class="nl">expectContinue:</span> <span class="nc">Boolean</span><span class="o">):</span> <span class="nc">Response</span><span class="o">.</span><span class="na">Builder</span><span class="o">?</span>
+
+  <span class="nd">@Throws</span><span class="o">(</span><span class="nl">IOException:</span><span class="o">:</span><span class="kd">class</span><span class="err">)</span>
+  <span class="nc">fun</span> <span class="n">openResponseBodySource</span><span class="o">(</span><span class="nl">response:</span> <span class="nc">Response</span><span class="o">):</span> <span class="nc">Source</span>
+
+  <span class="o">....</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>ExchangeCodec接口中主要有四个方法需要关注，处理request的header和body(writeRequestHeaders、createRequestBody)；处理response的header和body(readResponseHeaders、openResponseBodySource)。HTTP1的header采用的是文本形式，body有像json这样的文本形式，也有采用protobuf这样的二进制(其编解码过程被熟知已被破解)。HTTP2强制header和body都采用二进制形式，其中就引入了帧的概念。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nf">Http2ExchangeCodec</span><span class="o">(</span>
+  <span class="nl">client:</span> <span class="nc">OkHttpClient</span><span class="o">,</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="nl">connection:</span> <span class="nc">RealConnection</span><span class="o">,</span>
+  <span class="kd">private</span> <span class="n">val</span> <span class="nl">chain:</span> <span class="nc">RealInterceptorChain</span><span class="o">,</span>
+  <span class="kd">private</span> <span class="n">val</span> <span class="nl">http2Connection:</span> <span class="nc">Http2Connection</span>
+<span class="o">)</span> <span class="o">:</span> <span class="nc">ExchangeCodec</span> <span class="o">{</span>
+  <span class="o">...</span>
+
+  <span class="n">override</span> <span class="n">fun</span> <span class="nf">writeRequestHeaders</span><span class="o">(</span><span class="nl">request:</span> <span class="nc">Request</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">stream</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span>
+
+    <span class="n">val</span> <span class="n">hasRequestBody</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">body</span> <span class="o">!=</span> <span class="kc">null</span>
+    <span class="n">val</span> <span class="n">requestHeaders</span> <span class="o">=</span> <span class="n">http2HeadersList</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">http2Connection</span><span class="o">.</span><span class="na">newStream</span><span class="o">(</span><span class="n">requestHeaders</span><span class="o">,</span> <span class="n">hasRequestBody</span><span class="o">)</span>
+    <span class="c1">// We may have been asked to cancel while creating the new stream and sending the request</span>
+    <span class="c1">// headers, but there was still no stream to close.</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">canceled</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">stream</span><span class="o">!!.</span><span class="na">closeLater</span><span class="o">(</span><span class="nc">ErrorCode</span><span class="o">.</span><span class="na">CANCEL</span><span class="o">)</span>
+      <span class="k">throw</span> <span class="nf">IOException</span><span class="o">(</span><span class="s">"Canceled"</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="n">stream</span><span class="o">!!.</span><span class="na">readTimeout</span><span class="o">().</span><span class="na">timeout</span><span class="o">(</span><span class="n">chain</span><span class="o">.</span><span class="na">readTimeoutMillis</span><span class="o">.</span><span class="na">toLong</span><span class="o">(),</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+    <span class="n">stream</span><span class="o">!!.</span><span class="na">writeTimeout</span><span class="o">().</span><span class="na">timeout</span><span class="o">(</span><span class="n">chain</span><span class="o">.</span><span class="na">writeTimeoutMillis</span><span class="o">.</span><span class="na">toLong</span><span class="o">(),</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="n">override</span> <span class="n">fun</span> <span class="nf">createRequestBody</span><span class="o">(</span><span class="nl">request:</span> <span class="nc">Request</span><span class="o">,</span> <span class="nl">contentLength:</span> <span class="nc">Long</span><span class="o">):</span> <span class="nc">Sink</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">stream</span><span class="o">!!.</span><span class="na">getSink</span><span class="o">()</span>
+  <span class="o">}</span>
+
+
+  <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>当发起一个请求，调用者构建的request header经过writeRequestHeaders会被encode为二进制。首先先对request各个header进行utf-8编码，然后将编码之后的数据通过Http2Writer#header进一步压缩编码(其中压缩编码采用的是Hpack)。HTTP2中定义了10种帧类型，这里讲到的头部帧是其中一个，还有其他可以看下面的代码。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_DATA</span> <span class="o">=</span> <span class="mh">0x0</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_HEADERS</span> <span class="o">=</span> <span class="mh">0x1</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_PRIORITY</span> <span class="o">=</span> <span class="mh">0x2</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_RST_STREAM</span> <span class="o">=</span> <span class="mh">0x3</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_SETTINGS</span> <span class="o">=</span> <span class="mh">0x4</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_PUSH_PROMISE</span> <span class="o">=</span> <span class="mh">0x5</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_PING</span> <span class="o">=</span> <span class="mh">0x6</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_GOAWAY</span> <span class="o">=</span> <span class="mh">0x7</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_WINDOW_UPDATE</span> <span class="o">=</span> <span class="mh">0x8</span>
+  <span class="kd">const</span> <span class="n">val</span> <span class="no">TYPE_CONTINUATION</span> <span class="o">=</span> <span class="mh">0x9</span>
+</code></pre></div></div>
+<p>接下来我们来看看body逻辑，createRequestBody的方法体很简单<code class="language-plaintext highlighter-rouge">return stream!!.getSink()</code>,Http2Stream中的getSink获得到的是FramingSink，其重写了Sink#write。request body中的data通过FramingSink被写入到内部的sendBuffer缓存(最大16k).</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nf">Http2ExchangeCodec</span><span class="o">(</span>
+  <span class="nl">client:</span> <span class="nc">OkHttpClient</span><span class="o">,</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="nl">connection:</span> <span class="nc">RealConnection</span><span class="o">,</span>
+  <span class="kd">private</span> <span class="n">val</span> <span class="nl">chain:</span> <span class="nc">RealInterceptorChain</span><span class="o">,</span>
+  <span class="kd">private</span> <span class="n">val</span> <span class="nl">http2Connection:</span> <span class="nc">Http2Connection</span>
+<span class="o">)</span> <span class="o">:</span> <span class="nc">ExchangeCodec</span> <span class="o">{</span>
+  <span class="o">...</span>
+
+ <span class="n">override</span> <span class="n">fun</span> <span class="nf">readResponseHeaders</span><span class="o">(</span><span class="nl">expectContinue:</span> <span class="nc">Boolean</span><span class="o">):</span> <span class="nc">Response</span><span class="o">.</span><span class="na">Builder</span><span class="o">?</span> <span class="o">{</span>
+    <span class="n">val</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span> <span class="o">?:</span> <span class="k">throw</span> <span class="nc">IOException</span><span class="o">(</span><span class="s">"stream wasn't created"</span><span class="o">)</span>
+    <span class="n">val</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="na">takeHeaders</span><span class="o">()</span>
+    <span class="n">val</span> <span class="n">responseBuilder</span> <span class="o">=</span> <span class="n">readHttp2HeadersList</span><span class="o">(</span><span class="n">headers</span><span class="o">,</span> <span class="n">protocol</span><span class="o">)</span>
+    <span class="k">return</span> <span class="nf">if</span> <span class="o">(</span><span class="n">expectContinue</span> <span class="o">&amp;&amp;</span> <span class="n">responseBuilder</span><span class="o">.</span><span class="na">code</span> <span class="o">==</span> <span class="no">HTTP_CONTINUE</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kc">null</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="n">responseBuilder</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="n">override</span> <span class="n">fun</span> <span class="nf">openResponseBodySource</span><span class="o">(</span><span class="nl">response:</span> <span class="nc">Response</span><span class="o">):</span> <span class="nc">Source</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">stream</span><span class="o">!!.</span><span class="na">source</span>
+  <span class="o">}</span>
+
+
+  <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>Http2Stream#takeHeaders获取头部帧，其数据来源于Http2Connection$ReaderRunnable任务，其任务会不停的重Http2Reader#nextFrame取并传给Http2Stream#takeHeaders</p>
+
+<h2 id="2reference"><em class="header2-font">2.Reference</em></h2>
+<p><a href="http://www.ruanyifeng.com/blog/2016/08/http.html">HTTP 协议入门</a><br />
+<a href="https://juejin.im/post/6844904047594438670">[译] HPACK：http2中沉默的杀手</a><br />
+<a href="https://halfrost.com/http2-http-frames-definitions/">HTTP/2 中的帧定义</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2020-11-02/network-okhttp-protocol" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2020-11-02/network-okhttp-protocol&text=网络 --- OkHttp Protocol" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2020-11-02/network-okhttp-protocol&title=网络 --- OkHttp Protocol&summary=HTTP1 && HTTP2 && QUIC&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=网络 --- OkHttp Protocol&body=HTTP1 && HTTP2 && QUIC https://jamesfchen.github.io/2020-11-02/network-okhttp-protocol" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2020-11-02/network-okhttp-protocol";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

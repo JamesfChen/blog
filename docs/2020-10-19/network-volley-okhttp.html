@@ -1,0 +1,829 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2020-10-19/network-volley-okhttp">网络 --- Volley vs. OkHttp</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Mon, 19 Oct 2020 22:50:00 +0000</time> -->
+                  <time datetime='2020-10-19'>Mon, Oct 19 2020, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :8406</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/app-design/network">app-design/network</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>========================<br />
+Volley<br />
+=========================<br />
+<img src="/blog/asset/network/Volley.jpg" alt="network" /></p>
+
+<p>========================<br />
+OkHttp<br />
+=========================<br />
+<img src="/blog/asset/network/OkHttp.jpg" alt="network" /><br />
+  由于Volley是在HttpURLConnection的基础上完成的网路库，所以我们只对比Volley和OkHttp共有的部分。</p>
+<ul>
+  <li>request/response的网络请求池</li>
+  <li>cache池</li>
+  <li>retry次数</li>
+</ul>
+
+<h2 id="2introduction"><em class="header2-font">2.Introduction</em></h2>
+<h2 id="adispatcher"><em class="header3-font">a.Dispatcher</em></h2>
+<p>========================<br />
+Volley<br />
+=========================<br />
+  Volley的Dispatcher主要有两个队列</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mNetworkQueue
+mWaitingRequestQueue
+
+NetworkDispatcher的线程池大小为4
+创建了一个ByteArrayPool最多只能读4k的buf
+</code></pre></div></div>
+<p>  Volley并不存在同步请求，都是采用异步请求。所以只要两个队列就行。对于处于in flight的request也多是暂时找了个队列存放起来。由于网络请求池子被限制最多只能跑4个线，<code class="language-plaintext highlighter-rouge">所以对于Volley来说只能并发4个线程</code>。</p>
+
+<p>========================<br />
+OkHttp<br />
+=========================<br />
+  OkHttp的Dispatcher主要有如下三个队列</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>runningSyncCalls: ArrayDeque&lt;RealCall&gt;
+readyAsyncCalls:ArrayDeque&lt;AsyncCall&gt;
+runningAsyncCalls:ArrayDeque&lt;AsyncCall&gt;
+
+maxRequests = 64
+maxRequestsPerHost = 5
+//线程数最大为整型最大值2^31-1，1min保活，该池子主要用于异步发送请求
+executorService/executorServiceOrNull(corePoolSize = 0,maximumPoolSize = Int.MAX_VALUE,keepAliveTime = 60,unit = s,workQueue=SynchronousQueue ) 
+</code></pre></div></div>
+<p>  每一次网络请求都会被当成一次call并且被推到队列里面。有时候是同步请求有时候是异步请求，所以OkHttp会初始化三个目的不一样的队列。<code class="language-plaintext highlighter-rouge">对于正在并发请求的数量(runningAsyncCalls size)，OkHttp最多64个，每个host最多5个</code>，请求池最多可容纳整型的最大值，可以近似看成无穷大，每个线程保活1分钟，没有核心固定的线程,相当于JDK中提供的Executors#newCachedThreadPool,也就是缓存池。</p>
+
+<p>  对比一下Volley和OkHttp的并发数量，显然太少，并发的数量更多需要根据cpu核数以及网络类型来计算。所以使用JDK提供的一系列Executor工具，就能高效使用简单控制线程。</p>
+
+<h2 id="bcache"><em class="header3-font">b.Cache</em></h2>
+<p>  首先得了解HTTP是如何处理缓存的</p>
+<h3 id="1-新鲜度检查freshness">1. 新鲜度检查（freshness）</h3>
+<p>response缓存的字段</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Date:获取服务器时间（绝对时间）
+Age：过期时间（相对时间）
+ETag：tag号
+Last-Modified：最后被修改的时间（绝对时间）
+
+# HTTP1.0使用
+Expires：过期时间（绝对时间）
+# HTTP1.1使用
+cache control 
+- noCache：跳过本地、CND等新鲜度验证，必须与源服务器验证。
+- must-revalidate:本地cache到期，必须跳过CND等缓存服务器，到源服务器验证
+- noStore：禁止使用缓存
+- onlyIfCached:只取本地缓存
+- maxAgeSeconds：缓存时长(相对时间)
+- private：只保留本地，其他中间缓存服务部保留
+- public：不能缓存的也多变成能缓存，比如身份验证
+- maxStaleSeconds:客户端可以接受超过多久的缓存响应
+- minFreshSeconds：期望在指定时间内的响应仍有效
+</code></pre></div></div>
+
+<h3 id="2-再验证">2. 再验证</h3>
+<p>条件请求</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If-None-Match+ETag：若客户端的etag和服务的etag相同则再验证命中，返回304，未命中返回200 ok
+If-Modified-Since+Last-Modified：上次缓存之后若无被修改则再验证命中，返回304，未命中返回200 ok
+</code></pre></div></div>
+
+<p>  cache这块两个库都是采用lru算法来管理disk资源,也可以说OkHttp借鉴了Volley这块很多代码处理，OkHttp为了支持高并发，拿掉了response body在内存中的缓存，保存了header等一些相关信息。</p>
+
+<p>========================<br />
+Volley<br />
+=========================<br />
+  Volley的cache一些基本信息</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cache接口
+Cache&amp;Entry
+DiskBasedCache
+//缓存heard
+mEntries = new LinkedHashMap&lt;Stirng,CacheHeader&gt;(16, .75f, true);
+//缓存body
+- size :disk cacah =5 * 1024 * 1024(5m) 
+- directory:缓存位置/data/data/&lt;application package&gt;/cache/volley
+</code></pre></div></div>
+<p>  Volley的缓存header:主要缓存key(http method+url)对应的CacheHeader(跟过期相关的字段还有response的header）</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CacheHeader</span> <span class="o">{</span>
+        <span class="cm">/**
+         * The size of the data identified by this CacheHeader on disk (both header and data).
+         *
+         * &lt;p&gt;Must be set by the caller after it has been calculated.
+         *
+         * &lt;p&gt;This is not serialized to disk.
+         */</span>
+        <span class="kt">long</span> <span class="n">size</span><span class="o">;</span>
+
+        <span class="cm">/** The key that identifies the cache entry. */</span>
+        <span class="kd">final</span> <span class="nc">String</span> <span class="n">key</span><span class="o">;</span>
+
+        <span class="cm">/** ETag for cache coherence. */</span>
+        <span class="kd">final</span> <span class="nc">String</span> <span class="n">etag</span><span class="o">;</span>
+
+        <span class="cm">/** Date of this response as reported by the server. */</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">serverDate</span><span class="o">;</span>
+
+        <span class="cm">/** The last modified date for the requested object. */</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">lastModified</span><span class="o">;</span>
+
+        <span class="cm">/** TTL for this record. */</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">ttl</span><span class="o">;</span>
+
+        <span class="cm">/** Soft TTL for this record. */</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">softTtl</span><span class="o">;</span>
+
+        <span class="cm">/** Headers from the response resulting in this cache entry. */</span>
+        <span class="kd">final</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Header</span><span class="o">&gt;</span> <span class="n">allResponseHeaders</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">private</span> <span class="nc">String</span> <span class="nf">getFilenameForKey</span><span class="o">(</span><span class="nc">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">firstHalfLength</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">localFilename</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">firstHalfLength</span><span class="o">).</span><span class="na">hashCode</span><span class="o">());</span>
+        <span class="n">localFilename</span> <span class="o">+=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">firstHalfLength</span><span class="o">).</span><span class="na">hashCode</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">localFilename</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>  Volley的缓存body:主要缓存 key(getFilenameForKey方法)对应的文件(response body为存储内容)，可以简单理解一个url对应一个缓存文件。缓存文件存放的位置并不是sd卡，而是保存在ROM分配给apk的cache位置。当缓存数据<code class="language-plaintext highlighter-rouge">超过5m</code>就会调用<code class="language-plaintext highlighter-rouge">pruneIfNeeded</code>清理lru算出来的数据。</p>
+
+<p>========================<br />
+OkHttp<br />
+=========================<br />
+  OkHttp的cache一些基本信息</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cache(Entry描述的是缓存日志的内容信息)
+
+DiskLruCache(Snapshot、Entry描述的是缓存日志的文件名信息)
+ 
+ #缓存meta 和 body的快照
+ Snapshot
+
+# 能在缓存日志中存多少个文件名信息是由maxSize决定
+#缓存header
+lruEntries = LinkedHashMap&lt;String, Entry&gt;(0, 0.75f, true)
+
+#lruEntries的日报
+JOURNAL_FILE = "journal"
+JOURNAL_FILE_TEMP = "journal.tmp"
+JOURNAL_FILE_BACKUP = "journal.bkp"
+
+# 缓存body ENTRY_COUNT = 2
+会创建两种类型缓存文件，总计4个文件
+- clean(&lt;url&gt;.md5().hex().0 &lt;url&gt;.md5().hex().1)
+- dirty(&lt;url&gt;.md5().hex().0.tmp &lt;url&gt;.md5().hex().1.tmp)
+</code></pre></div></div>
+<p>  OkHttp的缓存设计和Volley大同小异，内存中保留一份header相关，disk保存body，他们都是来源于Snapshot(封装了io流)。当然也有不同的地方，比如代码整体可读性更高，还有提供了缓存的日报。如果用户对cache操作记录超过2000次,则会将内存中的lruEntries写入到日报中。<code class="language-plaintext highlighter-rouge">最大字节数和缓存目录需要使用者设置</code>,如果超过使用者设置的字节数，则会调用trimToSize使用lru清理。<br />
+缓存的header内容大致如下</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     *
+     * ```
+     * http://google.com/foo
+     * GET
+     * 2
+     * Accept-Language: fr-CA
+     * Accept-Charset: UTF-8
+     * HTTP/1.1 200 OK
+     * 3
+     * Content-Type: image/png
+     * Content-Length: 100
+     * Cache-Control: max-age=600
+     * ```
+     *
+     * A typical HTTPS file looks like this:
+     *
+     * ```
+     * https://google.com/foo
+     * GET
+     * 2
+     * Accept-Language: fr-CA
+     * Accept-Charset: UTF-8
+     * HTTP/1.1 200 OK
+     * 3
+     * Content-Type: image/png
+     * Content-Length: 100
+     * Cache-Control: max-age=600
+     *
+     * AES_256_WITH_MD5
+     * 2
+     * base64-encoded peerCertificate[0]
+     * base64-encoded peerCertificate[1]
+     * -1
+     * TLSv1.2
+     * ```
+</code></pre></div></div>
+<p>缓存的日报的记录大致如下</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   *
+   *     libcore.io.DiskLruCache
+   *     1
+   *     100
+   *     2
+   *
+   *     CLEAN 3400330d1dfc7f3f7f4b8d4d803dfcf6 832 21054
+   *     DIRTY 335c4c6028171cfddfbaae1a9c313c52
+   *     CLEAN 335c4c6028171cfddfbaae1a9c313c52 3934 2342
+   *     REMOVE 335c4c6028171cfddfbaae1a9c313c52
+   *     DIRTY 1ab96a171faeeee38496d8b330771a7a
+   *     CLEAN 1ab96a171faeeee38496d8b330771a7a 1600 234
+   *     READ 335c4c6028171cfddfbaae1a9c313c52
+   *     READ 3400330d1dfc7f3f7f4b8d4d803dfcf6
+   *
+</code></pre></div></div>
+
+<p>缓存策略</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="kd">val</span> <span class="py">responseCaching</span> <span class="p">=</span> <span class="n">cacheResponse</span><span class="p">.</span><span class="n">cacheControl</span>
+
+      <span class="kd">val</span> <span class="py">ageMillis</span> <span class="p">=</span> <span class="nf">cacheResponseAge</span><span class="p">()</span>
+      <span class="kd">var</span> <span class="py">freshMillis</span> <span class="p">=</span> <span class="nf">computeFreshnessLifetime</span><span class="p">()</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">requestCaching</span><span class="p">.</span><span class="n">maxAgeSeconds</span> <span class="p">!=</span> <span class="p">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">freshMillis</span> <span class="p">=</span> <span class="nf">minOf</span><span class="p">(</span><span class="n">freshMillis</span><span class="p">,</span> <span class="nc">SECONDS</span><span class="p">.</span><span class="nf">toMillis</span><span class="p">(</span><span class="n">requestCaching</span><span class="p">.</span><span class="n">maxAgeSeconds</span><span class="p">.</span><span class="nf">toLong</span><span class="p">()))</span>
+      <span class="p">}</span>
+
+    <span class="c1">//在某个时间段内依然有效</span>
+      <span class="kd">var</span> <span class="py">minFreshMillis</span><span class="p">:</span> <span class="nc">Long</span> <span class="p">=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">requestCaching</span><span class="p">.</span><span class="n">minFreshSeconds</span> <span class="p">!=</span> <span class="p">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">minFreshMillis</span> <span class="p">=</span> <span class="nc">SECONDS</span><span class="p">.</span><span class="nf">toMillis</span><span class="p">(</span><span class="n">requestCaching</span><span class="p">.</span><span class="n">minFreshSeconds</span><span class="p">.</span><span class="nf">toLong</span><span class="p">())</span>
+      <span class="p">}</span>
+
+      <span class="kd">var</span> <span class="py">maxStaleMillis</span><span class="p">:</span> <span class="nc">Long</span> <span class="p">=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="p">(!</span><span class="n">responseCaching</span><span class="p">.</span><span class="n">mustRevalidate</span> <span class="p">&amp;&amp;</span> <span class="n">requestCaching</span><span class="p">.</span><span class="n">maxStaleSeconds</span> <span class="p">!=</span> <span class="p">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">maxStaleMillis</span> <span class="p">=</span> <span class="nc">SECONDS</span><span class="p">.</span><span class="nf">toMillis</span><span class="p">(</span><span class="n">requestCaching</span><span class="p">.</span><span class="n">maxStaleSeconds</span><span class="p">.</span><span class="nf">toLong</span><span class="p">())</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(!</span><span class="n">responseCaching</span><span class="p">.</span><span class="n">noCache</span> <span class="p">&amp;&amp;</span> <span class="n">ageMillis</span> <span class="p">+</span> <span class="n">minFreshMillis</span> <span class="p">&lt;</span> <span class="n">freshMillis</span> <span class="p">+</span> <span class="n">maxStaleMillis</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">builder</span> <span class="p">=</span> <span class="n">cacheResponse</span><span class="p">.</span><span class="nf">newBuilder</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ageMillis</span> <span class="p">+</span> <span class="n">minFreshMillis</span> <span class="p">&gt;=</span> <span class="n">freshMillis</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">builder</span><span class="p">.</span><span class="nf">addHeader</span><span class="p">(</span><span class="s">"Warning"</span><span class="p">,</span> <span class="s">"110 HttpURLConnection \"Response is stale\""</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="kd">val</span> <span class="py">oneDayMillis</span> <span class="p">=</span> <span class="mi">24</span> <span class="p">*</span> <span class="mi">60</span> <span class="p">*</span> <span class="mi">60</span> <span class="p">*</span> <span class="mi">1000L</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ageMillis</span> <span class="p">&gt;</span> <span class="n">oneDayMillis</span> <span class="p">&amp;&amp;</span> <span class="nf">isFreshnessLifetimeHeuristic</span><span class="p">())</span> <span class="p">{</span>
+          <span class="n">builder</span><span class="p">.</span><span class="nf">addHeader</span><span class="p">(</span><span class="s">"Warning"</span><span class="p">,</span> <span class="s">"113 HttpURLConnection \"Heuristic expiration\""</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nc">CacheStrategy</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="n">builder</span><span class="p">.</span><span class="nf">build</span><span class="p">())</span>
+      <span class="p">}</span>
+</code></pre></div></div>
+
+<p>  这里对比一下Volley和OkHttp</p>
+
+<h2 id="cretry"><em class="header3-font">c.Retry</em></h2>
+
+<p>========================<br />
+Volley<br />
+=========================</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>socket连接时间2.5s
+最多retry一次
+超时乘积因子(The default backoff multiplier)=1
+
+retry一次，连接时间就等于2.5 * 1+2.5 =5s
+</code></pre></div></div>
+
+<p>========================<br />
+OkHttp<br />
+=========================</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">RouteException</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// The attempt to connect via a route failed. The request will not have been sent.</span>
+          <span class="k">if</span> <span class="p">(!</span><span class="nf">recover</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">lastConnectException</span><span class="p">,</span> <span class="n">call</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">requestSendStarted</span> <span class="p">=</span> <span class="k">false</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="n">e</span><span class="p">.</span><span class="n">firstConnectException</span><span class="p">.</span><span class="nf">withSuppressed</span><span class="p">(</span><span class="n">recoveredFailures</span><span class="p">)</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">recoveredFailures</span> <span class="p">+=</span> <span class="n">e</span><span class="p">.</span><span class="n">firstConnectException</span>
+          <span class="p">}</span>
+          <span class="n">newExchangeFinder</span> <span class="p">=</span> <span class="k">false</span>
+          <span class="k">continue</span>
+        <span class="p">}</span>
+</code></pre></div></div>
+<p>  retry没有次数限制，只有遇到不可retry的情况ProtocolException SocketTimeoutException SSLHandshakeException/CertificateException SSLPeerUnverifiedException FileNotFoundException才会终止retry</p>
+
+<h2 id="3more"><em class="header2-font">3.More</em></h2>
+<p>========================<br />
+OkHttp ConnectInterceptor/CallServerInterceptor<br />
+=========================<br />
+  OkHttp定义了连接的类RealConnection(Connection)，对于如何管理连接这种资源，采用池子的方式RealConnectionPool(ConnectionPool)。<code class="language-plaintext highlighter-rouge">连接池最多只能空闲5个连接，每个连接最多保活5min</code>，这个连接池并不存在上限，也就是有多少连接存多少。相对于请求池保活1分钟，连接池保活5分钟算是合理其连接过程是一种巨大的时间空间的消耗。<br />
+  既然有了管理连接的池子，OkHttp也提供了find/retry连接的类，可能为了遵循设计模式中的单一原则并没有将find/retry放在RealConnectionPool类中去实现,即ExchangeFinder。<br />
+  这里我们需要讲讲组合成连接的组件们</p>
+<ul>
+  <li>地址路由Route 路由选择器RouteSelector 路由失败的名单RouteDatabase</li>
+  <li>数据交换器Exchange  ExchangeCodec(Http1ExchangeCodec、Http2ExchangeCodec)</li>
+</ul>
+
+<h2 id="4reference"><em class="header2-font">4.Reference</em></h2>
+<p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90">Volley 源码解析</a><br />
+<a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching">HTTP cache</a></p>
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2020-10-19/network-volley-okhttp" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2020-10-19/network-volley-okhttp&text=网络 --- Volley vs. OkHttp" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2020-10-19/network-volley-okhttp&title=网络 --- Volley vs. OkHttp&summary=面向Socket编程：OkHttp = Volley + HttpURLConnection&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=网络 --- Volley vs. OkHttp&body=面向Socket编程：OkHttp = Volley + HttpURLConnection https://jamesfchen.github.io/2020-10-19/network-volley-okhttp" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2020-10-19/network-volley-okhttp";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

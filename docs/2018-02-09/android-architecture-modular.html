@@ -1,0 +1,734 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-02-09/android-architecture-modular">Android架构中的组件化</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Fri, 09 Feb 2018 22:50:00 +0000</time> -->
+                  <time datetime='2018-02-09'>Fri, Feb 09 2018, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :5168</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/app-design/architecture">app-design/architecture</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#2about" id="markdown-toc-2about"><em class="header2-font">2.About</em></a></li>
+  <li><a href="#3introduction" id="markdown-toc-3introduction"><em class="header2-font">3.Introduction</em></a>    <ul>
+      <li><a href="#组件化配置" id="markdown-toc-组件化配置"><em class="header3-font">组件化配置</em></a>        <ul>
+          <li><a href="#组件目录" id="markdown-toc-组件目录">组件目录</a></li>
+          <li><a href="#组件通讯" id="markdown-toc-组件通讯">组件通讯</a></li>
+        </ul>
+      </li>
+      <li><a href="#组件化项目" id="markdown-toc-组件化项目"><em class="header3-font">组件化项目</em></a></li>
+    </ul>
+  </li>
+  <li><a href="#4reference" id="markdown-toc-4reference"><em class="header2-font">4.Reference</em></a></li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  现如今开发Android的代码量越来越庞大，容易出现dex超过64k方法，也给构建时间带来了挑战。所以在构建时间这块Android开发者使出了浑身解数，比如抛弃gradle使用buck来优化构建。为了便于团队的开发，很多Android团队使用了组件化、插件化的方式管理项目，而对于它们的共同点就是解耦代码，拆分成逻辑清晰的块。了解它们的关系就是这篇文章的关键点。</p>
+<h2 id="2about"><em class="header2-font">2.About</em></h2>
+
+<table class="wide">
+  <thead>
+    <tr>
+      <th> </th>
+      <th>构建/执行</th>
+      <th>打包方式</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>组件化</td>
+      <td>编译时</td>
+      <td>aar</td>
+    </tr>
+    <tr>
+      <td>插件化</td>
+      <td>运行时</td>
+      <td>apk/dex</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>通过上面我们可以粗糙地知道组件化与插件化的区别。</p>
+
+<p>  对于插件化，主要是通过hook framework层或者虚拟机加载dex的流程来动态加载apk或者dex从而实现业务的解耦，已经实时增加，比如动态换肤、热修复。不过对于这种行为对原来的流程有很大的破坏性，而不如像gradle这样的构建工具能够给我们提供稳定的callback来的安心。所以插件化对于Android生态算是一种恶。对于这种黑科技，我倒不是很喜欢，而组件化确实是一个福音。</p>
+
+<p>  对于组件化，这里讲的是业务组件化。通过组件化，可以将业务进行拆分，这样业务就独立了，再通过路由将各个组件串联起来。除了是业务解耦，还能让组件在调试时以apk的方式打包，这样可以调高开发效率。</p>
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+
+<p>说了这么多，还是让我们来看看代码怎么写的。结合<a href="https://github.com/JamesfChen/Spacecraft">JamesfChen/Spacecraft</a>这个项目来看，这个项目是我自己的开源项目，是一个轻量级App，主要关注架构一个App需要哪些技术点，欢迎您的star/fork/pr。</p>
+
+<h3 id="组件化配置"><em class="header3-font">组件化配置</em></h3>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">isComponentMode</span><span class="p">=</span><span class="s">true</span>
+</code></pre></div></div>
+<p>  在项目根目录的gradle.properties提供一个开关，来全局控制开启组件化模式。</p>
+
+<p>settings.gradle</p>
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(!</span><span class="n">isComponentMode</span><span class="o">.</span><span class="na">toBoolean</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">include</span> <span class="s1">':app'</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  如果开启组件化模式，我们需要将使用组件app从整个项目去掉。为什么要这么处理呢 ？ 看看下面的配置你就知道了。</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">isComponentMode</span><span class="o">.</span><span class="na">toBoolean</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'com.android.application'</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">'com.android.library'</span>
+<span class="o">}</span>
+
+<span class="n">android</span> <span class="o">{</span>
+    <span class="n">buildTypes</span> <span class="o">{</span>
+        <span class="n">release</span> <span class="o">{</span>
+            <span class="n">minifyEnabled</span> <span class="kc">false</span>
+            <span class="n">proguardFiles</span> <span class="nf">getDefaultProguardFile</span><span class="o">(</span><span class="s1">'proguard-android.txt'</span><span class="o">),</span> <span class="s1">'proguard-rules.pro'</span>
+        <span class="o">}</span>
+        <span class="n">component</span> <span class="o">{</span>
+            <span class="n">initWith</span> <span class="n">debug</span>
+            <span class="n">debuggable</span> <span class="kc">true</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  如果开启组件化模式，那么为了调试方便，我们需要将组件编译层apk，而不是aar/jar库。一旦被编译成apk，那么之前引用该组件的应用都要从整个项目去掉，以免造成编译报错。既然我们已经将组将编译成apk了，那么接下来就是搭建调试组件的环境了。</p>
+
+<h4 id="组件目录">组件目录</h4>
+<hr />
+
+<p>先来看看我的项目结构图。<br />
+<img src="/blog/asset/2018-02-09/2018-02-09-project-overview-modular.png" alt="" /></p>
+
+<p>  在src目录下，我们创建了一个component目录，用来放置调试代码，比如res资源，组件启动器，AndroidManifest文件等等。这里我们有必要来说说这个目录结构，其实我们可以在src目录下创建任意个目录用来override/add main目录下的一些资源。前提是这个任意目录结构要和main相同，gradle提供了debug/release两个目录。override/add 的规则是，新建的layout/drawable两个目录会覆盖main的layout/drawable，其余的都是add。所以我们可以把main目录看成是基础资源，而新建的component目录，提供的确实一些调试代码，当编译release时，并不会受到component目录的干扰，因为，我们接下来的代码决定了component也是一种build type。</p>
+
+<div class="language-groovy highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">android</span> <span class="o">{</span>
+    <span class="n">buildTypes</span> <span class="o">{</span>
+        <span class="n">release</span> <span class="o">{</span>
+             <span class="o">...</span>
+         <span class="o">}</span>
+        <span class="n">component</span> <span class="o">{</span>
+            <span class="n">initWith</span> <span class="n">debug</span>
+            <span class="n">debuggable</span> <span class="kc">true</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  创建完目录，我们还需要组件的build.gradle文件添加下面的代码，才能让这个目录生效。使用initWith继承debug type，在这里debuggable其实可加可不加，因为继承了debg type的特性了。</p>
+
+<h4 id="组件通讯">组件通讯</h4>
+<hr />
+
+<ol>
+  <li>
+    <p>Scheme <br />
+ 使用Intent/IntentFilter中的data来实现类似于网络中URL的跳转，URI的<code class="language-plaintext highlighter-rouge">&lt;scheme&gt;://&lt;host&gt;:&lt;port&gt;/&lt;path&gt;</code>通用公式，那么这样就设计到了URI的设计，数据库的URI设计是根据数据库字段，那么组件的URI设计应该根据什么 ？这是一个值得我们思考的问题。</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> tel://：　
+ mailto://：
+ smsto://：
+ content://：
+ file://：
+ geo://
+</code></pre></div>    </div>
+    <p>现如今的第三方路由库<a href="https://github.com/alibaba/ARouter">ARouter</a>,就是设计了一套跳转URI。这里还有一点想要说的，URI在代码代码里面最好的表现方式是什么 ？ Retrofit已经给我们解决了这个问题。而请求/想要最好的方式是什么 ？ RxJava也给我们解决了这个问题。 其实像EventBus也可以用于组件通讯，传递的是事件，但是它的请求/响应，个人感觉比起RxJava感觉有点丑。</p>
+  </li>
+  <li>
+    <p>RPC<br />
+ 在Android中的RPC例子就是AIDL，通过Proxy/Stub 实现了通讯，<a href="https://github.com/JamesfChen/Spacecraft">JamesfChen/Spacecraft</a>这个项目也是使用了一个Proxy的来转发跳转页面逻辑。</p>
+  </li>
+</ol>
+
+<p>公共库代码</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">BaseRouterActivity</span><span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nc">Fragment</span> <span class="nf">switchToFragment</span><span class="o">(</span><span class="nc">String</span> <span class="n">fragmentName</span><span class="o">,</span> <span class="nc">Bundle</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Fragment</span> <span class="n">f</span> <span class="o">=</span> <span class="nc">Fragment</span><span class="o">.</span><span class="na">instantiate</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">fragmentName</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="nc">FragmentTransaction</span> <span class="n">transaction</span> <span class="o">=</span> <span class="n">getFragmentManager</span><span class="o">().</span><span class="na">beginTransaction</span><span class="o">();</span>
+        <span class="o">...</span>
+        <span class="n">transaction</span><span class="o">.</span><span class="na">commitAllowingStateLoss</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    
+<span class="o">}</span>
+</code></pre></div></div>
+<p>  BaseRouterActivity类位于所有组件的公共库，组件通过继承BaseRouterActivity类，比如写个StarterActivity类，然后通过调用父类的switchToFragment方法，将信息通过底层公共库传给其他组件。对于BaseRouterActivity类暴露给组件的switchToFragment方法做法应该，在优化一下，应该提供一个抽象方法给子类，而不应该提供一个这么重要的方法，不过为了展示代码方便就这么处理了。</p>
+
+<p>组件代码</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">StarterActivity</span> <span class="kd">extends</span> <span class="nc">BaseRouterActivity</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">META_DATA_KEY_FRAGMENT_CLASS</span> <span class="o">=</span>
+            <span class="s">"FRAGMENT_CLASS"</span><span class="o">;</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="nc">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">switchToFragment</span><span class="o">(</span><span class="n">getMetaData</span><span class="o">());</span>
+    <span class="o">}</span>
+
+     <span class="kd">private</span> <span class="nc">String</span> <span class="nf">getMetaData</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">ActivityInfo</span> <span class="n">ai</span> <span class="o">=</span> <span class="n">getPackageManager</span><span class="o">().</span><span class="na">getActivityInfo</span><span class="o">(</span><span class="n">getComponentName</span><span class="o">(),</span>
+                    <span class="nc">PackageManager</span><span class="o">.</span><span class="na">GET_META_DATA</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ai</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">ai</span><span class="o">.</span><span class="na">metaData</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+            <span class="nc">String</span>  <span class="n">fragmentClass</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="na">metaData</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="no">META_DATA_KEY_FRAGMENT_CLASS</span><span class="o">);</span>
+              <span class="k">return</span> <span class="n">fragmentClass</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">PackageManager</span><span class="o">.</span><span class="na">NameNotFoundException</span> <span class="n">nnfe</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// No recovery</span>
+            <span class="nc">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">"StarterActivity"</span><span class="o">,</span> <span class="s">"Cannot get Metadata for: "</span> <span class="o">+</span> <span class="n">getComponentName</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;activity</span>
+            <span class="na">android:name=</span><span class="s">".StarterActivity"</span>
+            <span class="na">android:windowSoftInputMode=</span><span class="s">"stateHidden"</span>
+            <span class="na">android:screenOrientation=</span><span class="s">"landscape"</span>
+            <span class="na">android:label=</span><span class="s">"@string/app_name"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"android.intent.action.MAIN"</span><span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.LAUNCHER"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/intent-filter&gt;</span>
+            <span class="nt">&lt;meta-data</span> <span class="na">android:name=</span><span class="s">"FRAGMENT_CLASS"</span>
+                       <span class="na">android:value=</span><span class="s">"应用包名.ActionCenterFragment"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/activity&gt;</span>
+</code></pre></div></div>
+<p>  通过meta-data这个配置形式，使得代码更加简单化，只要在meta-data中提供想要跳转的组件就可以了。</p>
+
+<h3 id="组件化项目"><em class="header3-font">组件化项目</em></h3>
+
+<p>再看看一个组件化的案例。<br />
+<img src="/blog/asset/2018-02-09/2018-02-09-architecture-evolution.png" alt="" /></p>
+
+<p>由于初期，架构v1.x版本比较野蛮的采用了PBL分包，数据交互使用MVP，而随着代码量、业务的增长，在架构v2.x版本则采取底层按照功能模块划分，业务层通过组件化的形式将业务解耦，使其便于调试编译。这里我们确实可以看出MVP架构的价值，不像Android早期的View-Module模式，很多的保证了底层与业务层的充分解耦，如果新增业务，只要通过修改P层，从而让底层与V层做到适配，绝大多数中间人都是为了传递委一方的需求，另一方的能力。</p>
+
+<!-- 大部分Android项目都是使用View-Module模式开发 -->
+<!-- ![](http://www.tutorialsteacher.com/Content/images/mvc/mvc-architecture.png) -->
+<p>  </p>
+<h2 id="4reference"><em class="header2-font">4.Reference</em></h2>
+<p><a href="https://blog.dreamtobe.cn/2016/05/29/lls_architecture/">英语流利说 Android 架构演进</a></p>
+
+<p><a href="http://www.infoq.com/cn/articles/wechat-android-app-architecture">微信Android客户端架构演进之路</a></p>
+
+<p><a href="http://blog.zhaiyifan.cn/2016/10/20/android-new-project-from-0-p11/">从零开始的Android新项目11 - 组件化实践（1）</a></p>
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2018-02-09/android-architecture-modular" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2018-02-09/android-architecture-modular&text=Android架构中的组件化" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2018-02-09/android-architecture-modular&title=Android架构中的组件化&summary=这一篇将会解答组件化、插件化的区别&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=Android架构中的组件化&body=这一篇将会解答组件化、插件化的区别 https://jamesfchen.github.io/2018-02-09/android-architecture-modular" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2018-02-09/android-architecture-modular";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

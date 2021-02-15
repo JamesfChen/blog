@@ -1,0 +1,1638 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-03-16/service-ams-schedule-process">Framework层的服务 --- AMS管理进程</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Fri, 16 Mar 2018 00:00:00 +0000</time> -->
+                  <time datetime='2018-03-16'>Fri, Mar 16 2018, 00:00</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :46723</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/framework-design/service">framework-design/service</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a>    <ul>
+      <li><a href="#process-state" id="markdown-toc-process-state"><em class="header3-font">Process state</em></a>        <ul>
+          <li><a href="#linux-process-state" id="markdown-toc-linux-process-state">linux process state</a></li>
+          <li><a href="#android-process-state" id="markdown-toc-android-process-state">android process state</a></li>
+        </ul>
+      </li>
+      <li><a href="#process-types" id="markdown-toc-process-types"><em class="header3-font">Process types</em></a>        <ul>
+          <li><a href="#linux-process-types" id="markdown-toc-linux-process-types">linux process types</a></li>
+          <li><a href="#android-process-types" id="markdown-toc-android-process-types">android process types</a></li>
+        </ul>
+      </li>
+      <li><a href="#process-priority" id="markdown-toc-process-priority"><em class="header3-font">Process priority</em></a>        <ul>
+          <li><a href="#linux-priority" id="markdown-toc-linux-priority">linux priority</a></li>
+          <li><a href="#android-priority" id="markdown-toc-android-priority">android priority</a></li>
+        </ul>
+      </li>
+      <li><a href="#process-policy" id="markdown-toc-process-policy"><em class="header3-font">Process policy</em></a>        <ul>
+          <li><a href="#linux-policy" id="markdown-toc-linux-policy">linux policy</a></li>
+          <li><a href="#android-policy" id="markdown-toc-android-policy">android policy</a></li>
+        </ul>
+      </li>
+      <li><a href="#process-group" id="markdown-toc-process-group"><em class="header3-font">Process group</em></a>        <ul>
+          <li><a href="#linux-group" id="markdown-toc-linux-group">linux group</a></li>
+          <li><a href="#android-group" id="markdown-toc-android-group">android group</a></li>
+        </ul>
+      </li>
+      <li><a href="#process-siganl" id="markdown-toc-process-siganl"><em class="header3-font">Process siganl</em></a>        <ul>
+          <li><a href="#linux-siganl" id="markdown-toc-linux-siganl">linux siganl</a></li>
+          <li><a href="#android-siganl" id="markdown-toc-android-siganl">android siganl</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#2introduction" id="markdown-toc-2introduction"><em class="header2-font">2.Introduction</em></a>    <ul>
+      <li><a href="#进程lru排序" id="markdown-toc-进程lru排序"><em class="header3-font">进程LRU排序</em></a>        <ul>
+          <li><a href="#插入当前的进程" id="markdown-toc-插入当前的进程">插入当前的进程</a></li>
+          <li><a href="#重排序相关联的进程" id="markdown-toc-重排序相关联的进程">重排序相关联的进程</a></li>
+        </ul>
+      </li>
+      <li><a href="#进程oom_adj调整" id="markdown-toc-进程oom_adj调整"><em class="header3-font">进程oom_adj调整</em></a>        <ul>
+          <li><a href="#assranktasklayersifneeded" id="markdown-toc-assranktasklayersifneeded">ASS#rankTaskLayersIfNeeded</a></li>
+          <li><a href="#computeoomadjlocked" id="markdown-toc-computeoomadjlocked">computeOomAdjLocked</a></li>
+          <li><a href="#applyoomadjlocked" id="markdown-toc-applyoomadjlocked">applyOomAdjLocked</a></li>
+          <li><a href="#iapplicationthreadscheduletrimmemory" id="markdown-toc-iapplicationthreadscheduletrimmemory">IApplicationThread#scheduleTrimMemory</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  对于kernel来说，进程、线程是不分家的，多线程或者多进程都会共享资源，但是由于需要确保每个应用在user space中都相对独立、相对安全，彼此不能轻易地操作彼此的数据，就急需做分离。所以进程和线程在user space其实是不同的。进程拥有独立的内存。多个进程中某个进程发生crash并不会影响其他的进程运行，借由进程的这个特性，对于需要放在后台工作的任务来说，进程是个非常好的选择，即使由于内存吃紧被回收，代码发生crash挂了，也都不影响前台UI进程。<br />
+  对于android framework来说，一个app中可以有多个进程，面向用户的前台UI进程存活率指定是比其他后台进程更高。android framework采用了多进程管理多个app，应用层存在大量的承载着app的虚拟机，一个虚拟机跑在一个进程中。<br />
+对于多进程的设计我们可以先推测一下：</p>
+<ul>
+  <li>进程回收：通过oom_adj值和进程占用的内存大小两个值共同决定回收哪些进程</li>
+  <li>进程并发调度：通过nice值标记进程调度优先级</li>
+</ul>
+
+<p>所以对于像音乐播放器这样的后台进程存活情况如何，怎么提高其存活率是我们需要关注的点。这里可以直接说一下，<code class="language-plaintext highlighter-rouge">使用LRU算法+组件特点排序进程;使用oom_adj值和占用内存大小回收进程</code></p>
+
+<p>  我们都知道Android操作系统是基于Linux操作系统的，所以很多东西会沿用了Linux，但又在其基础之上做了定制。想要了解Android中的进程，需要简单了解一下Linux中的进程。</p>
+
+<h3 id="process-state"><em class="header3-font">Process state</em></h3>
+<h4 id="linux-process-state">linux process state</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-   R  running or runnable (on run queue)
+-   D  uninterruptible sleep (usually IO)
+-   S  interruptible sleep (waiting for an event to complete)
+-   Z  defunct/zombie, terminated but not reaped by its parent
+-   T  stopped, either by a job control signal or because it is being traced
+</code></pre></div></div>
+<h4 id="android-process-state">android process state</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Map from process states to the states we track.</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="no">PROCESS_STATE_TO_STATE</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span>
+        <span class="no">STATE_PERSISTENT</span><span class="o">,</span>               <span class="c1">// ActivityManager.PROCESS_STATE_PERSISTENT</span>
+        <span class="no">STATE_PERSISTENT</span><span class="o">,</span>               <span class="c1">// ActivityManager.PROCESS_STATE_PERSISTENT_UI</span>
+        <span class="no">STATE_TOP</span><span class="o">,</span>                      <span class="c1">// ActivityManager.PROCESS_STATE_TOP</span>
+        <span class="no">STATE_IMPORTANT_FOREGROUND</span><span class="o">,</span>     <span class="c1">// ActivityManager.PROCESS_STATE_FOREGROUND_SERVICE</span>
+        <span class="no">STATE_IMPORTANT_FOREGROUND</span><span class="o">,</span>     <span class="c1">// ActivityManager.PROCESS_STATE_BOUND_FOREGROUND_SERVICE</span>
+        <span class="no">STATE_IMPORTANT_FOREGROUND</span><span class="o">,</span>     <span class="c1">// ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND</span>
+        <span class="no">STATE_IMPORTANT_BACKGROUND</span><span class="o">,</span>     <span class="c1">// ActivityManager.PROCESS_STATE_IMPORTANT_BACKGROUND</span>
+        <span class="no">STATE_IMPORTANT_BACKGROUND</span><span class="o">,</span>     <span class="c1">// ActivityManager.PROCESS_STATE_TRANSIENT_BACKGROUND</span>
+        <span class="no">STATE_BACKUP</span><span class="o">,</span>                   <span class="c1">// ActivityManager.PROCESS_STATE_BACKUP</span>
+        <span class="no">STATE_SERVICE</span><span class="o">,</span>                  <span class="c1">// ActivityManager.PROCESS_STATE_SERVICE</span>
+        <span class="no">STATE_RECEIVER</span><span class="o">,</span>                 <span class="c1">// ActivityManager.PROCESS_STATE_RECEIVER</span>
+        <span class="no">STATE_TOP</span><span class="o">,</span>                      <span class="c1">// ActivityManager.PROCESS_STATE_TOP_SLEEPING</span>
+        <span class="no">STATE_HEAVY_WEIGHT</span><span class="o">,</span>             <span class="c1">// ActivityManager.PROCESS_STATE_HEAVY_WEIGHT</span>
+        <span class="no">STATE_HOME</span><span class="o">,</span>                     <span class="c1">// ActivityManager.PROCESS_STATE_HOME</span>
+        <span class="no">STATE_LAST_ACTIVITY</span><span class="o">,</span>            <span class="c1">// ActivityManager.PROCESS_STATE_LAST_ACTIVITY</span>
+        <span class="no">STATE_CACHED_ACTIVITY</span><span class="o">,</span>          <span class="c1">// ActivityManager.PROCESS_STATE_CACHED_ACTIVITY</span>
+        <span class="no">STATE_CACHED_ACTIVITY_CLIENT</span><span class="o">,</span>   <span class="c1">// ActivityManager.PROCESS_STATE_CACHED_ACTIVITY_CLIENT</span>
+        <span class="no">STATE_CACHED_ACTIVITY</span><span class="o">,</span>          <span class="c1">// ActivityManager.PROCESS_STATE_CACHED_RECENT</span>
+        <span class="no">STATE_CACHED_EMPTY</span><span class="o">,</span>             <span class="c1">// ActivityManager.PROCESS_STATE_CACHED_EMPTY</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>  相对于linux的process state，android process state更加细化。</p>
+<h3 id="process-types"><em class="header3-font">Process types</em></h3>
+<h4 id="linux-process-types">linux process types</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 交互进程:由shell启动的进程,通过终端控制台(tty)控制。终端控制台关闭，进程也就被关闭了。
+- 批处理进程
+- daemon process:脱离于tty运行的进程。
+</code></pre></div></div>
+
+<h4 id="android-process-types">android process types</h4>
+
+<blockquote>
+  <p>It is important that application developers understand how different application components (in particular Activity, Service, and BroadcastReceiver) impact the lifetime of the application’s process. Not using these components correctly can result in the system killing the application’s process while it is doing important work</p>
+</blockquote>
+
+<p>android系统的进程依附于四大组件，如果进程不存在这些组件，就会被回收，这与linux的进程管理策略有点区别。</p>
+<ol>
+  <li>foreground process
+    <ul>
+      <li>running Activity at the top of the screen that the use is interacting with（its <code class="language-plaintext highlighter-rouge">onResume()</code> method has been called）</li>
+      <li>running BroadcastReceiver(its <code class="language-plaintext highlighter-rouge">onReceive()</code> method is executing)</li>
+      <li>Service is currently executing code in one of its callback(<code class="language-plaintext highlighter-rouge">onCreate(),onStart(),onDestroy()</code>)</li>
+    </ul>
+  </li>
+  <li>visible process
+    <ul>
+      <li>running Activity is visible to the user on-screen but not in the foreground(its <code class="language-plaintext highlighter-rouge">onPause()</code> method has been called)</li>
+      <li>Service is running as a foreground service,through <code class="language-plaintext highlighter-rouge">startForeground()</code> method</li>
+      <li>It is <code class="language-plaintext highlighter-rouge">hosting a service that the system is using</code> for a particular feature that the user is aware, such as a live wallpaper, input method service, etc.</li>
+    </ul>
+  </li>
+  <li>
+    <p>service process<br />
+it is one holding a Service that has been started with the <code class="language-plaintext highlighter-rouge">startService()</code> method。<br />
+Services that have been running for a long time (such as 30 minutes or more) may be demoted in importance to allow their process to drop to the cached LRU list described next.</p>
+  </li>
+  <li>cached process<br />
+These processes often hold one or more Activity instances that are not currently visible to the user (the <code class="language-plaintext highlighter-rouge">onStop()</code> method has been called and returned)</li>
+</ol>
+
+<h3 id="process-priority"><em class="header3-font">Process priority</em></h3>
+<h4 id="linux-priority">linux priority</h4>
+<p>通过设置进程的nice值，取值范围为-20～+19，来改变其priority</p>
+
+<h4 id="android-priority">android priority</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Standard priority of application threads.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_DEFAULT</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/*
+     * ***************************************
+     * ** Keep in sync with utils/threads.h **
+     * ***************************************
+     */</span>
+    
+    <span class="cm">/**
+     * Lowest available thread priority.  Only for those who really, really
+     * don't want to run if anything else is happening.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_LOWEST</span> <span class="o">=</span> <span class="mi">19</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Standard priority background threads.  This gives your thread a slightly
+     * lower than normal priority, so that it will have less chance of impacting
+     * the responsiveness of the user interface.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_BACKGROUND</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Standard priority of threads that are currently running a user interface
+     * that the user is interacting with.  Applications can not normally
+     * change to this priority; the system will automatically adjust your
+     * application threads as the user moves through the UI.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_FOREGROUND</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Standard priority of system display threads, involved in updating
+     * the user interface.  Applications can not
+     * normally change to this priority.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_DISPLAY</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Standard priority of the most important display threads, for compositing
+     * the screen and retrieving input events.  Applications can not normally
+     * change to this priority.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_URGENT_DISPLAY</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Standard priority of video threads.  Applications can not normally
+     * change to this priority.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_VIDEO</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Standard priority of audio threads.  Applications can not normally
+     * change to this priority.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_AUDIO</span> <span class="o">=</span> <span class="o">-</span><span class="mi">16</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Standard priority of the most important audio threads.
+     * Applications can not normally change to this priority.
+     * Use with {@link #setThreadPriority(int)} and
+     * {@link #setThreadPriority(int, int)}, &lt;b&gt;not&lt;/b&gt; with the normal
+     * {@link java.lang.Thread} class.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_URGENT_AUDIO</span> <span class="o">=</span> <span class="o">-</span><span class="mi">19</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Minimum increment to make a priority more favorable.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_MORE_FAVORABLE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Minimum increment to make a priority less favorable.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_PRIORITY_LESS_FAVORABLE</span> <span class="o">=</span> <span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+</code></pre></div></div>
+<p>android 的priority值，并没有做什么变动，还是和linux的保持一致。</p>
+
+<h3 id="process-policy"><em class="header3-font">Process policy</em></h3>
+<h4 id="linux-policy">linux policy</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- SCHED_FIFO:First in-first out scheduling
+- SCHED_RR:Round-robin scheduling
+- SCHED_DEADLINE:Sporadic task model deadline scheduling
+- SCHED_OTHER:Default Linux time-sharing scheduling
+- SCHED_BATCH:Scheduling batch processes
+- SCHED_IDLE:Scheduling very low priority jobs
+</code></pre></div></div>
+
+<h4 id="android-policy">android policy</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Default scheduling policy
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SCHED_OTHER</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * First-In First-Out scheduling policy
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SCHED_FIFO</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Round-Robin scheduling policy
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SCHED_RR</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Batch scheduling policy
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SCHED_BATCH</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Idle scheduling policy
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SCHED_IDLE</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Reset scheduler choice on fork.
+     * @hide
+     */</span>
+     <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SCHED_RESET_ON_FORK</span> <span class="o">=</span> <span class="mh">0x40000000</span><span class="o">;</span>
+</code></pre></div></div>
+<h3 id="process-group"><em class="header3-font">Process group</em></h3>
+<h4 id="linux-group">linux group</h4>
+
+<h4 id="android-group">android group</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Default thread group -
+     * has meaning with setProcessGroup() only, cannot be used with setThreadGroup().
+     * When used with setProcessGroup(), the group of each thread in the process
+     * is conditionally changed based on that thread's current priority, as follows:
+     * threads with priority numerically less than THREAD_PRIORITY_BACKGROUND
+     * are moved to foreground thread group.  All other threads are left unchanged.
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_DEFAULT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Background thread group - All threads in
+     * this group are scheduled with a reduced share of the CPU.
+     * Value is same as constant SP_BACKGROUND of enum SchedPolicy.
+     * FIXME rename to THREAD_GROUP_BACKGROUND.
+     * @hide
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_BG_NONINTERACTIVE</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Foreground thread group - All threads in
+     * this group are scheduled with a normal share of the CPU.
+     * Value is same as constant SP_FOREGROUND of enum SchedPolicy.
+     * Not used at this level.
+     * @hide
+     **/</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_FOREGROUND</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * System thread group.
+     * @hide
+     **/</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_SYSTEM</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Application audio thread group.
+     * @hide
+     **/</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_AUDIO_APP</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * System audio thread group.
+     * @hide
+     **/</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_AUDIO_SYS</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Thread group for top foreground app.
+     * @hide
+     **/</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_TOP_APP</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Thread group for RT app.
+     * @hide
+     **/</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_RT_APP</span> <span class="o">=</span> <span class="mi">6</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Thread group for bound foreground services that should
+     * have additional CPU restrictions during screen off
+     * @hide
+     **/</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">THREAD_GROUP_RESTRICTED</span> <span class="o">=</span> <span class="mi">7</span><span class="o">;</span>
+</code></pre></div></div>
+
+<h3 id="process-siganl"><em class="header3-font">Process siganl</em></h3>
+<h4 id="linux-siganl">linux siganl</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       SIGHUP        1       Term    Hangup detected on controlling terminal
+                                     or death of controlling process
+       SIGINT        2       Term    Interrupt from keyboard
+       SIGQUIT       3       Core    Quit from keyboard
+       SIGILL        4       Core    Illegal Instruction
+       SIGABRT       6       Core    Abort signal from abort(3)
+       SIGFPE        8       Core    Floating-point exception
+       SIGKILL       9       Term    Kill signal
+       SIGSEGV      11       Core    Invalid memory reference
+       SIGPIPE      13       Term    Broken pipe: write to pipe with no
+                                     readers; see pipe(7)
+       SIGALRM      14       Term    Timer signal from alarm(2)
+       SIGTERM      15       Term    Termination signal
+       SIGUSR1   30,10,16    Term    User-defined signal 1
+       SIGUSR2   31,12,17    Term    User-defined signal 2
+       SIGCHLD   20,17,18    Ign     Child stopped or terminated
+       SIGCONT   19,18,25    Cont    Continue if stopped
+       SIGSTOP   17,19,23    Stop    Stop process
+       SIGTSTP   18,20,24    Stop    Stop typed at terminal
+       SIGTTIN   21,21,26    Stop    Terminal input for background process
+       SIGTTOU   22,22,27    Stop    Terminal output for background process
+       ...
+</code></pre></div></div>
+<h4 id="android-siganl">android siganl</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SIGNAL_QUIT</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SIGNAL_KILL</span> <span class="o">=</span> <span class="mi">9</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SIGNAL_USR1</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>  总的来说主要有变化的是process state和process types。</p>
+<h2 id="2introduction"><em class="header2-font">2.Introduction</em></h2>
+<p>android进程管理采用LRU算法排序进程，使用oom_adj值和占用内存大小来决定在内存紧张的时候回收哪个进程。</p>
+
+<h3 id="进程lru排序"><em class="header3-font">进程LRU排序</em></h3>
+<p>mLruProcesses为进程的cache列表，越靠近列表的尾部越不会被kill掉，存活下来的希望越大。当插入一个正在使用的进程那么会发生如下变化 ：</p>
+<ul>
+  <li>插入的当前进程会被放置于尾部</li>
+  <li>与其相关联的进程将会尽可能被推到靠近尾部，提高其level，免于被kill</li>
+</ul>
+
+<h4 id="插入当前的进程">插入当前的进程</h4>
+<blockquote class="filename">
+  <p>AMS#updateLruProcessLocked</p>
+</blockquote>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">void</span> <span class="nf">updateLruProcessLocked</span><span class="o">(</span><span class="nc">ProcessRecord</span> <span class="n">app</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">activityChange</span><span class="o">,</span>
+            <span class="nc">ProcessRecord</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">hasActivity</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">activities</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">hasClientActivities</span>
+                <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">treatLikeActivity</span> <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">recentTasks</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">hasService</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span> <span class="c1">// not impl yet. app.services.size() &gt; 0;</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">activityChange</span> <span class="o">&amp;&amp;</span> <span class="n">hasActivity</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// The process has activities, so we are only allowing activity-based adjustments</span>
+            <span class="c1">// to move it.  It should be kept in the front of the list with other</span>
+            <span class="c1">// processes that have activities, and we don't want those to change their</span>
+            <span class="c1">// order except due to activity operations.</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">mLruSeq</span><span class="o">++;</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">now</span> <span class="o">=</span> <span class="nc">SystemClock</span><span class="o">.</span><span class="na">uptimeMillis</span><span class="o">();</span>
+        <span class="n">app</span><span class="o">.</span><span class="na">lastActivityTime</span> <span class="o">=</span> <span class="n">now</span><span class="o">;</span>
+        <span class="o">...</span>
+        <span class="kt">int</span> <span class="n">lrui</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
+
+        <span class="o">...</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">lrui</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">lrui</span> <span class="o">&lt;</span> <span class="n">mLruProcessActivityStart</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mLruProcessActivityStart</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">lrui</span> <span class="o">&lt;</span> <span class="n">mLruProcessServiceStart</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mLruProcessServiceStart</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">lrui</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    
+        <span class="kt">int</span> <span class="n">nextIndex</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">hasActivity</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="kt">int</span> <span class="no">N</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">app</span><span class="o">.</span><span class="na">activities</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">recentTasks</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">mLruProcessActivityStart</span> <span class="o">&lt;</span> <span class="o">(</span><span class="no">N</span> <span class="o">-</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
+                <span class="c1">// Process doesn't have activities, but has clients with</span>
+                <span class="c1">// activities...  move it up, but one below the top (the top</span>
+                <span class="c1">// should always have a real activity).</span>
+                <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span>
+                        <span class="s">"Adding to second-top of LRU activity list: "</span> <span class="o">+</span> <span class="n">app</span><span class="o">);</span>
+                <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="no">N</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">app</span><span class="o">);</span>
+                <span class="c1">// To keep it from spamming the LRU list (by making a bunch of clients),</span>
+                <span class="c1">// we will push down any other entries owned by the app.</span>
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">uid</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">info</span><span class="o">.</span><span class="na">uid</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="no">N</span> <span class="o">-</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">mLruProcessActivityStart</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="nc">ProcessRecord</span> <span class="n">subProc</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">subProc</span><span class="o">.</span><span class="na">info</span><span class="o">.</span><span class="na">uid</span> <span class="o">==</span> <span class="n">uid</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c1">// We want to push this one down the list.  If the process after</span>
+                        <span class="c1">// it is for the same uid, however, don't do so, because we don't</span>
+                        <span class="c1">// want them internally to be re-ordered.</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">).</span><span class="na">info</span><span class="o">.</span><span class="na">uid</span> <span class="o">!=</span> <span class="n">uid</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span>
+                                    <span class="s">"Pushing uid "</span> <span class="o">+</span> <span class="n">uid</span> <span class="o">+</span> <span class="s">" swapping at "</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s">": "</span>
+                                    <span class="o">+</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">+</span> <span class="s">" : "</span> <span class="o">+</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+                            <span class="nc">ProcessRecord</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                            <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+                            <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">tmp</span><span class="o">);</span>
+                            <span class="n">i</span><span class="o">--;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="c1">// A gap, we can stop here.</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// Process has activities, put it at the very tipsy-top.</span>
+                <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span> <span class="s">"Adding to top of LRU activity list: "</span> <span class="o">+</span> <span class="n">app</span><span class="o">);</span>
+                <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">nextIndex</span> <span class="o">=</span> <span class="n">mLruProcessServiceStart</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">hasService</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Process has services, put it at the top of the service list.</span>
+            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span> <span class="s">"Adding to top of LRU service list: "</span> <span class="o">+</span> <span class="n">app</span><span class="o">);</span>
+            <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">mLruProcessActivityStart</span><span class="o">,</span> <span class="n">app</span><span class="o">);</span>
+            <span class="n">nextIndex</span> <span class="o">=</span> <span class="n">mLruProcessServiceStart</span><span class="o">;</span>
+            <span class="n">mLruProcessActivityStart</span><span class="o">++;</span>
+        <span class="o">}</span> <span class="k">else</span>  <span class="o">{</span>
+            <span class="c1">// Process not otherwise of interest, it goes to the top of the non-service area.</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">mLruProcessServiceStart</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">client</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// If there is a client, don't allow the process to be moved up higher</span>
+                <span class="c1">// in the list than that client.</span>
+                <span class="kt">int</span> <span class="n">clientIndex</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">lastIndexOf</span><span class="o">(</span><span class="n">client</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span> <span class="o">&amp;&amp;</span> <span class="n">clientIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span> <span class="s">"Unknown client "</span> <span class="o">+</span> <span class="n">client</span>
+                        <span class="o">+</span> <span class="s">" when updating "</span> <span class="o">+</span> <span class="n">app</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">clientIndex</span> <span class="o">&lt;=</span> <span class="n">lrui</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// Don't allow the client index restriction to push it down farther in the</span>
+                    <span class="c1">// list than it already is.</span>
+                    <span class="n">clientIndex</span> <span class="o">=</span> <span class="n">lrui</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">clientIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="n">clientIndex</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">clientIndex</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span> <span class="s">"Adding at "</span> <span class="o">+</span> <span class="n">index</span> <span class="o">+</span> <span class="s">" of LRU list: "</span> <span class="o">+</span> <span class="n">app</span><span class="o">);</span>
+            <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="n">app</span><span class="o">);</span>
+            <span class="n">nextIndex</span> <span class="o">=</span> <span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="n">mLruProcessActivityStart</span><span class="o">++;</span>
+            <span class="n">mLruProcessServiceStart</span><span class="o">++;</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+<p>首先尽可能从mLruProcesses移除将要插入的进程，然后判断将要插入的进程应该插入哪一个位置。这里有三个判断条件，与Activity组件有关联的进程；与Service组件相关的进程；其他进程。</p>
+
+<p>与Activity组件有关联的进程：</p>
+<ol>
+  <li>该进程只存在Activity组件</li>
+  <li>该进程存在Activity组件，存在Service组件进程，其绑定的client进程(bindService)存在Activity组件，flag为公开给开发中使用的值，比如flag=BIND_AUTO_CREATE</li>
+  <li>该进程存在Activity组件，存在Service组件进程，其存在Service组件进程被当中Activity看待，flag=BIND_TREAT_LIKE_ACTIVITY为framework私有的</li>
+  <li>该进程中没有Activity组件，存在Service组件进程，其绑定的client进程（bindService）存在Activity组件</li>
+  <li>该进程中没有Activity组件，存在Service组件进程，flag=BIND_TREAT_LIKE_ACTIVITY时;Service进程被当中Activity看待</li>
+</ol>
+
+<p>  1,2,3会将进程直接添加到mLruProcesses尾部，理由很简单，Activity是用户交互的组件，我们得先保证其具有高存活率。后两种会将进程添加到mLruProcesses倒数第二位，从这里可以看出存在Activity的进程比和Activity相互关联的Service进程存活率更高。</p>
+
+<p>有Service组件的进程：<br />
+  由于hasService总是为false，这部分代码还没有完善。不过我们可以大致知道，对于进程的管理越来越细化了，之前是根据Activity来划分，接下去还会出现根据Service来划分。这里有个地方需要提及一下，Android团队在源码中使用了mLruProcessServiceStart/mLruProcessActivityStart这两个字段来分割Service进程和Activity进程。</p>
+
+<p>其他的进程：<br />
+  该进程没有存在Activity组件，绑定的进程也没有Activity组件，比如绑定Service进程的Service进程。首先比较client进程的index和当前进程的index，两者取其最大值，这样保证了存活率最高，然后再和mLruProcessServiceStart比较，两者之间取最小值，这样保证了位置紧邻”上一个其他的进程”。从这里可以看出，client进程的index如果大于当前进程，将帮助当前进程往前添加。如果小于，当前进程还是呆在原地不动。如果不存在client进程，也就对于当前进程的位置没有什么帮助，直接依次添加mLruProcesses列表的头部。这么说对于那些无依无靠的进程，就很容易被回收。</p>
+
+<h4 id="重排序相关联的进程">重排序相关联的进程</h4>
+<blockquote class="filename">
+  <p>AMS#updateLruProcessLocked</p>
+</blockquote>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c1">// If the app is currently using a content provider or service,</span>
+        <span class="c1">// bump those processes as well.</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="na">connections</span><span class="o">.</span><span class="na">size</span><span class="o">()-</span><span class="mi">1</span><span class="o">;</span> <span class="n">j</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="nc">ConnectionRecord</span> <span class="n">cr</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">connections</span><span class="o">.</span><span class="na">valueAt</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cr</span><span class="o">.</span><span class="na">binding</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cr</span><span class="o">.</span><span class="na">serviceDead</span> <span class="o">&amp;&amp;</span> <span class="n">cr</span><span class="o">.</span><span class="na">binding</span><span class="o">.</span><span class="na">service</span> <span class="o">!=</span> <span class="kc">null</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">cr</span><span class="o">.</span><span class="na">binding</span><span class="o">.</span><span class="na">service</span><span class="o">.</span><span class="na">app</span> <span class="o">!=</span> <span class="kc">null</span>
+                    <span class="o">&amp;&amp;</span> <span class="n">cr</span><span class="o">.</span><span class="na">binding</span><span class="o">.</span><span class="na">service</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">lruSeq</span> <span class="o">!=</span> <span class="n">mLruSeq</span>
+                    <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cr</span><span class="o">.</span><span class="na">binding</span><span class="o">.</span><span class="na">service</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">persistent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nextIndex</span> <span class="o">=</span> <span class="n">updateLruProcessInternalLocked</span><span class="o">(</span><span class="n">cr</span><span class="o">.</span><span class="na">binding</span><span class="o">.</span><span class="na">service</span><span class="o">.</span><span class="na">app</span><span class="o">,</span> <span class="n">now</span><span class="o">,</span> <span class="n">nextIndex</span><span class="o">,</span>
+                        <span class="s">"service connection"</span><span class="o">,</span> <span class="n">cr</span><span class="o">,</span> <span class="n">app</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="na">conProviders</span><span class="o">.</span><span class="na">size</span><span class="o">()-</span><span class="mi">1</span><span class="o">;</span> <span class="n">j</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="nc">ContentProviderRecord</span> <span class="n">cpr</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">conProviders</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">).</span><span class="na">provider</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cpr</span><span class="o">.</span><span class="na">proc</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">cpr</span><span class="o">.</span><span class="na">proc</span><span class="o">.</span><span class="na">lruSeq</span> <span class="o">!=</span> <span class="n">mLruSeq</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cpr</span><span class="o">.</span><span class="na">proc</span><span class="o">.</span><span class="na">persistent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nextIndex</span> <span class="o">=</span> <span class="n">updateLruProcessInternalLocked</span><span class="o">(</span><span class="n">cpr</span><span class="o">.</span><span class="na">proc</span><span class="o">,</span> <span class="n">now</span><span class="o">,</span> <span class="n">nextIndex</span><span class="o">,</span>
+                        <span class="s">"provider reference"</span><span class="o">,</span> <span class="n">cpr</span><span class="o">,</span> <span class="n">app</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>  如果当前进程存在service connection，则帮助绑定的service进程提高在mLruProcessses中的index。<br />
+  如果当前进程存在provider reference，则帮助ContentProvider进程提高在mLruProcesses中的index。</p>
+
+<h3 id="进程oom_adj调整"><em class="header3-font">进程oom_adj调整</em></h3>
+
+<table class="inner-borders">
+  <thead>
+    <tr>
+      <th>adj级别</th>
+      <th>取值</th>
+      <th>介绍</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>INVALID_ADJ</td>
+      <td>-10000</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>NATIVE_ADJ</td>
+      <td>-1000</td>
+      <td>native进程，不受jvm控制</td>
+    </tr>
+    <tr>
+      <td>SYSTEM_ADJ</td>
+      <td>-900</td>
+      <td>system_server进程</td>
+    </tr>
+    <tr>
+      <td>PERSISTENT_PROC_ADJ</td>
+      <td>-800</td>
+      <td>persistent进程,在AndroidManifest申明“android：persistent=true”，即带有FLAG_SYSTEM标记，比如telephony进程</td>
+    </tr>
+    <tr>
+      <td>PERSISTENT_SERVICE_ADJ</td>
+      <td>-700</td>
+      <td>绑定系统进程或者persistent进程的一种进程</td>
+    </tr>
+    <tr>
+      <td>FOREGROUND_APP_ADJ</td>
+      <td>0</td>
+      <td>foreground进程</td>
+    </tr>
+    <tr>
+      <td>VISIBLE_APP_LAYER_MAX</td>
+      <td>(PERCEPTIBLE_APP_ADJ - VISIBLE_APP_ADJ - 1)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>VISIBLE_APP_ADJ</td>
+      <td>100</td>
+      <td>visible进程</td>
+    </tr>
+    <tr>
+      <td>PERCEPTIBLE_APP_ADJ</td>
+      <td>200</td>
+      <td>用户可察觉的进程，但却不可见，比如音乐播放后台</td>
+    </tr>
+    <tr>
+      <td>BACKUP_APP_ADJ</td>
+      <td>300</td>
+      <td>备份进程。执行bindBackupAgent过程的进程</td>
+    </tr>
+    <tr>
+      <td>HEAVY_WEIGHT_APP_ADJ</td>
+      <td>400</td>
+      <td>附带重量级应用的进程，运行于后台。在init.rc脚本中启动的，比如zygote.当应用的privateFlags=PRIVATE_FLAG_CANT_SAVE_STATE</td>
+    </tr>
+    <tr>
+      <td>SERVICE_ADJ</td>
+      <td>500</td>
+      <td>service进程</td>
+    </tr>
+    <tr>
+      <td>HOME_APP_ADJ</td>
+      <td>600</td>
+      <td>home应用的进程</td>
+    </tr>
+    <tr>
+      <td>PREVIOUS_APP_ADJ</td>
+      <td>700</td>
+      <td>上一个应用的进程</td>
+    </tr>
+    <tr>
+      <td>SERVICE_B_ADJ</td>
+      <td>800</td>
+      <td>SERVICE_ADJ的B list(不同于SERVICE_ADJ的A list，是用来标识old和decrepit的services)</td>
+    </tr>
+    <tr>
+      <td>CACHED_APP_MIN_ADJ~CACHED_APP_MAX_ADJ</td>
+      <td>900~906</td>
+      <td>cache进程</td>
+    </tr>
+    <tr>
+      <td>UNKNOWN_ADJ</td>
+      <td>1001</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="assranktasklayersifneeded">ASS#rankTaskLayersIfNeeded</h4>
+<hr />
+<blockquote class="filename">
+  <p>AMS#updateOomAdjLocked</p>
+</blockquote>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="o">...</span>
+        <span class="c1">// Reset state in all uid records.</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">mActiveUids</span><span class="o">.</span><span class="na">size</span><span class="o">()-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="nc">UidRecord</span> <span class="n">uidRec</span> <span class="o">=</span> <span class="n">mActiveUids</span><span class="o">.</span><span class="na">valueAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="kc">false</span> <span class="o">&amp;&amp;</span> <span class="no">DEBUG_UID_OBSERVERS</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="no">TAG_UID_OBSERVERS</span><span class="o">,</span>
+                    <span class="s">"Starting update of "</span> <span class="o">+</span> <span class="n">uidRec</span><span class="o">);</span>
+            <span class="n">uidRec</span><span class="o">.</span><span class="na">reset</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="n">mStackSupervisor</span><span class="o">.</span><span class="na">rankTaskLayersIfNeeded</span><span class="o">();</span>
+
+        <span class="n">mAdjSeq</span><span class="o">++;</span>
+        <span class="n">mNewNumServiceProcs</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">mNewNumAServiceProcs</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">emptyProcessLimit</span> <span class="o">=</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_MAX_EMPTY_PROCESSES</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">cachedProcessLimit</span> <span class="o">=</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_MAX_CACHED_PROCESSES</span> <span class="o">-</span> <span class="n">emptyProcessLimit</span><span class="o">;</span>
+
+        <span class="c1">// Let's determine how many processes we have running vs.</span>
+        <span class="c1">// how many slots we have for background processes; we may want</span>
+        <span class="c1">// to put multiple processes in a slot of there are enough of</span>
+        <span class="c1">// them.</span>
+        <span class="kt">int</span> <span class="n">numSlots</span> <span class="o">=</span> <span class="o">(</span><span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MAX_ADJ</span>
+                <span class="o">-</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MIN_ADJ</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">numEmptyProcs</span> <span class="o">=</span> <span class="no">N</span> <span class="o">-</span> <span class="n">mNumNonCachedProcs</span> <span class="o">-</span> <span class="n">mNumCachedHiddenProcs</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">numEmptyProcs</span> <span class="o">&gt;</span> <span class="n">cachedProcessLimit</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// If there are more empty processes than our limit on cached</span>
+            <span class="c1">// processes, then use the cached process limit for the factor.</span>
+            <span class="c1">// This ensures that the really old empty processes get pushed</span>
+            <span class="c1">// down to the bottom, so if we are running low on memory we will</span>
+            <span class="c1">// have a better chance at keeping around more cached processes</span>
+            <span class="c1">// instead of a gazillion empty processes.</span>
+            <span class="n">numEmptyProcs</span> <span class="o">=</span> <span class="n">cachedProcessLimit</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">emptyFactor</span> <span class="o">=</span> <span class="n">numEmptyProcs</span><span class="o">/</span><span class="n">numSlots</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">emptyFactor</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">)</span> <span class="n">emptyFactor</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">cachedFactor</span> <span class="o">=</span> <span class="o">(</span><span class="n">mNumCachedHiddenProcs</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">mNumCachedHiddenProcs</span> <span class="o">:</span> <span class="mi">1</span><span class="o">)/</span><span class="n">numSlots</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cachedFactor</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">)</span> <span class="n">cachedFactor</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">stepCached</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">stepEmpty</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">numCached</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">numEmpty</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">numTrimming</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="n">mNumNonCachedProcs</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">mNumCachedHiddenProcs</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="c1">// First update the OOM adjustment for each of the</span>
+        <span class="c1">// application processes based on their current state.</span>
+        <span class="kt">int</span> <span class="n">curCachedAdj</span> <span class="o">=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MIN_ADJ</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">nextCachedAdj</span> <span class="o">=</span> <span class="n">curCachedAdj</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">curEmptyAdj</span> <span class="o">=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MIN_ADJ</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">nextEmptyAdj</span> <span class="o">=</span> <span class="n">curEmptyAdj</span><span class="o">+</span><span class="mi">2</span><span class="o">;</span>
+
+        <span class="kt">boolean</span> <span class="n">retryCycles</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+        <span class="c1">// need to reset cycle state before calling computeOomAdjLocked because of service connections</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="no">N</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">app</span><span class="o">.</span><span class="na">containsCycle</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+<p>从ActivityDisplay的尾部开始遍历得到ActivityStack，每一个ActivityStack都包含着一组TaskRecord在mTaskHistory。紧急着从mTaskHistory尾端开始遍历得到TaskRecord。最尾端的TaskRecord为最近使用的。ActivityStack会从尾端到头部依次递增给TaskRecord的mLayerRank复制。显然越往后数值越大。</p>
+
+<h4 id="computeoomadjlocked">computeOomAdjLocked</h4>
+<hr />
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="no">N</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">app</span><span class="o">.</span><span class="na">procStateChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="n">computeOomAdjLocked</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">UNKNOWN_ADJ</span><span class="o">,</span> <span class="no">TOP_APP</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="n">now</span><span class="o">);</span>
+
+                <span class="c1">// if any app encountered a cycle, we need to perform an additional loop later</span>
+                <span class="n">retryCycles</span> <span class="o">|=</span> <span class="n">app</span><span class="o">.</span><span class="na">containsCycle</span><span class="o">;</span>
+
+                <span class="c1">// If we haven't yet assigned the final cached adj</span>
+                <span class="c1">// to the process, do that now.</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">curAdj</span> <span class="o">&gt;=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">UNKNOWN_ADJ</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">switch</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">case</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_CACHED_ACTIVITY</span><span class="o">:</span>
+                        <span class="k">case</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_CACHED_ACTIVITY_CLIENT</span><span class="o">:</span>
+                        <span class="k">case</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_CACHED_RECENT</span><span class="o">:</span>
+                            <span class="c1">// This process is a cached process holding activities...</span>
+                            <span class="c1">// assign it the next cached value for that type, and then</span>
+                            <span class="c1">// step that cached level.</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">curRawAdj</span> <span class="o">=</span> <span class="n">curCachedAdj</span><span class="o">;</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">curAdj</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">modifyRawOomAdj</span><span class="o">(</span><span class="n">curCachedAdj</span><span class="o">);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span> <span class="o">&amp;&amp;</span> <span class="kc">false</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span> <span class="s">"Assigning activity LRU #"</span> <span class="o">+</span> <span class="n">i</span>
+                                    <span class="o">+</span> <span class="s">" adj: "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">curAdj</span> <span class="o">+</span> <span class="s">" (curCachedAdj="</span> <span class="o">+</span> <span class="n">curCachedAdj</span>
+                                    <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">curCachedAdj</span> <span class="o">!=</span> <span class="n">nextCachedAdj</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="n">stepCached</span><span class="o">++;</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="n">stepCached</span> <span class="o">&gt;=</span> <span class="n">cachedFactor</span><span class="o">)</span> <span class="o">{</span>
+                                    <span class="n">stepCached</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                                    <span class="n">curCachedAdj</span> <span class="o">=</span> <span class="n">nextCachedAdj</span><span class="o">;</span>
+                                    <span class="n">nextCachedAdj</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">;</span>
+                                    <span class="k">if</span> <span class="o">(</span><span class="n">nextCachedAdj</span> <span class="o">&gt;</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MAX_ADJ</span><span class="o">)</span> <span class="o">{</span>
+                                        <span class="n">nextCachedAdj</span> <span class="o">=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MAX_ADJ</span><span class="o">;</span>
+                                    <span class="o">}</span>
+                                <span class="o">}</span>
+                            <span class="o">}</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="k">default</span><span class="o">:</span>
+                            <span class="c1">// For everything else, assign next empty cached process</span>
+                            <span class="c1">// level and bump that up.  Note that this means that</span>
+                            <span class="c1">// long-running services that have dropped down to the</span>
+                            <span class="c1">// cached level will be treated as empty (since their process</span>
+                            <span class="c1">// state is still as a service), which is what we want.</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">curRawAdj</span> <span class="o">=</span> <span class="n">curEmptyAdj</span><span class="o">;</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">curAdj</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">modifyRawOomAdj</span><span class="o">(</span><span class="n">curEmptyAdj</span><span class="o">);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_LRU</span> <span class="o">&amp;&amp;</span> <span class="kc">false</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_LRU</span><span class="o">,</span> <span class="s">"Assigning empty LRU #"</span> <span class="o">+</span> <span class="n">i</span>
+                                    <span class="o">+</span> <span class="s">" adj: "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">curAdj</span> <span class="o">+</span> <span class="s">" (curEmptyAdj="</span> <span class="o">+</span> <span class="n">curEmptyAdj</span>
+                                    <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">curEmptyAdj</span> <span class="o">!=</span> <span class="n">nextEmptyAdj</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="n">stepEmpty</span><span class="o">++;</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="n">stepEmpty</span> <span class="o">&gt;=</span> <span class="n">emptyFactor</span><span class="o">)</span> <span class="o">{</span>
+                                    <span class="n">stepEmpty</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                                    <span class="n">curEmptyAdj</span> <span class="o">=</span> <span class="n">nextEmptyAdj</span><span class="o">;</span>
+                                    <span class="n">nextEmptyAdj</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">;</span>
+                                    <span class="k">if</span> <span class="o">(</span><span class="n">nextEmptyAdj</span> <span class="o">&gt;</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MAX_ADJ</span><span class="o">)</span> <span class="o">{</span>
+                                        <span class="n">nextEmptyAdj</span> <span class="o">=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">CACHED_APP_MAX_ADJ</span><span class="o">;</span>
+                                    <span class="o">}</span>
+                                <span class="o">}</span>
+                            <span class="o">}</span>
+                            <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Cycle strategy:</span>
+        <span class="c1">// - Retry computing any process that has encountered a cycle.</span>
+        <span class="c1">// - Continue retrying until no process was promoted.</span>
+        <span class="c1">// - Iterate from least important to most important.</span>
+        <span class="kt">int</span> <span class="n">cycleCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">retryCycles</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cycleCount</span><span class="o">++;</span>
+            <span class="n">retryCycles</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="no">N</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">containsCycle</span> <span class="o">==</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">adjSeq</span><span class="o">--;</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">completedAdjSeq</span><span class="o">--;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="no">N</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">containsCycle</span> <span class="o">==</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">computeOomAdjLocked</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">UNKNOWN_ADJ</span><span class="o">,</span> <span class="no">TOP_APP</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="n">now</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="n">retryCycles</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>从mLruProcesses数组的尾部开始遍历得到ProcessRecord，通过computeOomAdjLocked方法，开始计算每个ProcessRecord的adj值</p>
+
+<h4 id="applyoomadjlocked">applyOomAdjLocked</h4>
+<hr />
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="no">N</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+            <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">applyOomAdjLocked</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="n">now</span><span class="o">,</span> <span class="n">nowElapsed</span><span class="o">);</span>
+
+                <span class="c1">// Count the number of process types.</span>
+                <span class="k">switch</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">case</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_CACHED_ACTIVITY</span><span class="o">:</span>
+                    <span class="k">case</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_CACHED_ACTIVITY_CLIENT</span><span class="o">:</span>
+                        <span class="n">mNumCachedHiddenProcs</span><span class="o">++;</span>
+                        <span class="n">numCached</span><span class="o">++;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">numCached</span> <span class="o">&gt;</span> <span class="n">cachedProcessLimit</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">kill</span><span class="o">(</span><span class="s">"cached #"</span> <span class="o">+</span> <span class="n">numCached</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                        <span class="o">}</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="k">case</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_CACHED_EMPTY</span><span class="o">:</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">numEmpty</span> <span class="o">&gt;</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_TRIM_EMPTY_PROCESSES</span>
+                                <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">lastActivityTime</span> <span class="o">&lt;</span> <span class="n">oldTime</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">kill</span><span class="o">(</span><span class="s">"empty for "</span>
+                                    <span class="o">+</span> <span class="o">((</span><span class="n">oldTime</span> <span class="o">+</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">MAX_EMPTY_TIME</span> <span class="o">-</span> <span class="n">app</span><span class="o">.</span><span class="na">lastActivityTime</span><span class="o">)</span>
+                                    <span class="o">/</span> <span class="mi">1000</span><span class="o">)</span> <span class="o">+</span> <span class="s">"s"</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="n">numEmpty</span><span class="o">++;</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">numEmpty</span> <span class="o">&gt;</span> <span class="n">emptyProcessLimit</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="n">app</span><span class="o">.</span><span class="na">kill</span><span class="o">(</span><span class="s">"empty #"</span> <span class="o">+</span> <span class="n">numEmpty</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="k">default</span><span class="o">:</span>
+                        <span class="n">mNumNonCachedProcs</span><span class="o">++;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">isolated</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">services</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">isolatedEntryPoint</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// If this is an isolated process, there are no services</span>
+                    <span class="c1">// running in it, and it's not a special process with a</span>
+                    <span class="c1">// custom entry point, then the process is no longer</span>
+                    <span class="c1">// needed.  We agressively kill these because we can by</span>
+                    <span class="c1">// definition not re-use the same process again, and it is</span>
+                    <span class="c1">// good to avoid having whatever code was running in them</span>
+                    <span class="c1">// left sitting around after no longer needed.</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">kill</span><span class="o">(</span><span class="s">"isolated not needed"</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="c1">// Keeping this process, update its uid.</span>
+                    <span class="kd">final</span> <span class="nc">UidRecord</span> <span class="n">uidRec</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">uidRecord</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">uidRec</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">uidRec</span><span class="o">.</span><span class="na">ephemeral</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">info</span><span class="o">.</span><span class="na">isInstantApp</span><span class="o">();</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">uidRec</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">&gt;</span> <span class="n">app</span><span class="o">.</span><span class="na">curProcState</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">uidRec</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="na">curProcState</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">foregroundServices</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">uidRec</span><span class="o">.</span><span class="na">foregroundServices</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">&gt;=</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_HOME</span>
+                        <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">numTrimming</span><span class="o">++;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>应用oom adj的值，当需要杀掉目标进程则返回false</p>
+
+<h4 id="iapplicationthreadscheduletrimmemory">IApplicationThread#scheduleTrimMemory</h4>
+<hr />
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="kd">final</span> <span class="kt">int</span> <span class="n">numCachedAndEmpty</span> <span class="o">=</span> <span class="n">numCached</span> <span class="o">+</span> <span class="n">numEmpty</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">memFactor</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">numCached</span> <span class="o">&lt;=</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_TRIM_CACHED_PROCESSES</span>
+                <span class="o">&amp;&amp;</span> <span class="n">numEmpty</span> <span class="o">&lt;=</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_TRIM_EMPTY_PROCESSES</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">numCachedAndEmpty</span> <span class="o">&lt;=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">TRIM_CRITICAL_THRESHOLD</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_CRITICAL</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">numCachedAndEmpty</span> <span class="o">&lt;=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">TRIM_LOW_THRESHOLD</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_LOW</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_MODERATE</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_NORMAL</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// We always allow the memory level to go up (better).  We only allow it to go</span>
+        <span class="c1">// down if we are in a state where that is allowed, *and* the total number of processes</span>
+        <span class="c1">// has gone down since last time.</span>
+        <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span> <span class="s">"oom: memFactor="</span> <span class="o">+</span> <span class="n">memFactor</span>
+                <span class="o">+</span> <span class="s">" last="</span> <span class="o">+</span> <span class="n">mLastMemoryLevel</span> <span class="o">+</span> <span class="s">" allowLow="</span> <span class="o">+</span> <span class="n">mAllowLowerMemLevel</span>
+                <span class="o">+</span> <span class="s">" numProcs="</span> <span class="o">+</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">+</span> <span class="s">" last="</span> <span class="o">+</span> <span class="n">mLastNumProcesses</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">memFactor</span> <span class="o">&gt;</span> <span class="n">mLastMemoryLevel</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">mAllowLowerMemLevel</span> <span class="o">||</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="n">mLastNumProcesses</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="n">mLastMemoryLevel</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span> <span class="s">"Keeping last mem factor!"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">memFactor</span> <span class="o">!=</span> <span class="n">mLastMemoryLevel</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">EventLogTags</span><span class="o">.</span><span class="na">writeAmMemFactor</span><span class="o">(</span><span class="n">memFactor</span><span class="o">,</span> <span class="n">mLastMemoryLevel</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">mLastMemoryLevel</span> <span class="o">=</span> <span class="n">memFactor</span><span class="o">;</span>
+        <span class="n">mLastNumProcesses</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="kt">boolean</span> <span class="n">allChanged</span> <span class="o">=</span> <span class="n">mProcessStats</span><span class="o">.</span><span class="na">setMemFactorLocked</span><span class="o">(</span><span class="n">memFactor</span><span class="o">,</span> <span class="o">!</span><span class="n">isSleepingLocked</span><span class="o">(),</span> <span class="n">now</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">trackerMemFactor</span> <span class="o">=</span> <span class="n">mProcessStats</span><span class="o">.</span><span class="na">getMemFactorLocked</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">memFactor</span> <span class="o">!=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_NORMAL</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mLowRamStartTime</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mLowRamStartTime</span> <span class="o">=</span> <span class="n">now</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">fgTrimLevel</span><span class="o">;</span>
+            <span class="k">switch</span> <span class="o">(</span><span class="n">memFactor</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">case</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_CRITICAL</span><span class="o">:</span>
+                    <span class="n">fgTrimLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_RUNNING_CRITICAL</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">case</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_LOW</span><span class="o">:</span>
+                    <span class="n">fgTrimLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_RUNNING_LOW</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">default</span><span class="o">:</span>
+                    <span class="n">fgTrimLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_RUNNING_MODERATE</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">factor</span> <span class="o">=</span> <span class="n">numTrimming</span><span class="o">/</span><span class="mi">3</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">minFactor</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mHomeProcess</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">minFactor</span><span class="o">++;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mPreviousProcess</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">minFactor</span><span class="o">++;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">factor</span> <span class="o">&lt;</span> <span class="n">minFactor</span><span class="o">)</span> <span class="n">factor</span> <span class="o">=</span> <span class="n">minFactor</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">curLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_COMPLETE</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="no">N</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">allChanged</span> <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">procStateChanged</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">setProcessTrackerStateLocked</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="n">trackerMemFactor</span><span class="o">,</span> <span class="n">now</span><span class="o">);</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">procStateChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">&gt;=</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_HOME</span>
+                        <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">&lt;</span> <span class="n">curLevel</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_SWITCH</span> <span class="o">||</span> <span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span>
+                                    <span class="s">"Trimming memory of "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">processName</span> <span class="o">+</span> <span class="s">" to "</span> <span class="o">+</span> <span class="n">curLevel</span><span class="o">);</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">scheduleTrimMemory</span><span class="o">(</span><span class="n">curLevel</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="o">}</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="c1">// For now we won't do this; our memory trimming seems</span>
+                            <span class="c1">// to be good enough at this point that destroying</span>
+                            <span class="c1">// activities causes more harm than good.</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="n">curLevel</span> <span class="o">&gt;=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_COMPLETE</span>
+                                    <span class="o">&amp;&amp;</span> <span class="n">app</span> <span class="o">!=</span> <span class="n">mHomeProcess</span> <span class="o">&amp;&amp;</span> <span class="n">app</span> <span class="o">!=</span> <span class="n">mPreviousProcess</span><span class="o">)</span> <span class="o">{</span>
+                                <span class="c1">// Need to do this on its own message because the stack may not</span>
+                                <span class="c1">// be in a consistent state at this point.</span>
+                                <span class="c1">// For these apps we will also finish their activities</span>
+                                <span class="c1">// to help them free memory.</span>
+                                <span class="n">mStackSupervisor</span><span class="o">.</span><span class="na">scheduleDestroyAllActivities</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="s">"trim"</span><span class="o">);</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">=</span> <span class="n">curLevel</span><span class="o">;</span>
+                    <span class="n">step</span><span class="o">++;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">step</span> <span class="o">&gt;=</span> <span class="n">factor</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                        <span class="k">switch</span> <span class="o">(</span><span class="n">curLevel</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">case</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_COMPLETE</span><span class="o">:</span>
+                                <span class="n">curLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_MODERATE</span><span class="o">;</span>
+                                <span class="k">break</span><span class="o">;</span>
+                            <span class="k">case</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_MODERATE</span><span class="o">:</span>
+                                <span class="n">curLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_BACKGROUND</span><span class="o">;</span>
+                                <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">==</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_HEAVY_WEIGHT</span>
+                        <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">app</span><span class="o">.</span><span class="na">killedByAm</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">&lt;</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_BACKGROUND</span>
+                            <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_SWITCH</span> <span class="o">||</span> <span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span>
+                                    <span class="s">"Trimming memory of heavy-weight "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">processName</span>
+                                    <span class="o">+</span> <span class="s">" to "</span> <span class="o">+</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_BACKGROUND</span><span class="o">);</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">scheduleTrimMemory</span><span class="o">(</span>
+                                    <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_BACKGROUND</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_BACKGROUND</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">((</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">&gt;=</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_IMPORTANT_BACKGROUND</span>
+                            <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">systemNoUi</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">pendingUiClean</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c1">// If this application is now in the background and it</span>
+                        <span class="c1">// had done UI, then give it the special trim level to</span>
+                        <span class="c1">// have it free UI resources.</span>
+                        <span class="kd">final</span> <span class="kt">int</span> <span class="n">level</span> <span class="o">=</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_UI_HIDDEN</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">&lt;</span> <span class="n">level</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">try</span> <span class="o">{</span>
+                                <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_SWITCH</span> <span class="o">||</span> <span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span>
+                                        <span class="s">"Trimming memory of bg-ui "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">processName</span>
+                                        <span class="o">+</span> <span class="s">" to "</span> <span class="o">+</span> <span class="n">level</span><span class="o">);</span>
+                                <span class="n">app</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">scheduleTrimMemory</span><span class="o">(</span><span class="n">level</span><span class="o">);</span>
+                            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                        <span class="n">app</span><span class="o">.</span><span class="na">pendingUiClean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">&lt;</span> <span class="n">fgTrimLevel</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_SWITCH</span> <span class="o">||</span> <span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span>
+                                    <span class="s">"Trimming memory of fg "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">processName</span>
+                                    <span class="o">+</span> <span class="s">" to "</span> <span class="o">+</span> <span class="n">fgTrimLevel</span><span class="o">);</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">scheduleTrimMemory</span><span class="o">(</span><span class="n">fgTrimLevel</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">=</span> <span class="n">fgTrimLevel</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mLowRamStartTime</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mLowRamTimeSinceLastIdle</span> <span class="o">+=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">mLowRamStartTime</span><span class="o">;</span>
+                <span class="n">mLowRamStartTime</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="no">N</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+                <span class="nc">ProcessRecord</span> <span class="n">app</span> <span class="o">=</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">allChanged</span> <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">procStateChanged</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">setProcessTrackerStateLocked</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="n">trackerMemFactor</span><span class="o">,</span> <span class="n">now</span><span class="o">);</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">procStateChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">app</span><span class="o">.</span><span class="na">curProcState</span> <span class="o">&gt;=</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">PROCESS_STATE_IMPORTANT_BACKGROUND</span>
+                        <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">systemNoUi</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">pendingUiClean</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">&lt;</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_UI_HIDDEN</span>
+                            <span class="o">&amp;&amp;</span> <span class="n">app</span><span class="o">.</span><span class="na">thread</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="no">DEBUG_SWITCH</span> <span class="o">||</span> <span class="no">DEBUG_OOM_ADJ</span><span class="o">)</span> <span class="nc">Slog</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="no">TAG_OOM_ADJ</span><span class="o">,</span>
+                                    <span class="s">"Trimming memory of ui hidden "</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">processName</span>
+                                    <span class="o">+</span> <span class="s">" to "</span> <span class="o">+</span> <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_UI_HIDDEN</span><span class="o">);</span>
+                            <span class="n">app</span><span class="o">.</span><span class="na">thread</span><span class="o">.</span><span class="na">scheduleTrimMemory</span><span class="o">(</span>
+                                    <span class="nc">ComponentCallbacks2</span><span class="o">.</span><span class="na">TRIM_MEMORY_UI_HIDDEN</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                    <span class="n">app</span><span class="o">.</span><span class="na">pendingUiClean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">app</span><span class="o">.</span><span class="na">trimMemoryLevel</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>在回调application层的接口之前会计算其level，而level又与memory factory有关。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="kt">int</span> <span class="n">memFactor</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">numCached</span> <span class="o">&lt;=</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_TRIM_CACHED_PROCESSES</span>
+                <span class="o">&amp;&amp;</span> <span class="n">numEmpty</span> <span class="o">&lt;=</span> <span class="n">mConstants</span><span class="o">.</span><span class="na">CUR_TRIM_EMPTY_PROCESSES</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">numCachedAndEmpty</span> <span class="o">&lt;=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">TRIM_CRITICAL_THRESHOLD</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_CRITICAL</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">numCachedAndEmpty</span> <span class="o">&lt;=</span> <span class="nc">ProcessList</span><span class="o">.</span><span class="na">TRIM_LOW_THRESHOLD</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_LOW</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_MODERATE</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">memFactor</span> <span class="o">=</span> <span class="nc">ProcessStats</span><span class="o">.</span><span class="na">ADJ_MEM_FACTOR_NORMAL</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="o">...</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">memFactor</span> <span class="o">&gt;</span> <span class="n">mLastMemoryLevel</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">mAllowLowerMemLevel</span> <span class="o">||</span> <span class="n">mLruProcesses</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="n">mLastNumProcesses</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">memFactor</span> <span class="o">=</span> <span class="n">mLastMemoryLevel</span><span class="o">;</span>
+                <span class="o">...</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+       <span class="o">...</span>
+</code></pre></div></div>
+<p>用一张表单展示上面的代码逻辑</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>memory 因素</th>
+      <th>取值</th>
+      <th>计算条件</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ADJ_MEM_FACTOR_NORMAL</td>
+      <td>0</td>
+      <td>Cached&gt;5或者Empty&gt;8</td>
+    </tr>
+    <tr>
+      <td>ADJ_MEM_FACTOR_MODERATE</td>
+      <td>1</td>
+      <td>Cached&lt;=5 &amp;&amp; Empty&lt;=8</td>
+    </tr>
+    <tr>
+      <td>ADJ_MEM_FACTOR_LOW</td>
+      <td>2</td>
+      <td>Cached+Empty&lt;=5</td>
+    </tr>
+    <tr>
+      <td>ADJ_MEM_FACTOR_CRITICAL</td>
+      <td>3</td>
+      <td>Cached+Empty&lt;=3</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>具体如何得到level值的就不继续细看了，有兴趣自行研究，这里提供些level的常量值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process is nearing the end
+     * of the background LRU list, and if more memory isn't found soon it will
+     * be killed.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_COMPLETE</span> <span class="o">=</span> <span class="mi">80</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process is around the middle
+     * of the background LRU list; freeing memory can help the system keep
+     * other processes running later in the list for better overall performance.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_MODERATE</span> <span class="o">=</span> <span class="mi">60</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process has gone on to the
+     * LRU list.  This is a good opportunity to clean up resources that can
+     * efficiently and quickly be re-built if the user returns to the app.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_BACKGROUND</span> <span class="o">=</span> <span class="mi">40</span><span class="o">;</span>
+    
+    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process had been showing
+     * a user interface, and is no longer doing so.  Large allocations with
+     * the UI should be released at this point to allow memory to be better
+     * managed.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_UI_HIDDEN</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process is not an expendable
+     * background process, but the device is running extremely low on memory
+     * and is about to not be able to keep any background processes running.
+     * Your running process should free up as many non-critical resources as it
+     * can to allow that memory to be used elsewhere.  The next thing that
+     * will happen after this is {@link #onLowMemory()} called to report that
+     * nothing at all can be kept in the background, a situation that can start
+     * to notably impact the user.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_RUNNING_CRITICAL</span> <span class="o">=</span> <span class="mi">15</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process is not an expendable
+     * background process, but the device is running low on memory.
+     * Your running process should free up unneeded resources to allow that
+     * memory to be used elsewhere.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_RUNNING_LOW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * Level for {@link #onTrimMemory(int)}: the process is not an expendable
+     * background process, but the device is running moderately low on memory.
+     * Your running process may want to release some unneeded resources for
+     * use elsewhere.
+     */</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">TRIM_MEMORY_RUNNING_MODERATE</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+</code></pre></div></div>
+<p>文中还有一些具体的细节没有展开，有空再来填坑。</p>
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

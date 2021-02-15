@@ -1,0 +1,713 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2018-03-14/service-wms-launch">Framework层的服务 --- WMS启动流程</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Wed, 14 Mar 2018 00:00:00 +0000</time> -->
+                  <time datetime='2018-03-14'>Wed, Mar 14 2018, 00:00</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :9984</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <ul id="markdown-toc">
+  <li><a href="#1summary" id="markdown-toc-1summary"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#2about" id="markdown-toc-2about"><em class="header2-font">2.About</em></a></li>
+  <li><a href="#3introduction" id="markdown-toc-3introduction"><em class="header2-font">3.Introduction</em></a>    <ul>
+      <li><a href="#main方法" id="markdown-toc-main方法"><em class="header3-font">main方法</em></a></li>
+      <li><a href="#displayready方法" id="markdown-toc-displayready方法"><em class="header3-font">displayReady方法</em></a></li>
+      <li><a href="#systemready方法" id="markdown-toc-systemready方法"><em class="header3-font">systemReady方法</em></a></li>
+    </ul>
+  </li>
+</ul>
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  </p>
+<h2 id="2about"><em class="header2-font">2.About</em></h2>
+<p>  </p>
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+
+<p>WMS启动流程中主要的方法也就是下面的三个：</p>
+<ul>
+  <li>main</li>
+  <li>displayReady</li>
+  <li>systemReady</li>
+</ul>
+
+<h3 id="main方法"><em class="header3-font">main方法</em></h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="nc">WindowManagerService</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">InputManagerService</span> <span class="n">im</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">haveInputMethods</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">showBootMsgs</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">onlyCore</span><span class="o">,</span>
+            <span class="nc">WindowManagerPolicy</span> <span class="n">policy</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">DisplayThread</span><span class="o">.</span><span class="na">getHandler</span><span class="o">().</span><span class="na">runWithScissors</span><span class="o">(()</span> <span class="o">-&gt;</span>
+                <span class="n">sInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WindowManagerService</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">im</span><span class="o">,</span> <span class="n">haveInputMethods</span><span class="o">,</span> <span class="n">showBootMsgs</span><span class="o">,</span>
+                        <span class="n">onlyCore</span><span class="o">,</span> <span class="n">policy</span><span class="o">),</span> <span class="mi">0</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">sInstance</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>  使用android.display工作线程初始化WindowManagerService对象，接下来来看看WMS构造器。</p>
+
+<p>WindowManagerService构造器</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">private</span> <span class="nf">WindowManagerService</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">InputManagerService</span> <span class="n">inputManager</span><span class="o">,</span>
+            <span class="kt">boolean</span> <span class="n">haveInputMethods</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">showBootMsgs</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">onlyCore</span><span class="o">,</span>
+            <span class="nc">WindowManagerPolicy</span> <span class="n">policy</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">installLock</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="no">INDEX_WINDOW</span><span class="o">);</span>
+        <span class="n">mRoot</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RootWindowContainer</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">mContext</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+        <span class="n">mHaveInputMethods</span> <span class="o">=</span> <span class="n">haveInputMethods</span><span class="o">;</span>
+        <span class="n">mAllowBootMessages</span> <span class="o">=</span> <span class="n">showBootMsgs</span><span class="o">;</span>
+        <span class="n">mOnlyCore</span> <span class="o">=</span> <span class="n">onlyCore</span><span class="o">;</span>
+        <span class="n">mLimitedAlphaCompositing</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getBoolean</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">bool</span><span class="o">.</span><span class="na">config_sf_limitedAlpha</span><span class="o">);</span>
+        <span class="n">mHasPermanentDpad</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getBoolean</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">bool</span><span class="o">.</span><span class="na">config_hasPermanentDpad</span><span class="o">);</span>
+        <span class="n">mInTouchMode</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getBoolean</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">bool</span><span class="o">.</span><span class="na">config_defaultInTouchMode</span><span class="o">);</span>
+        <span class="n">mDrawLockTimeoutMillis</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getInteger</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">integer</span><span class="o">.</span><span class="na">config_drawLockTimeoutMillis</span><span class="o">);</span>
+        <span class="n">mAllowAnimationsInLowPowerMode</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getBoolean</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">bool</span><span class="o">.</span><span class="na">config_allowAnimationsInLowPowerMode</span><span class="o">);</span>
+        <span class="n">mMaxUiWidth</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getInteger</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">integer</span><span class="o">.</span><span class="na">config_maxUiWidth</span><span class="o">);</span>
+        <span class="n">mInputManager</span> <span class="o">=</span> <span class="n">inputManager</span><span class="o">;</span> <span class="c1">// Must be before createDisplayContentLocked.</span>
+        <span class="n">mDisplayManagerInternal</span> <span class="o">=</span> <span class="nc">LocalServices</span><span class="o">.</span><span class="na">getService</span><span class="o">(</span><span class="nc">DisplayManagerInternal</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">mDisplaySettings</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DisplaySettings</span><span class="o">();</span>
+        <span class="n">mDisplaySettings</span><span class="o">.</span><span class="na">readSettingsLocked</span><span class="o">();</span>
+
+        <span class="n">mWindowPlacerLocked</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WindowSurfacePlacer</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">mPolicy</span> <span class="o">=</span> <span class="n">policy</span><span class="o">;</span>
+        <span class="n">mTaskSnapshotController</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TaskSnapshotController</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+        <span class="nc">LocalServices</span><span class="o">.</span><span class="na">addService</span><span class="o">(</span><span class="nc">WindowManagerPolicy</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">mPolicy</span><span class="o">);</span>
+
+        <span class="k">if</span><span class="o">(</span><span class="n">mInputManager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="nc">InputChannel</span> <span class="n">inputChannel</span> <span class="o">=</span> <span class="n">mInputManager</span><span class="o">.</span><span class="na">monitorInput</span><span class="o">(</span><span class="no">TAG_WM</span><span class="o">);</span>
+            <span class="n">mPointerEventDispatcher</span> <span class="o">=</span> <span class="n">inputChannel</span> <span class="o">!=</span> <span class="kc">null</span>
+                    <span class="o">?</span> <span class="k">new</span> <span class="nc">PointerEventDispatcher</span><span class="o">(</span><span class="n">inputChannel</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">mPointerEventDispatcher</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">mFxSession</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SurfaceSession</span><span class="o">();</span>
+        <span class="n">mDisplayManager</span> <span class="o">=</span> <span class="o">(</span><span class="nc">DisplayManager</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getSystemService</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="na">DISPLAY_SERVICE</span><span class="o">);</span>
+        <span class="n">mDisplays</span> <span class="o">=</span> <span class="n">mDisplayManager</span><span class="o">.</span><span class="na">getDisplays</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Display</span> <span class="n">display</span> <span class="o">:</span> <span class="n">mDisplays</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">createDisplayContentLocked</span><span class="o">(</span><span class="n">display</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">mKeyguardDisableHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">KeyguardDisableHandler</span><span class="o">(</span><span class="n">mContext</span><span class="o">,</span> <span class="n">mPolicy</span><span class="o">);</span>
+
+        <span class="n">mPowerManager</span> <span class="o">=</span> <span class="o">(</span><span class="nc">PowerManager</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getSystemService</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="na">POWER_SERVICE</span><span class="o">);</span>
+        <span class="n">mPowerManagerInternal</span> <span class="o">=</span> <span class="nc">LocalServices</span><span class="o">.</span><span class="na">getService</span><span class="o">(</span><span class="nc">PowerManagerInternal</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">mPowerManagerInternal</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mPowerManagerInternal</span><span class="o">.</span><span class="na">registerLowPowerModeObserver</span><span class="o">(</span>
+                    <span class="k">new</span> <span class="nc">PowerManagerInternal</span><span class="o">.</span><span class="na">LowPowerModeListener</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getServiceType</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="nc">ServiceType</span><span class="o">.</span><span class="na">ANIMATION</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onLowPowerModeChanged</span><span class="o">(</span><span class="nc">PowerSaveState</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mWindowMap</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">enabled</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">batterySaverEnabled</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">mAnimationsDisabled</span> <span class="o">!=</span> <span class="n">enabled</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mAllowAnimationsInLowPowerMode</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">mAnimationsDisabled</span> <span class="o">=</span> <span class="n">enabled</span><span class="o">;</span>
+                            <span class="n">dispatchNewAnimatorScaleLocked</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+            <span class="n">mAnimationsDisabled</span> <span class="o">=</span> <span class="n">mPowerManagerInternal</span>
+                    <span class="o">.</span><span class="na">getLowPowerState</span><span class="o">(</span><span class="nc">ServiceType</span><span class="o">.</span><span class="na">ANIMATION</span><span class="o">).</span><span class="na">batterySaverEnabled</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">mScreenFrozenLock</span> <span class="o">=</span> <span class="n">mPowerManager</span><span class="o">.</span><span class="na">newWakeLock</span><span class="o">(</span>
+                <span class="nc">PowerManager</span><span class="o">.</span><span class="na">PARTIAL_WAKE_LOCK</span><span class="o">,</span> <span class="s">"SCREEN_FROZEN"</span><span class="o">);</span>
+        <span class="n">mScreenFrozenLock</span><span class="o">.</span><span class="na">setReferenceCounted</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+        <span class="n">mAppTransition</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AppTransition</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="n">mAppTransition</span><span class="o">.</span><span class="na">registerListenerLocked</span><span class="o">(</span><span class="n">mActivityManagerAppTransitionNotifier</span><span class="o">);</span>
+
+        <span class="kd">final</span> <span class="nc">AnimationHandler</span> <span class="n">animationHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnimationHandler</span><span class="o">();</span>
+        <span class="n">animationHandler</span><span class="o">.</span><span class="na">setProvider</span><span class="o">(</span><span class="k">new</span> <span class="nc">SfVsyncFrameCallbackProvider</span><span class="o">());</span>
+        <span class="n">mBoundsAnimationController</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BoundsAnimationController</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">mAppTransition</span><span class="o">,</span>
+                <span class="nc">AnimationThread</span><span class="o">.</span><span class="na">getHandler</span><span class="o">(),</span> <span class="n">animationHandler</span><span class="o">);</span>
+
+        <span class="n">mActivityManager</span> <span class="o">=</span> <span class="nc">ActivityManager</span><span class="o">.</span><span class="na">getService</span><span class="o">();</span>
+        <span class="n">mAmInternal</span> <span class="o">=</span> <span class="nc">LocalServices</span><span class="o">.</span><span class="na">getService</span><span class="o">(</span><span class="nc">ActivityManagerInternal</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">mAppOps</span> <span class="o">=</span> <span class="o">(</span><span class="nc">AppOpsManager</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getSystemService</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="na">APP_OPS_SERVICE</span><span class="o">);</span>
+        <span class="nc">AppOpsManager</span><span class="o">.</span><span class="na">OnOpChangedInternalListener</span> <span class="n">opListener</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="nc">AppOpsManager</span><span class="o">.</span><span class="na">OnOpChangedInternalListener</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onOpChanged</span><span class="o">(</span><span class="kt">int</span> <span class="n">op</span><span class="o">,</span> <span class="nc">String</span> <span class="n">packageName</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">updateAppOpsState</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+        <span class="n">mAppOps</span><span class="o">.</span><span class="na">startWatchingMode</span><span class="o">(</span><span class="no">OP_SYSTEM_ALERT_WINDOW</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">opListener</span><span class="o">);</span>
+        <span class="n">mAppOps</span><span class="o">.</span><span class="na">startWatchingMode</span><span class="o">(</span><span class="nc">AppOpsManager</span><span class="o">.</span><span class="na">OP_TOAST_WINDOW</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">opListener</span><span class="o">);</span>
+
+        <span class="c1">// Get persisted window scale setting</span>
+        <span class="n">mWindowAnimationScaleSetting</span> <span class="o">=</span> <span class="nc">Settings</span><span class="o">.</span><span class="na">Global</span><span class="o">.</span><span class="na">getFloat</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">(),</span>
+                <span class="nc">Settings</span><span class="o">.</span><span class="na">Global</span><span class="o">.</span><span class="na">WINDOW_ANIMATION_SCALE</span><span class="o">,</span> <span class="n">mWindowAnimationScaleSetting</span><span class="o">);</span>
+        <span class="n">mTransitionAnimationScaleSetting</span> <span class="o">=</span> <span class="nc">Settings</span><span class="o">.</span><span class="na">Global</span><span class="o">.</span><span class="na">getFloat</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">(),</span>
+                <span class="nc">Settings</span><span class="o">.</span><span class="na">Global</span><span class="o">.</span><span class="na">TRANSITION_ANIMATION_SCALE</span><span class="o">,</span>
+                <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getFloat</span><span class="o">(</span>
+                        <span class="no">R</span><span class="o">.</span><span class="na">dimen</span><span class="o">.</span><span class="na">config_appTransitionAnimationDurationScaleDefault</span><span class="o">));</span>
+
+        <span class="n">setAnimatorDurationScale</span><span class="o">(</span><span class="nc">Settings</span><span class="o">.</span><span class="na">Global</span><span class="o">.</span><span class="na">getFloat</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getContentResolver</span><span class="o">(),</span>
+                <span class="nc">Settings</span><span class="o">.</span><span class="na">Global</span><span class="o">.</span><span class="na">ANIMATOR_DURATION_SCALE</span><span class="o">,</span> <span class="n">mAnimatorDurationScaleSetting</span><span class="o">));</span>
+
+        <span class="nc">IntentFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IntentFilter</span><span class="o">();</span>
+        <span class="c1">// Track changes to DevicePolicyManager state so we can enable/disable keyguard.</span>
+        <span class="n">filter</span><span class="o">.</span><span class="na">addAction</span><span class="o">(</span><span class="no">ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED</span><span class="o">);</span>
+        <span class="c1">// Listen to user removal broadcasts so that we can remove the user-specific data.</span>
+        <span class="n">filter</span><span class="o">.</span><span class="na">addAction</span><span class="o">(</span><span class="nc">Intent</span><span class="o">.</span><span class="na">ACTION_USER_REMOVED</span><span class="o">);</span>
+        <span class="n">mContext</span><span class="o">.</span><span class="na">registerReceiver</span><span class="o">(</span><span class="n">mBroadcastReceiver</span><span class="o">,</span> <span class="n">filter</span><span class="o">);</span>
+
+        <span class="n">mSettingsObserver</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SettingsObserver</span><span class="o">();</span>
+
+        <span class="n">mHoldingScreenWakeLock</span> <span class="o">=</span> <span class="n">mPowerManager</span><span class="o">.</span><span class="na">newWakeLock</span><span class="o">(</span>
+                <span class="nc">PowerManager</span><span class="o">.</span><span class="na">SCREEN_BRIGHT_WAKE_LOCK</span> <span class="o">|</span> <span class="nc">PowerManager</span><span class="o">.</span><span class="na">ON_AFTER_RELEASE</span><span class="o">,</span> <span class="no">TAG_WM</span><span class="o">);</span>
+        <span class="n">mHoldingScreenWakeLock</span><span class="o">.</span><span class="na">setReferenceCounted</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+        <span class="n">mAnimator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WindowAnimator</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+        <span class="n">mAllowTheaterModeWakeFromLayout</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">().</span><span class="na">getBoolean</span><span class="o">(</span>
+                <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">bool</span><span class="o">.</span><span class="na">config_allowTheaterModeWakeFromWindowLayout</span><span class="o">);</span>
+
+
+        <span class="nc">LocalServices</span><span class="o">.</span><span class="na">addService</span><span class="o">(</span><span class="nc">WindowManagerInternal</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nc">LocalService</span><span class="o">());</span>
+        <span class="n">initPolicy</span><span class="o">();</span>
+
+        <span class="c1">// Add ourself to the Watchdog monitors.</span>
+        <span class="nc">Watchdog</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">addMonitor</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+        <span class="n">openSurfaceTransaction</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">createWatermarkInTransaction</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">closeSurfaceTransaction</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="n">showEmulatorDisplayOverlayIfNeeded</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="displayready方法"><em class="header3-font">displayReady方法</em></h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">displayReady</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Display</span> <span class="n">display</span> <span class="o">:</span> <span class="n">mDisplays</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">displayReady</span><span class="o">(</span><span class="n">display</span><span class="o">.</span><span class="na">getDisplayId</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="kd">synchronized</span><span class="o">(</span><span class="n">mWindowMap</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="nc">DisplayContent</span> <span class="n">displayContent</span> <span class="o">=</span> <span class="n">getDefaultDisplayContentLocked</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mMaxUiWidth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">displayContent</span><span class="o">.</span><span class="na">setMaxUiWidth</span><span class="o">(</span><span class="n">mMaxUiWidth</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">readForcedDisplayPropertiesLocked</span><span class="o">(</span><span class="n">displayContent</span><span class="o">);</span>
+            <span class="n">mDisplayReady</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">mActivityManager</span><span class="o">.</span><span class="na">updateConfiguration</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">}</span>
+
+        <span class="kd">synchronized</span><span class="o">(</span><span class="n">mWindowMap</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mIsTouchDevice</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">.</span><span class="na">getPackageManager</span><span class="o">().</span><span class="na">hasSystemFeature</span><span class="o">(</span>
+                    <span class="nc">PackageManager</span><span class="o">.</span><span class="na">FEATURE_TOUCHSCREEN</span><span class="o">);</span>
+            <span class="n">configureDisplayPolicyLocked</span><span class="o">(</span><span class="n">getDefaultDisplayContentLocked</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">mActivityManager</span><span class="o">.</span><span class="na">updateConfiguration</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">RemoteException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">}</span>
+
+        <span class="n">updateCircularDisplayMaskIfNeeded</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="systemready方法"><em class="header3-font">systemReady方法</em></h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">systemReady</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">mPolicy</span><span class="o">.</span><span class="na">systemReady</span><span class="o">();</span>
+        <span class="n">mTaskSnapshotController</span><span class="o">.</span><span class="na">systemReady</span><span class="o">();</span>
+ <span class="o">}</span> 
+</code></pre></div></div>
+
+<p>WindowManagerPolicy是一个接口，其实现类为PhoneWindowManager,所以systemReady的源代码如下</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">systemReady</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// In normal flow, systemReady is called before other system services are ready.</span>
+        <span class="c1">// So it is better not to bind keyguard here.</span>
+        <span class="n">mKeyguardDelegate</span><span class="o">.</span><span class="na">onSystemReady</span><span class="o">();</span>
+
+        <span class="n">mVrManagerInternal</span> <span class="o">=</span> <span class="nc">LocalServices</span><span class="o">.</span><span class="na">getService</span><span class="o">(</span><span class="nc">VrManagerInternal</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mVrManagerInternal</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mVrManagerInternal</span><span class="o">.</span><span class="na">addPersistentVrModeStateListener</span><span class="o">(</span><span class="n">mPersistentVrModeListener</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">readCameraLensCoverState</span><span class="o">();</span>
+        <span class="n">updateUiMode</span><span class="o">();</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mLock</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">updateOrientationListenerLp</span><span class="o">();</span>
+            <span class="n">mSystemReady</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">mHandler</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">updateSettings</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+            <span class="c1">// If this happens, for whatever reason, systemReady came later than systemBooted.</span>
+            <span class="c1">// And keyguard should be already bound from systemBooted</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mSystemBooted</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mKeyguardDelegate</span><span class="o">.</span><span class="na">onBootCompleted</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="n">mSystemGestures</span><span class="o">.</span><span class="na">systemReady</span><span class="o">();</span>
+        <span class="n">mImmersiveModeConfirmation</span><span class="o">.</span><span class="na">systemReady</span><span class="o">();</span>
+
+        <span class="n">mAutofillManagerInternal</span> <span class="o">=</span> <span class="nc">LocalServices</span><span class="o">.</span><span class="na">getService</span><span class="o">(</span><span class="nc">AutofillManagerInternal</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<!-- ## *4.Reference*{:.header2-font} -->
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

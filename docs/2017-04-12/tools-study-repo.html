@@ -1,0 +1,2907 @@
+ 
+
+
+
+
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>电解质</title>
+    <meta name="theme-color" content="#222222" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://jamesfchen.github.io/blog/js/jquery.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/bootstrap.min.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/header.js"></script>
+    <script src="https://jamesfchen.github.io/blog/js/toc.js"></script>
+    <link
+      href="https://jamesfchen.github.io/blog/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/theme.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/syntax.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://jamesfchen.github.io/blog/css/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    
+ 
+
+
+    <script type="text/javascript">
+      const DELAY = 3000;
+      WebFontConfig = {
+        google: {
+          families: ["Ubuntu::latin"]
+        }
+      };
+      (function() {
+        var wf = document.createElement("script");
+        wf.src =
+          ("https:" == document.location.protocol ? "https" : "http") +
+          "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+        wf.type = "text/javascript";
+        wf.async = "true";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wf, s);
+        // var screenHeight = $('body').height()
+        // debug,%s,%d,%o,%f
+        console.log("window.location.href:%s", window.location.href);
+        console.log("window.location.host:%s", window.location.origin);
+        // log
+        // info
+        // warn
+        // error
+        if (window.location.href == window.location.origin + "/blog/") {
+          setTimeout(() => {
+            // $('.mask').css({"transform":"translate(100px,100px)"});​
+            $(".mask").addClass("animate-scroll");
+          }, DELAY);
+        } else {
+          $(".mask").css({ display: "none" });
+        }
+      })();
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a
+            class="navbar-brand"
+            href="https://jamesfchen.github.io/blog/"
+            >电解质</a
+          >
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://jamesfchen.github.io/blog/">Home</a></li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/archive.html"
+                >Archive</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/tags.html"
+                >Tags</a
+              >
+            </li>
+            <li>
+              <a href="https://jamesfchen.github.io/blog/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+
+              <h1>
+                <a href="https://jamesfchen.github.io/blog/2017-04-12/tools-study-repo">repo工具</a>
+              </h1>
+              <div class="post-meta">
+
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <!-- <time>Wed, 12 Apr 2017 22:50:00 +0000</time> -->
+                  <time datetime='2017-04-12'>Wed, Apr 12 2017, 22:50</time>
+                  
+                </div>
+
+                <!-- <ul> -->
+                  <!-- <li>该文章累计文字 :42477</li> -->
+                <!-- </ul> -->
+
+                <ul>
+                  
+                  <li>
+                    <a href="https://jamesfchen.github.io/blog/tag/tools">tools</a>
+                  </li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <!-- MarkdownTOC -->
+
+<ul>
+  <li><a href="#1summaryheader2-font"><em class="header2-font">1.Summary</em></a></li>
+  <li><a href="#2about-repoheader2-font"><em class="header2-font">2.About Repo</em></a></li>
+  <li><a href="#3introductionheader2-font"><em class="header2-font">3.Introduction</em></a>
+    <ul>
+      <li><a href="#repo仓库header3-font"><em class="header3-font">Repo仓库</em></a></li>
+      <li><a href="#manifest仓库header3-font"><em class="header3-font">Manifest仓库</em></a></li>
+      <li><a href="#projects仓库集header3-font"><em class="header3-font">Projects仓库集</em></a></li>
+      <li><a href="#创建分支header3-font"><em class="header3-font">创建分支</em></a></li>
+    </ul>
+  </li>
+  <li><a href="#4referenceheader2-font"><em class="header2-font">4.Reference</em></a></li>
+</ul>
+
+<!-- /MarkdownTOC -->
+
+<h2 id="1summary"><em class="header2-font">1.Summary</em></h2>
+<p>  首先说一下为什么会想分享这篇博客。出发点很简单，只是想学习一下Python在AOSP中的应用。repo应用就是一个研究的切入点。其次Python在深度学习、大数据都有一定的支持，后续会研究一下这方面的技术。最后就是个人喜好，无他。</p>
+
+<h2 id="2about-repo"><em class="header2-font">2.About Repo</em></h2>
+<p>  repo就是通过Python封装git命令的应用。什么是<a href="https://source.android.com/source/developing.html">repo</a>？简单来说就是对AOSP含有git仓库的各个项目的批处理。repo应用包括repo仓库（仓库也可以叫做项目）、manifest仓库、projectsc仓库集这三个核心。repo仓库都是一些Python文件，manifest仓库只有一个存放AOSP各个子项目元数据的xml文件。projects仓库集是AOSP各个子项目对应的git仓库。<br />
+<em>下面用一张图片表示一下。</em></p>
+
+<p><img src="/blog/asset/2017-04-12/2017-04-12-repo_architecture.png" alt="architecture" /></p>
+
+<p>补充一点，git是允许repository和working directory分布在不同的目录下的。所以就会看到AOSP的working directory在项目根目录而.git目录在.repo/projects目录</p>
+
+<h2 id="3introduction"><em class="header2-font">3.Introduction</em></h2>
+
+<p>  先来草率的分析一下,拉取一套AOSP代码应该按照如下流程：</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="nb">mkdir </span>testsource  <span class="c">#创建AOSP目录。用于存放.repo应用和源码
+</span>
+<span class="nb">cd </span>testsource
+repo init   <span class="nt">-u</span>  https://android.googlesource.com/platform/manifest <span class="nt">-b</span> android-4.0.1_r1
+      cmd     <span class="c">#初始化repo仓库和manifest仓库                      
+</span>
+repo <span class="nb">sync</span> <span class="nt">-j</span> 8   
+      cmd     <span class="c">#同步projects仓库集
+</span>
+repo start master <span class="nt">--all</span> 
+      cmd     <span class="c">#创建并且切换到新分支上
+</span>
+
+repo仓库初始化---&gt;manifest仓库初始化---&gt;project仓库集初始化---&gt;创建并切换到新分支上
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  从数据流自上而下看：</p>
+
+<p><code class="language-plaintext highlighter-rouge">repo command line ---&gt;optparse---&gt;git command line</code></p>
+
+<p>  在Python中使用的是optparse模块（后续将被argparse模块取代）解析命令行，所以optparse模块相当于数据转换中心将repo命名行转成git命令行</p>
+
+<p><img src="/blog/asset/2017-04-12/2017-04-12-repo_init_help.png" alt="repo init" /></p>
+
+<h3 id="repo仓库"><em class="header3-font">Repo仓库</em></h3>
+
+<p>  接下来就看看具体的细节处理，从repo模块的入口函数main开始，执行的命令行如下：</p>
+
+<p><code class="language-plaintext highlighter-rouge">repo init   -u  https://android.googlesource.com/platform/manifest -b android-4.0.1_r1</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">orig_args</span><span class="p">):</span>
+  <span class="n">cmd</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">_ParseArguments</span><span class="p">(</span><span class="n">orig_args</span><span class="p">)</span>
+
+  <span class="n">repo_main</span><span class="p">,</span> <span class="n">rel_repo_dir</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+  <span class="c1"># Don't use the local repo copy, make sure to switch to the gitc client first.
+</span>  <span class="k">if</span> <span class="n">cmd</span> <span class="o">!=</span> <span class="s">'gitc-init'</span><span class="p">:</span>
+    <span class="n">repo_main</span><span class="p">,</span> <span class="n">rel_repo_dir</span> <span class="o">=</span> <span class="n">_FindRepo</span><span class="p">()</span>
+
+  <span class="n">wrapper_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+  <span class="n">my_main</span><span class="p">,</span> <span class="n">my_git</span> <span class="o">=</span> <span class="n">_RunSelf</span><span class="p">(</span><span class="n">wrapper_path</span><span class="p">)</span>
+
+  <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getcwd</span><span class="p">()</span>
+  <span class="p">...</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">repo_main</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">help</span><span class="p">:</span>
+      <span class="n">_Usage</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s">'help'</span><span class="p">:</span>
+      <span class="n">_Help</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cmd</span><span class="p">:</span>
+      <span class="n">_NotInstalled</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s">'init'</span> <span class="ow">or</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s">'gitc-init'</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">my_git</span><span class="p">:</span>
+        <span class="n">_SetDefaultsTo</span><span class="p">(</span><span class="n">my_git</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">_Init</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">gitc_init</span><span class="o">=</span><span class="p">(</span><span class="n">cmd</span> <span class="o">==</span> <span class="s">'gitc-init'</span><span class="p">))</span>
+      <span class="k">except</span> <span class="n">CloneFailure</span><span class="p">:</span>
+        <span class="p">...</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">repo_main</span><span class="p">,</span> <span class="n">rel_repo_dir</span> <span class="o">=</span> <span class="n">_FindRepo</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">_NoCommands</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">my_main</span><span class="p">:</span>
+    <span class="n">repo_main</span> <span class="o">=</span> <span class="n">my_main</span>
+
+  <span class="n">ver_str</span> <span class="o">=</span> <span class="s">'.'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">VERSION</span><span class="p">))</span>
+  <span class="n">me</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">repo_main</span><span class="p">,</span>
+        <span class="s">'--repo-dir=%s'</span> <span class="o">%</span> <span class="n">rel_repo_dir</span><span class="p">,</span>
+        <span class="s">'--wrapper-version=%s'</span> <span class="o">%</span> <span class="n">ver_str</span><span class="p">,</span>
+        <span class="s">'--wrapper-path=%s'</span> <span class="o">%</span> <span class="n">wrapper_path</span><span class="p">,</span>
+        <span class="s">'--'</span><span class="p">]</span>
+  <span class="n">me</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">orig_args</span><span class="p">)</span>
+  <span class="n">me</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">extra_args</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">execv</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">me</span><span class="p">)</span>
+  <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">148</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  repo模块函数main(sys.argv[1:]) 参数sys.argv[1:]就是由command、options组成，然后由_ParseArguments函数解析。由于main函数流程复杂，我们考虑的是初次初始化。main函数在调用_Init函数之前对环境进行了检查：repo模块的版本号和路径、.repo/repo/路径下的main模块和git仓库。在_Init函数之后就是执行main模块中的入口函数_Main</p>
+
+<p>_ParseArguments函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_ParseArguments</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+  <span class="n">cmd</span> <span class="o">=</span> <span class="bp">None</span>
+  <span class="n">opt</span> <span class="o">=</span> <span class="n">_Options</span><span class="p">()</span>
+  <span class="n">arg</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s">'-h'</span> <span class="ow">or</span> <span class="n">a</span> <span class="o">==</span> <span class="s">'--help'</span><span class="p">:</span>
+      <span class="n">opt</span><span class="p">.</span><span class="n">help</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">a</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'-'</span><span class="p">):</span>
+      <span class="n">cmd</span> <span class="o">=</span> <span class="n">a</span>
+      <span class="n">arg</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+      <span class="k">break</span>
+  <span class="k">return</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">arg</span></code></pre></figure>
+
+<p>  _ParseArguments函数解析出cmd、opt、args，其中,cmd是init，args是command（init）后面的参数（-u https://android.googlesource.com/platform/manifest -b android-4.0.1_r1），而opt特指-h（–help）这样的用意在于当你输入repo -h,–help时就可以弹出一些帮助文档。</p>
+
+<p>_FindRepo函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_FindRepo</span><span class="p">():</span>
+  <span class="s">"""Look for a repo installation, starting at the current directory.
+  """</span>
+  <span class="n">curdir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getcwd</span><span class="p">()</span>
+  <span class="n">repo</span> <span class="o">=</span> <span class="bp">None</span>
+
+  <span class="n">olddir</span> <span class="o">=</span> <span class="bp">None</span>
+  <span class="k">while</span> <span class="n">curdir</span> <span class="o">!=</span> <span class="s">'/'</span> \
+          <span class="ow">and</span> <span class="n">curdir</span> <span class="o">!=</span> <span class="n">olddir</span> \
+          <span class="ow">and</span> <span class="ow">not</span> <span class="n">repo</span><span class="p">:</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">curdir</span><span class="p">,</span> <span class="n">repodir</span><span class="p">,</span> <span class="n">REPO_MAIN</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">repo</span><span class="p">):</span>
+      <span class="n">repo</span> <span class="o">=</span> <span class="bp">None</span>
+      <span class="n">olddir</span> <span class="o">=</span> <span class="n">curdir</span>
+      <span class="n">curdir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">curdir</span><span class="p">)</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">repo</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">curdir</span><span class="p">,</span> <span class="n">repodir</span><span class="p">))</span></code></pre></figure>
+
+<p>  _FindRepo函数查找当前执行repo命令的目录下.repo/repo/main.py和.repo目录两者是否都存在。</p>
+
+<p>_RunSelf函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_RunSelf</span><span class="p">(</span><span class="n">wrapper_path</span><span class="p">):</span>
+  <span class="n">my_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">wrapper_path</span><span class="p">)</span>
+  <span class="n">my_main</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_dir</span><span class="p">,</span> <span class="s">'main.py'</span><span class="p">)</span>
+  <span class="n">my_git</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_dir</span><span class="p">,</span> <span class="s">'.git'</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">my_main</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">my_git</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'git_config.py'</span><span class="p">,</span>
+                 <span class="s">'project.py'</span><span class="p">,</span>
+                 <span class="s">'subcmds'</span><span class="p">]:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">my_main</span><span class="p">,</span> <span class="n">my_git</span>
+  <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span></code></pre></figure>
+
+<p>  _RunSelf函数检查repo模块的同级目录里是否有三个文件main.py 、git_config.py、project.py 和两个目录subcmds、.git。这次是查找运行中模块repo的同级目录，是否具备三个文件两个目录，如有具备这些，则.repo仓库之前就已经被初始化过了。反之，接下去就会初始化仓库。</p>
+
+<p>  接下来的各种控制流判断，取其中两个关键函数_SetDefaultsTo和_Init来详细讲解</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="p">...</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">repo_main</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s">'init'</span> <span class="ow">or</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s">'gitc-init'</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">my_git</span><span class="p">:</span>
+        <span class="n">_SetDefaultsTo</span><span class="p">(</span><span class="n">my_git</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">_Init</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">gitc_init</span><span class="o">=</span><span class="p">(</span><span class="n">cmd</span> <span class="o">==</span> <span class="s">'gitc-init'</span><span class="p">))</span>
+      <span class="p">...</span></code></pre></figure>
+
+<p>  repo_main,cmd,my_git这三个变量我们前面已经说过了它们的由来,其中的my_git如果存在，调用_SetDefaultsTo函数会设置数据源，反之，就是初次初始化，使用默认的数据源（REPO_URL = ‘https://gerrit.googlesource.com/git-repo’ ），那么就会克隆一个.repo/repo/仓库</p>
+
+<p>_SetDefaultsTo函数</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_SetDefaultsTo</span><span class="p">(</span><span class="n">gitdir</span><span class="p">):</span>
+  <span class="k">global</span> <span class="n">REPO_URL</span>
+  <span class="k">global</span> <span class="n">REPO_REV</span>
+
+  <span class="n">REPO_URL</span> <span class="o">=</span> <span class="n">gitdir</span>
+  <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">GIT</span><span class="p">,</span>
+                           <span class="s">'--git-dir=%s'</span> <span class="o">%</span> <span class="n">gitdir</span><span class="p">,</span>
+                           <span class="s">'symbolic-ref'</span><span class="p">,</span>
+                           <span class="s">'HEAD'</span><span class="p">],</span>
+                          <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+                          <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">)</span>
+  <span class="n">REPO_REV</span> <span class="o">=</span> <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
+  <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="n">proc</span><span class="p">.</span><span class="n">stderr</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+  <span class="n">proc</span><span class="p">.</span><span class="n">stderr</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="n">proc</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">_print</span><span class="p">(</span><span class="s">'fatal: %s has no current branch'</span> <span class="o">%</span> <span class="n">gitdir</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code></pre></figure>
+
+<p>  –git-dir 指定git仓库的位置,symbolic-ref 指定当前分支为克隆分支这两者的值通过关键词global变成全局变量。</p>
+
+<p>接下来就是核心函数_Init如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">_Init</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">gitc_init</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+  <span class="s">"""Installs repo by cloning it over the network.
+  """</span>
+  <span class="p">...</span>
+  <span class="n">opt</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">init_optparse</span><span class="p">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+    <span class="n">init_optparse</span><span class="p">.</span><span class="n">print_usage</span><span class="p">()</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">url</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">repo_url</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">REPO_URL</span>
+    <span class="n">extra_args</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'--repo-url=%s'</span> <span class="o">%</span> <span class="n">url</span><span class="p">)</span>
+
+  <span class="n">branch</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">repo_branch</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">branch</span><span class="p">:</span>
+    <span class="n">branch</span> <span class="o">=</span> <span class="n">REPO_REV</span>
+    <span class="n">extra_args</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'--repo-branch=%s'</span> <span class="o">%</span> <span class="n">branch</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">branch</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'refs/heads/'</span><span class="p">):</span>
+    <span class="n">branch</span> <span class="o">=</span> <span class="n">branch</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s">'refs/heads/'</span><span class="p">):]</span>
+  <span class="p">...</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">repodir</span><span class="p">)</span>
+  <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">e</span><span class="p">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="p">.</span><span class="n">EEXIST</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">_CheckGitVersion</span><span class="p">()</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">NeedSetupGnuPG</span><span class="p">():</span>
+      <span class="n">can_verify</span> <span class="o">=</span> <span class="n">SetupGnuPG</span><span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">quiet</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">can_verify</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">repodir</span><span class="p">,</span> <span class="n">S_repo</span><span class="p">))</span>
+    <span class="n">_Clone</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">opt</span><span class="p">.</span><span class="n">quiet</span><span class="p">,</span> <span class="ow">not</span> <span class="n">opt</span><span class="p">.</span><span class="n">no_clone_bundle</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isfile</span><span class="p">(</span><span class="s">'%s/repo'</span> <span class="o">%</span> <span class="n">dst</span><span class="p">):</span>
+      <span class="n">_print</span><span class="p">(</span><span class="s">"warning: '%s' does not look like a git-repo repository, is "</span>
+             <span class="s">"REPO_URL set correctly?"</span> <span class="o">%</span> <span class="n">url</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">can_verify</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">opt</span><span class="p">.</span><span class="n">no_repo_verify</span><span class="p">:</span>
+      <span class="n">rev</span> <span class="o">=</span> <span class="n">_Verify</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">branch</span><span class="p">,</span> <span class="n">opt</span><span class="p">.</span><span class="n">quiet</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">rev</span> <span class="o">=</span> <span class="s">'refs/remotes/origin/%s^0'</span> <span class="o">%</span> <span class="n">branch</span>
+
+    <span class="n">_Checkout</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">branch</span><span class="p">,</span> <span class="n">rev</span><span class="p">,</span> <span class="n">opt</span><span class="p">.</span><span class="n">quiet</span><span class="p">)</span>
+  <span class="k">except</span> <span class="n">CloneFailure</span><span class="p">:</span>
+    <span class="p">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  _Init函数的参数    <code class="language-plaintext highlighter-rouge">args=[-u,https://android.googlesource.com/platform/manifest,-b,android-4.0.1_r1]</code>     ,使用OptionParse类的成员函数parse_args解析得到opt对象（存储有url地址和分支号）和args列表（其值不为空时，便会停止创建仓库的进程）。既然得到了opt对象,那么接下来就要通过指定url地址和分支号去获取repo仓库、manifest仓库，由于命令行只有manifest仓库的地址，那么是不是就没有办法获取repo仓库了吗？google提供了自家repo仓库的url地址（<code class="language-plaintext highlighter-rouge">https://gerrit.googlesource.com/git-repo</code>）供开发者使用，也可以使用–repo-url选项指定自家公司repo仓库的url地址。接下来检查和配置环境</p>
+
+<ul>
+  <li>1.需要支持1.7.2以上的git版本</li>
+  <li>2.没有配置GnuPG的环境下，自动生成GnuPG文件</li>
+</ul>
+
+<p>  当GnuPG的环境配置好了，就会返回一个值can_verify，用于判断克隆完repo仓库后验证最新的tag是否被GunPG签过名，然后将克隆下来的repo仓库使用_Checkout函数切换到这个最新的tag，以便于使用最新的release版本（一般发布一个release版本都会打上一个tag），这就是这个tag的用意。</p>
+
+<p>  接下来我们就来看看函数_Init调用的两个核心函数_Clone和_Checkout</p>
+
+<p>在这之前我们来看看git对远程仓库的操作图</p>
+
+<p><img src="/blog/asset/2017-04-12/2017-04-12-git_operation_flowchart.png" alt="git operation flowchart" /></p>
+
+<p>_Clone函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">_Clone</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">local</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">clone_bundle</span><span class="p">):</span>
+  <span class="s">"""Clones a git repository to a new subdirectory of repodir
+  """</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">local</span><span class="p">)</span>
+  <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+
+  <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">GIT</span><span class="p">,</span> <span class="s">'init'</span><span class="p">,</span> <span class="s">'--quiet'</span><span class="p">]</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">local</span><span class="p">)</span>
+  <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">proc</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+
+  <span class="n">_InitHttp</span><span class="p">()</span>
+  <span class="n">_SetConfig</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="s">'remote.origin.url'</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+  <span class="n">_SetConfig</span><span class="p">(</span><span class="n">local</span><span class="p">,</span>
+             <span class="s">'remote.origin.fetch'</span><span class="p">,</span>
+             <span class="s">'+refs/heads/*:refs/remotes/origin/*'</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">clone_bundle</span> <span class="ow">and</span> <span class="n">_DownloadBundle</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">local</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
+    <span class="n">_ImportBundle</span><span class="p">(</span><span class="n">local</span><span class="p">)</span>
+  <span class="n">_Fetch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">local</span><span class="p">,</span> <span class="s">'origin'</span><span class="p">,</span> <span class="n">quiet</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  这里简单说一下_Clone函数的流程图。</p>
+
+<p><code class="language-plaintext highlighter-rouge">创建git仓库(git init)---&gt; 初始化http网络  ----&gt; 配置远程仓库url地址、分支名(git config)   ---&gt; fetch记录从remote repository到local repository（git fetch）</code></p>
+
+<p>  在有网络的条件下可以从远程仓库克隆代码，但是如果离线了怎么办？git给我们提供了一种bundle机制。<br />
+_DownloadBundle函数的代码如下:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">_DownloadBundle</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">local</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">'/'</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s">'/'</span>
+  <span class="n">url</span> <span class="o">+=</span> <span class="s">'clone.bundle'</span>
+
+  <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">Popen</span><span class="p">(</span>
+      <span class="p">[</span><span class="n">GIT</span><span class="p">,</span> <span class="s">'config'</span><span class="p">,</span> <span class="s">'--get-regexp'</span><span class="p">,</span> <span class="s">'url.*.insteadof'</span><span class="p">],</span>
+      <span class="n">cwd</span><span class="o">=</span><span class="n">local</span><span class="p">,</span>
+      <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">:</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="sa">r</span><span class="s">'^url\.(.*)\.insteadof (.*)$'</span><span class="p">).</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+      <span class="n">new_url</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">old_url</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">url</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">old_url</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">new_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">old_url</span><span class="p">):]</span>
+        <span class="k">break</span>
+  <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+  <span class="n">proc</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'http:'</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">url</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'https:'</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+  <span class="n">dest</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="s">'.git'</span><span class="p">,</span> <span class="s">'clone.bundle'</span><span class="p">),</span> <span class="s">'w+b'</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">r</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">e</span><span class="p">.</span><span class="n">code</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">501</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+      <span class="p">...</span>
+      <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="n">_print</span><span class="p">(</span><span class="s">'Get %s'</span> <span class="o">%</span> <span class="n">url</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+      <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8192</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">buf</span> <span class="o">==</span> <span class="s">''</span><span class="p">:</span>
+          <span class="k">return</span> <span class="bp">True</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+      <span class="n">r</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+  <span class="k">finally</span><span class="p">:</span>
+    <span class="n">dest</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  在使用git fetch获取remote repository记录到local repository之前，其实代码的来源还可以从bundle获取。生成bundle之前需要在有网络的条件下，将远程仓库的记录存储在bundle中。<br />
+  最后会调用_ImportBundle函数导入数据。这种导入方式的应用场景在于环境处于脱机状态，便可以从其他的机器拷贝一份bundle导入到自己的仓库中。_ImportBundle函数是对_Fetch函数进行包装,其中最为重要的就是第三个参数，指定了要导入到local repository的数据来源路径，可以是网络的 url 的仓库名，也可以是本地的bundle路径</p>
+
+<p>_Checkout函数</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">_Checkout</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">branch</span><span class="p">,</span> <span class="n">rev</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
+  <span class="s">"""Checkout an upstream branch into the repository and track it.
+  """</span>
+  <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">GIT</span><span class="p">,</span> <span class="s">'update-ref'</span><span class="p">,</span> <span class="s">'refs/heads/default'</span><span class="p">,</span> <span class="n">rev</span><span class="p">]</span>
+  <span class="k">if</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">).</span><span class="n">wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+
+  <span class="n">_SetConfig</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">'branch.default.remote'</span><span class="p">,</span> <span class="s">'origin'</span><span class="p">)</span>
+  <span class="n">_SetConfig</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">'branch.default.merge'</span><span class="p">,</span> <span class="s">'refs/heads/%s'</span> <span class="o">%</span> <span class="n">branch</span><span class="p">)</span>
+
+  <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">GIT</span><span class="p">,</span> <span class="s">'symbolic-ref'</span><span class="p">,</span> <span class="s">'HEAD'</span><span class="p">,</span> <span class="s">'refs/heads/default'</span><span class="p">]</span>
+  <span class="k">if</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">).</span><span class="n">wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+
+  <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">GIT</span><span class="p">,</span> <span class="s">'read-tree'</span><span class="p">,</span> <span class="s">'--reset'</span><span class="p">,</span> <span class="s">'-u'</span><span class="p">]</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+    <span class="n">cmd</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'-v'</span><span class="p">)</span>
+  <span class="n">cmd</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'HEAD'</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">).</span><span class="n">wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">CloneFailure</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  该函数对git chechout的底层函数进行封装，功能和git checkout切分支是一样的，至此我们的_Init函数就执行完了，并且得到了repo仓库了那么接下来就是要得到manifest仓库了</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>  <span class="p">...</span>
+  <span class="n">ver_str</span> <span class="o">=</span> <span class="s">'.'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">VERSION</span><span class="p">))</span>
+  <span class="n">me</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">repo_main</span><span class="p">,</span>
+        <span class="s">'--repo-dir=%s'</span> <span class="o">%</span> <span class="n">rel_repo_dir</span><span class="p">,</span>
+        <span class="s">'--wrapper-version=%s'</span> <span class="o">%</span> <span class="n">ver_str</span><span class="p">,</span>
+        <span class="s">'--wrapper-path=%s'</span> <span class="o">%</span> <span class="n">wrapper_path</span><span class="p">,</span>
+        <span class="s">'--'</span><span class="p">]</span>
+  <span class="n">me</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">orig_args</span><span class="p">)</span>
+  <span class="n">me</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">extra_args</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">execv</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">me</span><span class="p">)</span>
+  <span class="p">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="manifest仓库"><em class="header3-font">Manifest仓库</em></h3>
+<p>  接下来就是执行main模块函数_Main，执行时命令行如下：</p>
+
+<p><code class="language-plaintext highlighter-rouge">/home/.../.repo/repo/main.py  --repo-dir=/home/.../.repo   --wrapper-version=1.0  --wrapper-path=/usr/bin/repo  -- init -u xxxx -b xxx</code></p>
+
+<p>  其参数argv经过repo模块的扩展，添加了三个信息</p>
+
+<ul>
+  <li>.repo目录的绝对路径</li>
+  <li>repo模块内部定义的版本号</li>
+  <li>repo模块的绝对路径</li>
+</ul>
+
+<p>经过repo模块添加的信息用来检查是否有可用的repo和执行main模块，这是命令行的前部分，而后半部分（init -u xxxx -b xxx）供直接或间接以Command为基类的衍生类的成员函数Execute调用放置在.repo/repo/subcmds/目录下的*.py模块。repo脚本能执行的命令都是放在该目录下的，一个Python文件对应一个repo命令。比如：”repo init”表示要执行的模块在.repo/repo/subcmds/init.py。</p>
+
+<p>_Main函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">_Main</span><span class="p">(</span><span class="n">argv</span><span class="p">):</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="n">opt</span> <span class="o">=</span> <span class="n">optparse</span><span class="p">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s">"repo wrapperinfo -- ..."</span><span class="p">)</span>
+  <span class="n">opt</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">"--repo-dir"</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">"repodir"</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">"path to .repo/"</span><span class="p">)</span>
+  <span class="n">opt</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">"--wrapper-version"</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">"wrapper_version"</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">"version of the wrapper script"</span><span class="p">)</span>
+  <span class="n">opt</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">"--wrapper-path"</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">"wrapper_path"</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">"location of the wrapper script"</span><span class="p">)</span>
+  <span class="n">_PruneOptions</span><span class="p">(</span><span class="n">argv</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+  <span class="n">opt</span><span class="p">,</span> <span class="n">argv</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+
+  <span class="n">_CheckWrapperVersion</span><span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">wrapper_version</span><span class="p">,</span> <span class="n">opt</span><span class="p">.</span><span class="n">wrapper_path</span><span class="p">)</span>
+  <span class="n">_CheckRepoDir</span><span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">repodir</span><span class="p">)</span>
+
+  <span class="n">Version</span><span class="p">.</span><span class="n">wrapper_version</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">wrapper_version</span>
+  <span class="n">Version</span><span class="p">.</span><span class="n">wrapper_path</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">wrapper_path</span>
+
+  <span class="n">repo</span> <span class="o">=</span> <span class="n">_Repo</span><span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">repodir</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">init_ssh</span><span class="p">()</span>
+      <span class="n">init_http</span><span class="p">()</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">repo</span><span class="p">.</span><span class="n">_Run</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="k">finally</span><span class="p">:</span>
+      <span class="n">close_ssh</span><span class="p">()</span>
+  <span class="k">except</span> <span class="nb">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="k">except</span> <span class="n">ManifestParseError</span> <span class="k">as</span> <span class="n">mpe</span><span class="p">:</span>
+    <span class="p">...</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="k">except</span> <span class="n">RepoChangedException</span> <span class="k">as</span> <span class="n">rce</span><span class="p">:</span>
+    <span class="c1"># If repo changed, re-exec ourselves.
+</span>    <span class="c1">#
+</span>    <span class="n">argv</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">argv</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rce</span><span class="p">.</span><span class="n">extra_args</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">os</span><span class="p">.</span><span class="n">execv</span><span class="p">(</span><span class="n">__file__</span><span class="p">,</span> <span class="n">argv</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="mi">128</span>
+
+  <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+  <span class="n">_Main</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  _Main函数的重点部分在于repo调用_Repo类中的成员函数_Run，而前期也如repo和main两个模块一样做一些必要的检查。修剪命令行的_PruneOptions函数、解析命令的parse_args函数(opt为”–“之前的内容，argv”为–“之后的内容)、检查repo模块版本的_CheckWrapperVersion函数、检查 .repo目录是否存在的_CheckRepoDir函数。</p>
+
+<p>_Repo类的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+</pre></td><td class="code"><pre><span class="kn">from</span> <span class="nn">subcmds</span> <span class="kn">import</span> <span class="n">all_commands</span>
+
+<span class="k">class</span> <span class="nc">_Repo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repodir</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">repodir</span> <span class="o">=</span> <span class="n">repodir</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">commands</span> <span class="o">=</span> <span class="n">all_commands</span>
+    <span class="c1"># add 'branch' as an alias for 'branches'
+</span>    <span class="n">all_commands</span><span class="p">[</span><span class="s">'branch'</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_commands</span><span class="p">[</span><span class="s">'branches'</span><span class="p">]</span>
+
+  <span class="k">def</span> <span class="nf">_Run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">glob</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)):</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">startswith</span><span class="p">(</span><span class="s">'-'</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">glob</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">argv</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+        <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+      <span class="n">glob</span> <span class="o">=</span> <span class="n">argv</span>
+      <span class="n">name</span> <span class="o">=</span> <span class="s">'help'</span>
+      <span class="n">argv</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">gopts</span><span class="p">,</span> <span class="n">_gargs</span> <span class="o">=</span> <span class="n">global_options</span><span class="p">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">glob</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">commands</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="k">except</span> <span class="nb">KeyError</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="n">cmd</span><span class="p">.</span><span class="n">repodir</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">repodir</span>
+    <span class="n">cmd</span><span class="p">.</span><span class="n">manifest</span> <span class="o">=</span> <span class="n">XmlManifest</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">repodir</span><span class="p">)</span>
+    <span class="p">...</span>
+
+    <span class="n">Editor</span><span class="p">.</span><span class="n">globalConfig</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">globalConfig</span>
+    <span class="p">...</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">copts</span><span class="p">,</span> <span class="n">cargs</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">OptionParser</span><span class="p">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+      <span class="n">copts</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">ReadEnvironmentOptions</span><span class="p">(</span><span class="n">copts</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NoManifestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="k">return</span> <span class="mi">1</span>
+    <span class="p">...</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">copts</span><span class="p">,</span> <span class="n">cargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">DownloadError</span><span class="p">,</span> <span class="n">ManifestInvalidRevisionError</span><span class="p">,</span>
+        <span class="n">NoManifestException</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">except</span> <span class="n">NoSuchProjectError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">except</span> <span class="n">InvalidProjectGroupsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">finally</span><span class="p">:</span>
+      <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+      <span class="n">hours</span><span class="p">,</span> <span class="n">remainder</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">elapsed</span><span class="p">,</span> <span class="mi">3600</span><span class="p">)</span>
+      <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">remainder</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">gopts</span><span class="p">.</span><span class="n">time</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">hours</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="k">print</span><span class="p">(</span><span class="s">'real</span><span class="se">\t</span><span class="s">%dm%.3fs'</span> <span class="o">%</span> <span class="p">(</span><span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span><span class="p">),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">print</span><span class="p">(</span><span class="s">'real</span><span class="se">\t</span><span class="s">%dh%dm%.3fs'</span> <span class="o">%</span> <span class="p">(</span><span class="n">hours</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span><span class="p">),</span>
+                <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  _Repo类有两个成员变量repodir、commands和一个类变量all_commands，其中all_commands字典的值是一些repo脚本能够执行命令的类名。那这些值是怎么来的呢 ？ 在 <code class="language-plaintext highlighter-rouge">from subcmds import all_commands</code> 时，就会初始化subcmds包，将subcmds目录下所有模块名的首字母转化为大写其余字母不变，就成了命令的类名。再结合成员函数_Run，可以知道，该类的作用在于，将解析后的cmd分发到包subcmds下所对应的模块里面的类（比如：init指令—&gt;subcmds/init.py里面的Init类）。<br />
+  _Repo类的成员函数_Run主要是初始化XmlManifest，获取某个指令独有OptionParse并解析指令，调用Command类的成员函数Execute。</p>
+
+<p>其中XmlManifest类用于管理 .repo，XmlManifest类的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">XmlManifest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="s">"""manages the repo configuration file"""</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repodir</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">repodir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">repodir</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">topdir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">repodir</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">manifestFile</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">repodir</span><span class="p">,</span> <span class="n">MANIFEST_FILE_NAME</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">globalConfig</span> <span class="o">=</span> <span class="n">GitConfig</span><span class="p">.</span><span class="n">ForUser</span><span class="p">()</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">localManifestWarning</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">isGitcClient</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">repoProject</span> <span class="o">=</span> <span class="n">MetaProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">'repo'</span><span class="p">,</span>
+      <span class="n">gitdir</span>   <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">repodir</span><span class="p">,</span> <span class="s">'repo/.git'</span><span class="p">),</span>
+      <span class="n">worktree</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">repodir</span><span class="p">,</span> <span class="s">'repo'</span><span class="p">))</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">manifestProject</span> <span class="o">=</span> <span class="n">MetaProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">'manifests'</span><span class="p">,</span>
+      <span class="n">gitdir</span>   <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">repodir</span><span class="p">,</span> <span class="s">'manifests.git'</span><span class="p">),</span>
+      <span class="n">worktree</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">repodir</span><span class="p">,</span> <span class="s">'manifests'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>XmlManifest类在manifest_xml模块里面，XmlManifest类的主要成员变量有：</p>
+
+<ul>
+  <li>repodir:.repo目录的绝对路径</li>
+  <li>topdir：AOSP项目的绝对路径（testsource目录绝对路径）</li>
+  <li>manifestFile：.repo目录下的链接文件manifest.xml</li>
+  <li>repoProject： .repo目录下的repo仓库</li>
+  <li>manifestProject：.repo目录下的manifest仓库</li>
+</ul>
+
+<p>类中还提供了对.repo的属性值和对属性值操作的成员函数，比如加载数据到XmlManifest对象(_Load成员函数)和重置数据(_Unload成员函数)，创建manifest.xml链接文件（Link成员函数），获取projects目录下的仓库对象（GetProjectsWithName，GetProjectPaths成员函数）。所以不难看出该类就是对.repo目录的管理工具。我们在继续看一下该类中重要的成员变量repoProject、manifestProject，都是MetaProject类的对象.</p>
+
+<p>MetaProject类的代码如下</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">MetaProject</span><span class="p">(</span><span class="n">Project</span><span class="p">):</span>
+  <span class="s">"""A special project housed under .repo.
+  """</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manifest</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gitdir</span><span class="p">,</span> <span class="n">worktree</span><span class="p">):</span>
+    <span class="n">Project</span><span class="p">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">manifest</span><span class="o">=</span><span class="n">manifest</span><span class="p">,</span>
+                     <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                     <span class="n">gitdir</span><span class="o">=</span><span class="n">gitdir</span><span class="p">,</span>
+                     <span class="n">objdir</span><span class="o">=</span><span class="n">gitdir</span><span class="p">,</span>
+                     <span class="n">worktree</span><span class="o">=</span><span class="n">worktree</span><span class="p">,</span>
+                     <span class="n">remote</span><span class="o">=</span><span class="n">RemoteSpec</span><span class="p">(</span><span class="s">'origin'</span><span class="p">),</span>
+                     <span class="n">relpath</span><span class="o">=</span><span class="s">'.repo/%s'</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span>
+                     <span class="n">revisionExpr</span><span class="o">=</span><span class="s">'refs/heads/master'</span><span class="p">,</span>
+                     <span class="n">revisionId</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                     <span class="n">groups</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>成员变量如下：</p>
+
+<ul>
+  <li>manifest:是XmlManifest类的对象</li>
+  <li>name:创建新仓库的名字</li>
+  <li>gitdir: .git仓库的绝对路径</li>
+  <li>worktree:工作目录</li>
+  <li>remote：远程仓库</li>
+  <li>relpath：创建新仓库的相对于.repo目录的路径</li>
+  <li>revisionExpr： 分支</li>
+</ul>
+
+<p>MetaProject和Project对于仓库的操作逻辑差不多一样，不过为了体现这两个仓库（repo仓库和manifest仓库）在AOSP项目整个仓库集的重要性，才会有这样的命名。</p>
+
+<p>Project类的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="c1"># These objects can be shared between several working trees.
+</span>  <span class="n">shareable_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">'description'</span><span class="p">,</span> <span class="s">'info'</span><span class="p">]</span>
+  <span class="n">shareable_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="s">'hooks'</span><span class="p">,</span> <span class="s">'objects'</span><span class="p">,</span> <span class="s">'rr-cache'</span><span class="p">,</span> <span class="s">'svn'</span><span class="p">]</span>
+  <span class="c1"># These objects can only be used by a single working tree.
+</span>  <span class="n">working_tree_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">'config'</span><span class="p">,</span> <span class="s">'packed-refs'</span><span class="p">,</span> <span class="s">'shallow'</span><span class="p">]</span>
+  <span class="n">working_tree_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="s">'logs'</span><span class="p">,</span> <span class="s">'refs'</span><span class="p">]</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">manifest</span><span class="p">,</span>
+               <span class="n">name</span><span class="p">,</span>
+               <span class="n">remote</span><span class="p">,</span>
+               <span class="n">gitdir</span><span class="p">,</span>
+               <span class="n">objdir</span><span class="p">,</span>
+               <span class="n">worktree</span><span class="p">,</span>
+               <span class="n">relpath</span><span class="p">,</span>
+               <span class="n">revisionExpr</span><span class="p">,</span>
+               <span class="n">revisionId</span><span class="p">,</span>
+               <span class="n">rebase</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">groups</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">sync_c</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+               <span class="n">sync_s</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+               <span class="n">clone_depth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">upstream</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">is_derived</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+               <span class="n">dest_branch</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+               <span class="n">optimized_fetch</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+               <span class="n">old_revision</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">"""Init a Project object.
+
+    Args:
+      manifest: The XmlManifest object.
+      name: The `name` attribute of manifest.xml's project element.
+      remote: RemoteSpec object specifying its remote's properties.
+      gitdir: Absolute path of git directory.
+      objdir: Absolute path of directory to store git objects.
+      worktree: Absolute path of git working tree.
+      relpath: Relative path of git working tree to repo's top directory.
+      revisionExpr: The `revision` attribute of manifest.xml's project element.
+      revisionId: git commit id for checking out.
+      rebase: The `rebase` attribute of manifest.xml's project element.
+      groups: The `groups` attribute of manifest.xml's project element.
+      sync_c: The `sync-c` attribute of manifest.xml's project element.
+      sync_s: The `sync-s` attribute of manifest.xml's project element.
+      upstream: The `upstream` attribute of manifest.xml's project element.
+      parent: The parent Project object.
+      is_derived: False if the project was explicitly defined in the manifest;
+                  True if the project is a discovered submodule.
+      dest_branch: The branch to which to push changes for review by default.
+      optimized_fetch: If True, when a project is set to a sha1 revision, only
+                       fetch from the remote if the sha1 is not present locally.
+      old_revision: saved git commit id for open GITC projects.
+    """</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span> <span class="o">=</span> <span class="n">manifest</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">remote</span> <span class="o">=</span> <span class="n">remote</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">gitdir</span> <span class="o">=</span> <span class="n">gitdir</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\\</span><span class="s">'</span><span class="p">,</span> <span class="s">'/'</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">objdir</span> <span class="o">=</span> <span class="n">objdir</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\\</span><span class="s">'</span><span class="p">,</span> <span class="s">'/'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">worktree</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">worktree</span> <span class="o">=</span> <span class="n">worktree</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\\</span><span class="s">'</span><span class="p">,</span> <span class="s">'/'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">worktree</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">relpath</span> <span class="o">=</span> <span class="n">relpath</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">revisionExpr</span> <span class="o">=</span> <span class="n">revisionExpr</span>
+
+    <span class="k">if</span>   <span class="n">revisionId</span> <span class="ow">is</span> <span class="bp">None</span> \
+     <span class="ow">and</span> <span class="n">revisionExpr</span> \
+     <span class="ow">and</span> <span class="n">IsId</span><span class="p">(</span><span class="n">revisionExpr</span><span class="p">):</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">revisionId</span> <span class="o">=</span> <span class="n">revisionExpr</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">revisionId</span> <span class="o">=</span> <span class="n">revisionId</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">rebase</span> <span class="o">=</span> <span class="n">rebase</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">groups</span> <span class="o">=</span> <span class="n">groups</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">sync_c</span> <span class="o">=</span> <span class="n">sync_c</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">sync_s</span> <span class="o">=</span> <span class="n">sync_s</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">clone_depth</span> <span class="o">=</span> <span class="n">clone_depth</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">upstream</span> <span class="o">=</span> <span class="n">upstream</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">is_derived</span> <span class="o">=</span> <span class="n">is_derived</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">optimized_fetch</span> <span class="o">=</span> <span class="n">optimized_fetch</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">subprojects</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">snapshots</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">copyfiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">linkfiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">GitConfig</span><span class="p">.</span><span class="n">ForRepository</span><span class="p">(</span>
+                    <span class="n">gitdir</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">gitdir</span><span class="p">,</span>
+                    <span class="n">defaults</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">globalConfig</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">worktree</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">work_git</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_GitGetByExec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bare</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">gitdir</span><span class="o">=</span><span class="n">gitdir</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">work_git</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">bare_git</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_GitGetByExec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bare</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gitdir</span><span class="o">=</span><span class="n">gitdir</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">bare_ref</span> <span class="o">=</span> <span class="n">GitRefs</span><span class="p">(</span><span class="n">gitdir</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">bare_objdir</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_GitGetByExec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bare</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gitdir</span><span class="o">=</span><span class="n">objdir</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">dest_branch</span> <span class="o">=</span> <span class="n">dest_branch</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">old_revision</span> <span class="o">=</span> <span class="n">old_revision</span>
+
+    <span class="c1"># This will be filled in if a project is later identified to be the
+</span>    <span class="c1"># project containing repo hooks.
+</span>    <span class="bp">self</span><span class="p">.</span><span class="n">enabled_repo_hooks</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  Project是用来描述AOSP项目某一个仓库（或者说项目）,其中有几个重要的值是来源于manifest.xml,   <code class="language-plaintext highlighter-rouge">name,revisionExpr,rebase,groups,sync_c,sync_s,upstream</code>      这几个值对应到manifest.xml中某个标签的属性值，后续我们在克隆projects仓库集会讲解manifest标签和属性的用途。所以AOSP项目的仓库信息都在manifest.xml,除了repo仓库和manifest仓库，这些信息是在我们使用”repo sync”时会用到。</p>
+
+<p>  现在我们回到成员函数_Run的流程中，XmlManifest类已经构造完了。<code class="language-plaintext highlighter-rouge">cmd.OptionParser.parse_args(argv)</code>  ,再去获取每个指令独有的OptionParser并且解析指令  <code class="language-plaintext highlighter-rouge">init -u xxxx -b xxx</code></p>
+
+<p>OptionParser属性函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="s">"""Base class for any command line action in repo.
+  """</span>
+  <span class="p">...</span>
+ <span class="o">@</span><span class="nb">property</span>
+  <span class="k">def</span> <span class="nf">OptionParser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">_optparse</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">me</span> <span class="o">=</span> <span class="s">'repo %s'</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">NAME</span>
+        <span class="n">usage</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">helpUsage</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">replace</span><span class="p">(</span><span class="s">'%prog'</span><span class="p">,</span> <span class="n">me</span><span class="p">)</span>
+      <span class="k">except</span> <span class="nb">AttributeError</span><span class="p">:</span>
+        <span class="n">usage</span> <span class="o">=</span> <span class="s">'repo %s'</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">NAME</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_optparse</span> <span class="o">=</span> <span class="n">optparse</span><span class="p">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">)</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_Options</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">_optparse</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_optparse</span>
+  <span class="p">...</span>
+  <span class="k">def</span> <span class="nf">_Options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="s">"""Initialize the option parser.
+    """</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Command的衍生类重写了基类的_Options，定义了属于自己的options,先留个坑后面讲到”repo sync”的时候再分析。</p>
+
+<p>创建完XmlManifest类，解析命令行后，接下来就是调用Execute。</p>
+
+<p>  Command类是所有命令（init、sync、start）的基类，其成员函数Execute被其衍生类重写，故调用成员函数Execute就可以执行某个命令对应的成员函数Execute。所以，执行到这一行  <code class="language-plaintext highlighter-rouge">result = cmd.Execute(copts, cargs)</code>  的时候,就是整个架构的分水岭了。下面的图片是对前面的总结。</p>
+
+<p><img src="/blog/asset/2017-04-12/2017-04-12-repo__Repo_Run_flowchart.png" alt="repo _Repo#_Run flowchart" class="white-bg-image" /></p>
+
+<p>接下来就是执行init模块中Init类的成员函数Execute：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Init</span><span class="p">(</span><span class="n">InteractiveCommand</span><span class="p">,</span> <span class="n">MirrorSafeCommand</span><span class="p">):</span>
+  <span class="p">...</span>
+
+  <span class="k">def</span> <span class="nf">Execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">git_require</span><span class="p">(</span><span class="n">MIN_GIT_VERSION</span><span class="p">,</span> <span class="n">fail</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">reference</span><span class="p">:</span>
+      <span class="n">opt</span><span class="p">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">reference</span><span class="p">)</span>
+
+    <span class="c1"># Check this here, else manifest will be tagged "not new" and init won't be
+</span>    <span class="c1"># possible anymore without removing the .repo/manifests directory.
+</span>    <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">archive</span> <span class="ow">and</span> <span class="n">opt</span><span class="p">.</span><span class="n">mirror</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">_SyncManifest</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">_LinkManifest</span><span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">manifest_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">isatty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="p">.</span><span class="n">isatty</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">IsMirror</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">config_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">.</span><span class="n">_ShouldConfigureUser</span><span class="p">():</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_ConfigureUser</span><span class="p">()</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_ConfigureColor</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">_ConfigureDepth</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">_DisplayResult</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  Init类的成员函数Execute的重点在于两个成员函数_SyncManifest和_LinkManifest，前者会克隆出manifest仓库并且切换到可用的分支上，后者会通过os模块symlink函数生成链接文件manifest.xml。</p>
+
+<p>_SyncManifest函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Init</span><span class="p">(</span><span class="n">InteractiveCommand</span><span class="p">,</span> <span class="n">MirrorSafeCommand</span><span class="p">):</span>
+  <span class="p">...</span>
+
+  <span class="k">def</span> <span class="nf">_SyncManifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">manifestProject</span>
+    <span class="n">is_new</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">m</span><span class="p">.</span><span class="n">Exists</span>
+
+    <span class="k">if</span> <span class="n">is_new</span><span class="p">:</span>
+      <span class="p">...</span>
+
+      <span class="n">m</span><span class="p">.</span><span class="n">_InitGitDir</span><span class="p">(</span><span class="n">mirror_git</span><span class="o">=</span><span class="n">mirrored_manifest_git</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">manifest_branch</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">revisionExpr</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">manifest_branch</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">revisionExpr</span> <span class="o">=</span> <span class="s">'refs/heads/master'</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">manifest_branch</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">revisionExpr</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">manifest_branch</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">PreSync</span><span class="p">()</span>
+
+    <span class="p">...</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">.</span><span class="n">Sync_NetworkHalf</span><span class="p">(</span><span class="n">is_new</span><span class="o">=</span><span class="n">is_new</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">quiet</span><span class="p">,</span>
+        <span class="n">clone_bundle</span><span class="o">=</span><span class="ow">not</span> <span class="n">opt</span><span class="p">.</span><span class="n">no_clone_bundle</span><span class="p">,</span>
+        <span class="n">current_branch_only</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">current_branch_only</span><span class="p">,</span>
+        <span class="n">no_tags</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">no_tags</span><span class="p">):</span>
+      <span class="n">r</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">GetRemote</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">remote</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">'fatal: cannot obtain manifest %s'</span> <span class="o">%</span> <span class="n">r</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+
+      <span class="c1"># Better delete the manifest git dir if we created it; otherwise next
+</span>      <span class="c1"># time (when user fixes problems) we won't go through the "is_new" logic.
+</span>      <span class="k">if</span> <span class="n">is_new</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="p">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">gitdir</span><span class="p">)</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">manifest_branch</span><span class="p">:</span>
+      <span class="n">m</span><span class="p">.</span><span class="n">MetaBranchSwitch</span><span class="p">()</span>
+
+    <span class="n">syncbuf</span> <span class="o">=</span> <span class="n">SyncBuffer</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">config</span><span class="p">)</span>
+    <span class="n">m</span><span class="p">.</span><span class="n">Sync_LocalHalf</span><span class="p">(</span><span class="n">syncbuf</span><span class="p">)</span>
+    <span class="n">syncbuf</span><span class="p">.</span><span class="n">Finish</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">is_new</span> <span class="ow">or</span> <span class="n">m</span><span class="p">.</span><span class="n">CurrentBranch</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">.</span><span class="n">StartBranch</span><span class="p">(</span><span class="s">'default'</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'fatal: cannot create default in manifest'</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  Init类的成员函数_SyncManifest会克隆一个仓库，流程一般如下： <code class="language-plaintext highlighter-rouge">git init---&gt;git fetch---&gt;git checkout branch_name</code>  。对应的Project类成员函数就是_InitGitDir，Sync_NetworkHalf，Sync_LocalHalf,是不是很熟悉，跟克隆repo仓库的流程是一样的，其实repo仓库、manifest仓库、projects仓库集这些仓库克隆出来的方式是一样的。</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> 
+  <span class="p">...</span>
+
+  <span class="k">def</span> <span class="nf">_InitGitDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror_git</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">force_sync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">init_git_dir</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">gitdir</span><span class="p">)</span>
+    <span class="n">init_obj_dir</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">objdir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="c1"># Initialize the bare repository, which contains all of the objects.
+</span>      <span class="k">if</span> <span class="n">init_obj_dir</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">objdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">bare_objdir</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+     <span class="p">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  <em>InitGitDir，初始化的仓库为manifest.git,manifest目录下的.git仓库是manifest的复制品，通过Project类的成员函数_InitWorkTree创建。接着再说类_GitGetByExec，_GitGetByExec的对象bare_objdir封装了操作仓库的命令。比如git init。但是却找不到成员函数init，原来成员函数init是动态定义的。关键的地方就在于_GitGetByExec类的成员函数_getattr</em>。</p>
+
+<p>_GitGetByExec类的成员函数__getattr__代码如下:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> 
+  <span class="p">...</span>
+
+  <span class="k">class</span> <span class="nc">_GitGetByExec</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> 
+  <span class="p">...</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+      <span class="p">...</span>
+      <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'_'</span><span class="p">,</span> <span class="s">'-'</span><span class="p">)</span>
+
+      <span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">cmdv</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">'config'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="p">...</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+          <span class="k">if</span> <span class="ow">not</span> <span class="n">git_require</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+            <span class="p">...</span>
+          <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">cmdv</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'-c'</span><span class="p">)</span>
+            <span class="n">cmdv</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'%s=%s'</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+        <span class="n">cmdv</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">cmdv</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">GitCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">_project</span><span class="p">,</span>
+                       <span class="n">cmdv</span><span class="p">,</span>
+                       <span class="n">bare</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">_bare</span><span class="p">,</span>
+                       <span class="n">gitdir</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">_gitdir</span><span class="p">,</span>
+                       <span class="n">capture_stdout</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                       <span class="n">capture_stderr</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="n">Wait</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="p">...</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">stdout</span>
+        <span class="k">try</span><span class="p">:</span>
+          <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">AttributeError</span><span class="p">:</span>
+          <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">r</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+          <span class="k">return</span> <span class="n">r</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">r</span>
+      <span class="k">return</span> <span class="n">runner</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  runner闭包用来处理调用者提供的参数，比如bare_git.describe(project.GetRevisionId())中的”project.GetRevisionId()”,对应的git命令就是  <code class="language-plaintext highlighter-rouge">git  describe  args </code><br />
+所以_GitGetByExec类通过成员函数__getattr__可以向工厂一样生产一些执行git命令的成员函数。既然仓库已经初始化好了，那么接下来就是fetch仓库了。</p>
+
+<p>Sync_NetworkHalf成员函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  
+  <span class="p">...</span> 
+
+  <span class="k">def</span> <span class="nf">Sync_NetworkHalf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                       <span class="n">quiet</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">is_new</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">current_branch_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">force_sync</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">clone_bundle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                       <span class="n">no_tags</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">archive</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">optimized_fetch</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">prune</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="p">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">need_to_fetch</span> <span class="ow">and</span>
+        <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">_RemoteFetch</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="n">is_new</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span> <span class="n">alt_dir</span><span class="o">=</span><span class="n">alt_dir</span><span class="p">,</span>
+                              <span class="n">current_branch_only</span><span class="o">=</span><span class="n">current_branch_only</span><span class="p">,</span>
+                              <span class="n">no_tags</span><span class="o">=</span><span class="n">no_tags</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="n">prune</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)):</span>
+      <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">worktree</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_InitMRef</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_InitMirrorHead</span><span class="p">()</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">gitdir</span><span class="p">,</span> <span class="s">'FETCH_HEAD'</span><span class="p">))</span>
+      <span class="k">except</span> <span class="nb">OSError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  Project类Sync_NetworkHalf方法调用_RemoteFetch方法实现了从远程仓库fetch记录到本地仓库，_RemoteFetch函数其实是”git fetch”命令的封装。</p>
+
+<p>Sync_LocalHalf成员函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  
+  <span class="p">...</span>
+
+  <span class="k">def</span> <span class="nf">Sync_LocalHalf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">syncbuf</span><span class="p">,</span> <span class="n">force_sync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="s">"""Perform only the local IO portion of the sync process.
+       Network access is not required.
+    """</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">_InitWorkTree</span><span class="p">(</span><span class="n">force_sync</span><span class="o">=</span><span class="n">force_sync</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">revid</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetRevisionId</span><span class="p">(</span><span class="n">all_refs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_doff</span><span class="p">():</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_FastForward</span><span class="p">(</span><span class="n">revid</span><span class="p">)</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+
+    <span class="n">head</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">work_git</span><span class="p">.</span><span class="n">GetHead</span><span class="p">()</span>
+    <span class="p">...</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">syncbuf</span><span class="p">.</span><span class="n">detach_head</span><span class="p">:</span>
+      <span class="c1"># Currently on a detached HEAD.  The user is assumed to
+</span>      <span class="c1"># not have any local modifications worth worrying about.
+</span>      <span class="c1">#
+</span>      <span class="p">...</span>
+
+      <span class="k">if</span> <span class="n">head</span> <span class="o">==</span> <span class="n">revid</span><span class="p">:</span>
+        <span class="c1"># No changes; don't do anything further.
+</span>        <span class="c1"># Except if the head needs to be detached
+</span>        <span class="c1">#
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">syncbuf</span><span class="p">.</span><span class="n">detach_head</span><span class="p">:</span>
+          <span class="c1"># The copy/linkfile config may have changed.
+</span>          <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+          <span class="k">return</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">lost</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_revlist</span><span class="p">(</span><span class="n">not_rev</span><span class="p">(</span><span class="n">revid</span><span class="p">),</span> <span class="n">HEAD</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lost</span><span class="p">:</span>
+          <span class="n">syncbuf</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">"discarding %d commits"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lost</span><span class="p">))</span>
+
+      <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_Checkout</span><span class="p">(</span><span class="n">revid</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">GitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">syncbuf</span><span class="p">.</span><span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+      <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">head</span> <span class="o">==</span> <span class="n">revid</span><span class="p">:</span>
+      <span class="c1"># No changes; don't do anything further.
+</span>      <span class="c1">#
+</span>      <span class="c1"># The copy/linkfile config may have changed.
+</span>      <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+      <span class="k">return</span>
+
+    <span class="n">branch</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetBranch</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">branch</span><span class="p">.</span><span class="n">LocalMerge</span><span class="p">:</span>
+      <span class="c1"># The current branch has no tracking configuration.
+</span>      <span class="c1"># Jump off it to a detached HEAD.
+</span>      <span class="c1">#
+</span>      <span class="p">...</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_Checkout</span><span class="p">(</span><span class="n">revid</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">GitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">syncbuf</span><span class="p">.</span><span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+      <span class="k">return</span>
+
+    <span class="n">upstream_gain</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_revlist</span><span class="p">(</span><span class="n">not_rev</span><span class="p">(</span><span class="n">HEAD</span><span class="p">),</span> <span class="n">revid</span><span class="p">)</span>
+    <span class="n">pub</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">WasPublished</span><span class="p">(</span><span class="n">branch</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">all_refs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pub</span><span class="p">:</span>
+      <span class="n">not_merged</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_revlist</span><span class="p">(</span><span class="n">not_rev</span><span class="p">(</span><span class="n">revid</span><span class="p">),</span> <span class="n">pub</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">not_merged</span><span class="p">:</span>
+        <span class="p">...</span>
+        <span class="k">return</span>
+      <span class="k">elif</span> <span class="n">pub</span> <span class="o">==</span> <span class="n">head</span><span class="p">:</span>
+        <span class="c1"># All published commits are merged, and thus we are a
+</span>        <span class="c1"># strict subset.  We can fast-forward safely.
+</span>        <span class="c1">#
+</span>        <span class="n">syncbuf</span><span class="p">.</span><span class="n">later1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_doff</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Examine the local commits not in the remote.  Find the
+</span>    <span class="c1"># last one attributed to this user, if any.
+</span>    <span class="c1">#
+</span>    <span class="n">local_changes</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_revlist</span><span class="p">(</span><span class="n">not_rev</span><span class="p">(</span><span class="n">revid</span><span class="p">),</span> <span class="n">HEAD</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s">'%H %ce'</span><span class="p">)</span>
+    <span class="n">last_mine</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">cnt_mine</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">local_changes</span><span class="p">:</span>
+      <span class="n">commit_id</span><span class="p">,</span> <span class="n">committer_email</span> <span class="o">=</span> <span class="n">commit</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">).</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">committer_email</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">UserEmail</span><span class="p">:</span>
+        <span class="n">last_mine</span> <span class="o">=</span> <span class="n">commit_id</span>
+        <span class="n">cnt_mine</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">upstream_gain</span> <span class="ow">and</span> <span class="n">cnt_mine</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">local_changes</span><span class="p">):</span>
+      <span class="k">return</span>
+
+    <span class="p">...</span>
+
+    <span class="n">branch</span><span class="p">.</span><span class="n">remote</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetRemote</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">remote</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ID_RE</span><span class="p">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">revisionExpr</span><span class="p">):</span>
+      <span class="c1"># in case of manifest sync the revisionExpr might be a SHA1
+</span>      <span class="n">branch</span><span class="p">.</span><span class="n">merge</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">revisionExpr</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">branch</span><span class="p">.</span><span class="n">merge</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'refs/'</span><span class="p">):</span>
+        <span class="n">branch</span><span class="p">.</span><span class="n">merge</span> <span class="o">=</span> <span class="n">R_HEADS</span> <span class="o">+</span> <span class="n">branch</span><span class="p">.</span><span class="n">merge</span>
+    <span class="n">branch</span><span class="p">.</span><span class="n">Save</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">cnt_mine</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">.</span><span class="n">rebase</span><span class="p">:</span>
+      <span class="k">def</span> <span class="nf">_dorebase</span><span class="p">():</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_Rebase</span><span class="p">(</span><span class="n">upstream</span><span class="o">=</span><span class="s">'%s^1'</span> <span class="o">%</span> <span class="n">last_mine</span><span class="p">,</span> <span class="n">onto</span><span class="o">=</span><span class="n">revid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+      <span class="n">syncbuf</span><span class="p">.</span><span class="n">later2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dorebase</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">local_changes</span><span class="p">:</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_ResetHard</span><span class="p">(</span><span class="n">revid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_CopyAndLinkFiles</span><span class="p">()</span>
+      <span class="k">except</span> <span class="n">GitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">syncbuf</span><span class="p">.</span><span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">syncbuf</span><span class="p">.</span><span class="n">later1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_doff</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  Project类的成员函数Sync_LocalHalf内部流程较为复杂，这里我们只讲checkout到一个干净的分支。</p>
+
+<ul>
+  <li>_InitWorkTree成员函数：初始化manifest工作目录下的.git仓库</li>
+  <li>_Checkout成员函数：通过”git checkout”切换分支。</li>
+</ul>
+
+<p>_LinkManifest成员函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Init</span><span class="p">(</span><span class="n">InteractiveCommand</span><span class="p">,</span> <span class="n">MirrorSafeCommand</span><span class="p">):</span>  
+  <span class="p">...</span>
+
+  <span class="k">def</span> <span class="nf">_LinkManifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">'fatal: manifest name (-m) is required.'</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">Link</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ManifestParseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">"fatal: manifest '%s' not available"</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">'fatal: %s'</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  成员函数_LinkManifest最终会调用os.symlink，创建manifest工作目录下default.xml的链接文件manifest.xml到 .repo目录下，这样方便访问manifest.xml文件</p>
+
+<h3 id="projects仓库集"><em class="header3-font">Projects仓库集</em></h3>
+
+<p>  执行完repo init就获取到了repo仓库和manifest仓库了，接下来就要通过manifest.xml链接文件中的AOSP各个项目的元数据，获取projects仓库集。先来看看其内容：</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
+<span class="nt">&lt;manifest&gt;</span>  
+  
+  <span class="nt">&lt;remote</span>  <span class="na">name=</span><span class="s">"aosp"</span>  
+           <span class="na">fetch=</span><span class="s">".."</span>  
+           <span class="na">review=</span><span class="s">"https://android-review.googlesource.com/"</span> <span class="nt">/&gt;</span>  
+  <span class="nt">&lt;default</span> <span class="na">revision=</span><span class="s">"refs/tags/android-4.2_r1"</span>  
+           <span class="na">remote=</span><span class="s">"aosp"</span>  
+           <span class="na">sync-j=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>  
+  
+  <span class="nt">&lt;project</span> <span class="na">path=</span><span class="s">"build"</span> <span class="na">name=</span><span class="s">"platform/build"</span> <span class="nt">&gt;</span>  
+    <span class="nt">&lt;copyfile</span> <span class="na">src=</span><span class="s">"core/root.mk"</span> <span class="na">dest=</span><span class="s">"Makefile"</span> <span class="nt">/&gt;</span>  
+  <span class="nt">&lt;/project&gt;</span>  
+  <span class="nt">&lt;project</span> <span class="na">path=</span><span class="s">"abi/cpp"</span> <span class="na">name=</span><span class="s">"platform/abi/cpp"</span> <span class="nt">/&gt;</span>  
+  <span class="nt">&lt;project</span> <span class="na">path=</span><span class="s">"bionic"</span> <span class="na">name=</span><span class="s">"platform/bionic"</span> <span class="nt">/&gt;</span>  
+  ......  
+  
+<span class="nt">&lt;/manifest&gt;</span> </code></pre></figure>
+
+<p>  想了解更多的manifest.xml可以查看.repo/repo/docs/manifest-format.txt。这里我们只做简单了解<br />
+manifest.xml定义了四种标签：</p>
+
+<ul>
+  <li>remote：该标签描述的是远程仓库信息。其中的fetch值相当于url路径的前缀。就好比 <code class="language-plaintext highlighter-rouge">git@github.com:HawksJamesf/blog.git</code>  中的 <code class="language-plaintext highlighter-rouge">git@github.com:</code> ，标明了服务器。属性review用于code review服务器地址。</li>
+  <li>default：属性revision表明了AOSP项目使用的开发分支，属性sync-j表明了拉取代码时使用的cpu核数</li>
+  <li>project: 描述了相对于远程仓库的位置和相对于AOSP根目录的目录名字。比如想要获取build仓库，远程仓库的url为    <code class="language-plaintext highlighter-rouge">https://android.googlesource.com/platform</code>，那么该仓库的对应的远程仓库的url就是   <code class="language-plaintext highlighter-rouge">https://android.googlesource.com/platform/build</code></li>
+  <li>copyfile: 属性src为某个文件在远程仓库的位置，属性dest为本地仓库的位置。</li>
+</ul>
+
+<p>  执行  <code class="language-plaintext highlighter-rouge">repo sync -j 8 </code>  命令行，流程就跟执行repo init是一样的，到了main模块里面的_Repo类的成员函数_Run调用cmd.Execute(copts, cargs)这个风水岭，才会执行属于sync模块的代码。但是关于copts，cargs参数的如何获取，我们还得先看cmd.OptionParser.parse_args(argv)。</p>
+
+<p>_Options成员函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Sync</span><span class="p">(</span><span class="n">Command</span><span class="p">,</span> <span class="n">MirrorSafeCommand</span><span class="p">):</span>
+  <span class="p">...</span>
+  <span class="k">def</span> <span class="nf">_Options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">show_smart</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">default</span><span class="p">.</span><span class="n">sync_j</span>
+    <span class="k">except</span> <span class="n">ManifestParseError</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">jobs</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="p">...</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-l'</span><span class="p">,</span> <span class="s">'--local-only'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'local_only'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">"only update working tree, don't fetch"</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-n'</span><span class="p">,</span> <span class="s">'--network-only'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'network_only'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">"fetch only, don't update working tree"</span><span class="p">)</span> 
+    <span class="p">...</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-m'</span><span class="p">,</span> <span class="s">'--manifest-name'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'manifest_name'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">'temporary manifest to use for this sync'</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">'NAME.xml'</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-u'</span><span class="p">,</span> <span class="s">'--manifest-server-username'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'manifest_server_username'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">'username to authenticate with the manifest server'</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-p'</span><span class="p">,</span> <span class="s">'--manifest-server-password'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'manifest_server_password'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">'password to authenticate with the manifest server'</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'--fetch-submodules'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'fetch_submodules'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">'fetch submodules from server'</span><span class="p">)</span>
+    <span class="p">...</span>
+    
+    <span class="k">if</span> <span class="n">show_smart</span><span class="p">:</span>
+      <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-s'</span><span class="p">,</span> <span class="s">'--smart-sync'</span><span class="p">,</span>
+                   <span class="n">dest</span><span class="o">=</span><span class="s">'smart_sync'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s">'smart sync using manifest from the latest known good build'</span><span class="p">)</span>
+      <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'-t'</span><span class="p">,</span> <span class="s">'--smart-tag'</span><span class="p">,</span>
+                   <span class="n">dest</span><span class="o">=</span><span class="s">'smart_tag'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store'</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s">'smart sync using manifest from a known tag'</span><span class="p">)</span>
+
+    <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="s">'repo Version options'</span><span class="p">)</span>
+    <span class="n">g</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'--no-repo-verify'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'no_repo_verify'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">'do not verify repo source code'</span><span class="p">)</span>
+    <span class="n">g</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'--repo-upgraded'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'repo_upgraded'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="n">SUPPRESS_HELP</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  在分析repo init时已经说用，Command的衍生类override成员函数_Options，才能得到独有的OptionParser。还记得  <code class="language-plaintext highlighter-rouge">repo command line ---&gt;optparse---&gt;git command line</code>这个流程吗 ? 每种命令都有其对应的OptionParser，这样才能做到各个命令模块有自己处理repo command line的逻辑。紧接着把解析后的值传给成员函数Execute。</p>
+
+<p>Execute成员函数的代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Sync</span><span class="p">(</span><span class="n">Command</span><span class="p">,</span> <span class="n">MirrorSafeCommand</span><span class="p">):</span>
+  <span class="p">...</span>
+  <span class="k">def</span> <span class="nf">Execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="p">...</span>
+
+    <span class="n">manifest_name</span> <span class="o">=</span> <span class="n">opt</span><span class="p">.</span><span class="n">manifest_name</span>
+    <span class="p">...</span>
+
+    <span class="n">rp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">repoProject</span>
+    <span class="n">rp</span><span class="p">.</span><span class="n">PreSync</span><span class="p">()</span>
+
+    <span class="n">mp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">manifestProject</span>
+    <span class="n">mp</span><span class="p">.</span><span class="n">PreSync</span><span class="p">()</span>
+
+    <span class="p">...</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opt</span><span class="p">.</span><span class="n">local_only</span><span class="p">:</span>
+      <span class="n">mp</span><span class="p">.</span><span class="n">Sync_NetworkHalf</span><span class="p">(</span><span class="n">quiet</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">quiet</span><span class="p">,</span>
+                          <span class="n">current_branch_only</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">current_branch_only</span><span class="p">,</span>
+                          <span class="n">no_tags</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">no_tags</span><span class="p">,</span>
+                          <span class="n">optimized_fetch</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">optimized_fetch</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mp</span><span class="p">.</span><span class="n">HasChanges</span><span class="p">:</span>
+      <span class="n">syncbuf</span> <span class="o">=</span> <span class="n">SyncBuffer</span><span class="p">(</span><span class="n">mp</span><span class="p">.</span><span class="n">config</span><span class="p">)</span>
+      <span class="n">mp</span><span class="p">.</span><span class="n">Sync_LocalHalf</span><span class="p">(</span><span class="n">syncbuf</span><span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">syncbuf</span><span class="p">.</span><span class="n">Finish</span><span class="p">():</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">_ReloadManifest</span><span class="p">(</span><span class="n">manifest_name</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">jobs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">default</span><span class="p">.</span><span class="n">sync_j</span>
+    <span class="p">...</span>
+    <span class="n">all_projects</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetProjects</span><span class="p">(</span><span class="n">args</span><span class="p">,</span>
+                                    <span class="n">missing_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                    <span class="n">submodules_ok</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">fetch_submodules</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="p">.</span><span class="n">_fetch_times</span> <span class="o">=</span> <span class="n">_FetchTimes</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opt</span><span class="p">.</span><span class="n">local_only</span><span class="p">:</span>
+      <span class="n">to_fetch</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+      <span class="k">if</span> <span class="n">_ONE_DAY_S</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">rp</span><span class="p">.</span><span class="n">LastFetch</span><span class="p">):</span>
+        <span class="n">to_fetch</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+      <span class="n">to_fetch</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">all_projects</span><span class="p">)</span>
+      <span class="n">to_fetch</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">_fetch_times</span><span class="p">.</span><span class="n">Get</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+      <span class="n">fetched</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_Fetch</span><span class="p">(</span><span class="n">to_fetch</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+      <span class="n">_PostRepoFetch</span><span class="p">(</span><span class="n">rp</span><span class="p">,</span> <span class="n">opt</span><span class="p">.</span><span class="n">no_repo_verify</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">opt</span><span class="p">.</span><span class="n">network_only</span><span class="p">:</span>
+        <span class="c1"># bail out now; the rest touches the working tree
+</span>        <span class="k">return</span>
+
+      <span class="c1"># Iteratively fetch missing and/or nested unregistered submodules
+</span>      <span class="n">previously_missing_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+      <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="p">...</span>
+        <span class="n">all_projects</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetProjects</span><span class="p">(</span><span class="n">args</span><span class="p">,</span>
+                                        <span class="n">missing_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                        <span class="n">submodules_ok</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">fetch_submodules</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">all_projects</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">project</span><span class="p">.</span><span class="n">gitdir</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fetched</span><span class="p">:</span>
+            <span class="n">missing</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">missing</span><span class="p">:</span>
+          <span class="k">break</span>
+        <span class="c1"># Stop us from non-stopped fetching actually-missing repos: If set of
+</span>        <span class="c1"># missing repos has not been changed from last fetch, we break.
+</span>        <span class="n">missing_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">previously_missing_set</span> <span class="o">==</span> <span class="n">missing_set</span><span class="p">:</span>
+          <span class="k">break</span>
+        <span class="n">previously_missing_set</span> <span class="o">=</span> <span class="n">missing_set</span>
+        <span class="n">fetched</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">_Fetch</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="n">opt</span><span class="p">))</span>
+
+    <span class="p">...</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">UpdateProjectList</span><span class="p">():</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="p">...</span>
+    <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">all_projects</span><span class="p">:</span>
+      <span class="p">...</span>
+      <span class="k">if</span> <span class="n">project</span><span class="p">.</span><span class="n">worktree</span><span class="p">:</span>
+        <span class="n">project</span><span class="p">.</span><span class="n">Sync_LocalHalf</span><span class="p">(</span><span class="n">syncbuf</span><span class="p">,</span> <span class="n">force_sync</span><span class="o">=</span><span class="n">opt</span><span class="p">.</span><span class="n">force_sync</span><span class="p">)</span>
+    <span class="p">...</span>
+
+    <span class="p">...</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>  前期会有一些更新检查repo仓库和manifest仓库的工作，后期就会拉去projects仓库集，那么下面我们就来粗糙的理解执行成员函数Execute的流程：</p>
+
+<ul>
+  <li>一开始获取manifest仓库和repo仓库的对象，然后都会调用之前分析过的PreSync，如果opt.local_only不存在，就会调用Sync_NetworkHalf成员函数更新manifest仓库。紧接着如果manifest本地仓库相对于远程仓库有变化，就会调用Sync_LocalHalf做一些merge或者rebase操作，然后调用ReloadManifest成员函数重新从manifest.xml载入数据到对象。</li>
+  <li>接下来就是_Fetch成员函数，其中除了manifest仓库，其他的仓库都会更新。如果开启的合数大于1的话就会创建新的线程，防止主线程阻塞，其中关于线程同步机制可以查看<a href="http://www.laurentluce.com/posts/python-threads-synchronization-locks-rlocks-semaphores-conditions-events-and-queues/">这里</a>。而获取projects仓库集，主要使用的是Project类的成员函数Sync_NetworkHalf，接着调用_PostRepoFetch函数判断repo仓库是否有变化，如果是，则调用Sync_LocalHalf成员函数做一些merge或者rebase操作。</li>
+  <li>紧接着通过GetProjects成员函数从 .repo/projects目录下得到AOSP所有仓库对象的列表，不包括repo仓库和manifest仓库，这样就可以调用Sync_LocalHalf成员函数。如果参数args指定了具体的仓库（即repo sync project_name），那么GetProjects成员函数就只能得到指定的仓库。获取仓库的方式有两种：一种_GetProjectByPath，另一种是GetProjectsWithName。</li>
+</ul>
+
+<p>  至此，repo仓库、manifest仓库、projects仓库集连同其对应的工作目录都已经初始化完成。那么是不是就可以开始开发呢 ？ 其实接下来还要为AOSP项目的仓库创建一个新的开发分支，只有这样我们才能够在分支上面提交、上传自己的代码。也只有这样当我们发布了一个版本就可以给这个版本打上一个tag。当项目可以量产时，就可以在这个分支基础上创建出一个量产分支，并上传到服务器。</p>
+
+<h3 id="创建分支"><em class="header3-font">创建分支</em></h3>
+<p><code class="language-plaintext highlighter-rouge">repo start master --all</code> 其实挺好理解这个命令行的，就是  <code class="language-plaintext highlighter-rouge">git checkout -b name</code> 命令行的批量操作。留个坑，以后填吧。</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Start</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+  <span class="p">...</span>
+  <span class="k">def</span> <span class="nf">_Options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">'--all'</span><span class="p">,</span>
+                 <span class="n">dest</span><span class="o">=</span><span class="s">'all'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">'store_true'</span><span class="p">,</span>
+                 <span class="n">help</span><span class="o">=</span><span class="s">'begin branch in all projects'</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">Execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">Usage</span><span class="p">()</span>
+
+    <span class="n">nb</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">git</span><span class="p">.</span><span class="n">check_ref_format</span><span class="p">(</span><span class="s">'heads/%s'</span> <span class="o">%</span> <span class="n">nb</span><span class="p">):</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">"error: '%s' is not a valid name"</span> <span class="o">%</span> <span class="n">nb</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">err</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opt</span><span class="p">.</span><span class="nb">all</span><span class="p">:</span>
+      <span class="n">projects</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">projects</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">projects</span> <span class="o">=</span> <span class="p">[</span><span class="s">'.'</span><span class="p">,]</span>  <span class="c1"># start it in the local project by default
+</span>
+    <span class="n">all_projects</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetProjects</span><span class="p">(</span><span class="n">projects</span><span class="p">,</span>
+                                    <span class="n">missing_ok</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">))</span>
+
+    <span class="c1"># This must happen after we find all_projects, since GetProjects may need
+</span>    <span class="c1"># the local directory, which will disappear once we save the GITC manifest.
+</span>    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">:</span>
+      <span class="n">gitc_projects</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">GetProjects</span><span class="p">(</span><span class="n">projects</span><span class="p">,</span> <span class="n">manifest</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">,</span>
+                                       <span class="n">missing_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">gitc_projects</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">project</span><span class="p">.</span><span class="n">old_revision</span><span class="p">:</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">already_synced</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">already_synced</span> <span class="o">=</span> <span class="bp">False</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">old_revision</span> <span class="o">=</span> <span class="n">project</span><span class="p">.</span><span class="n">revisionExpr</span>
+        <span class="n">project</span><span class="p">.</span><span class="n">revisionExpr</span> <span class="o">=</span> <span class="bp">None</span>
+      <span class="c1"># Save the GITC manifest.
+</span>      <span class="n">gitc_utils</span><span class="p">.</span><span class="n">save_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">)</span>
+
+      <span class="c1"># Make sure we have a valid CWD
+</span>      <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">getcwd</span><span class="p">()):</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">topdir</span><span class="p">)</span>
+
+    <span class="n">pm</span> <span class="o">=</span> <span class="n">Progress</span><span class="p">(</span><span class="s">'Starting %s'</span> <span class="o">%</span> <span class="n">nb</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_projects</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">all_projects</span><span class="p">:</span>
+      <span class="n">pm</span><span class="p">.</span><span class="n">update</span><span class="p">()</span>
+
+      <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">:</span>
+        <span class="n">gitc_project</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="n">project</span><span class="p">.</span><span class="n">relpath</span><span class="p">]</span>
+        <span class="c1"># Sync projects that have not been opened.
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">gitc_project</span><span class="p">.</span><span class="n">already_synced</span><span class="p">:</span>
+          <span class="n">proj_localdir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">gitc_manifest</span><span class="p">.</span><span class="n">gitc_client_dir</span><span class="p">,</span>
+                                       <span class="n">project</span><span class="p">.</span><span class="n">relpath</span><span class="p">)</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">worktree</span> <span class="o">=</span> <span class="n">proj_localdir</span>
+          <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="n">proj_localdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">proj_localdir</span><span class="p">)</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">Sync_NetworkHalf</span><span class="p">()</span>
+          <span class="n">sync_buf</span> <span class="o">=</span> <span class="n">SyncBuffer</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">manifestProject</span><span class="p">.</span><span class="n">config</span><span class="p">)</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">Sync_LocalHalf</span><span class="p">(</span><span class="n">sync_buf</span><span class="p">)</span>
+          <span class="n">project</span><span class="p">.</span><span class="n">revisionId</span> <span class="o">=</span> <span class="n">gitc_project</span><span class="p">.</span><span class="n">old_revision</span>
+
+      <span class="c1"># If the current revision is a specific SHA1 then we can't push back
+</span>      <span class="c1"># to it; so substitute with dest_branch if defined, or with manifest
+</span>      <span class="c1"># default revision instead.
+</span>      <span class="n">branch_merge</span> <span class="o">=</span> <span class="s">''</span>
+      <span class="k">if</span> <span class="n">IsId</span><span class="p">(</span><span class="n">project</span><span class="p">.</span><span class="n">revisionExpr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">project</span><span class="p">.</span><span class="n">dest_branch</span><span class="p">:</span>
+          <span class="n">branch_merge</span> <span class="o">=</span> <span class="n">project</span><span class="p">.</span><span class="n">dest_branch</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">branch_merge</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">manifest</span><span class="p">.</span><span class="n">default</span><span class="p">.</span><span class="n">revisionExpr</span>
+
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">project</span><span class="p">.</span><span class="n">StartBranch</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">branch_merge</span><span class="o">=</span><span class="n">branch_merge</span><span class="p">):</span>
+        <span class="n">err</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+    <span class="n">pm</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">err</span><span class="p">:</span>
+      <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"error: %s/: cannot start %s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">relpath</span><span class="p">,</span> <span class="n">nb</span><span class="p">),</span>
+              <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+      <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="4reference"><em class="header2-font">4.Reference</em></h2>
+<p><a href="https://source.android.com/source/developing">Android Open Source Project</a><br />
+<a href="https://github.com/HawksJamesf/python-experimental">repo仓库源码</a><br />
+<a href="https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/">清华大学提供的AOSP</a><br />
+<a href="http://blog.csdn.net/luoshengyang/article/details/18195205">Android源代码仓库及其管理工具Repo分析</a></p>
+
+
+
+                <!-- donation -->
+                <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+                  <div>如果您觉得写得还不错或者对您有所启发，那就赶紧动动您的小指头，点击下面的红色按钮，狠狠地打赏一番吧。
+                  </div>
+                  <br/>
+                  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+                    <span>赏</span>
+                  </button>
+                  <div id="QR" style="display: none;">
+
+                    <div id="wechat" style="display: inline-block">
+                      <img id="wechat_qr" src="/blog/asset/donation-wechat.jpg" alt="hawks jamesf WeChat Pay" />
+                      <p>微信打赏</p>
+                    </div>
+
+                    <div id="alipay" style="display: inline-block">
+                      <img id="alipay_qr" src="/blog/asset/donation-alipay.png" alt="hawks jamesf Alipay" />
+                      <p>支付宝打赏</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+<div class="share-bar">
+  <ul class="share-buttons">
+    
+    <li class="share-facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://jamesfchen.github.io/2017-04-12/tools-study-repo" target="_blank" title="Share on Facebook">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+    <li class="share-twitter">
+      <a href="https://twitter.com/intent/tweet?url=https://jamesfchen.github.io/2017-04-12/tools-study-repo&text=repo工具" target="_blank" title="Tweet">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-linkedin">
+      <a href="http://www.linkedin.com/shareArticle?mini=true&url=https://jamesfchen.github.io/2017-04-12/tools-study-repo&title=repo工具&summary=用什么语言都可以封装git的命令，那为什么是python ?&source=" target="_blank" title="Share on LinkedIn">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+    
+
+    
+    <li class="share-envelope">
+      <a href="mailto:?&subject=repo工具&body=用什么语言都可以封装git的命令，那为什么是python ? https://jamesfchen.github.io/2017-04-12/tools-study-repo" target="_blank" title="Email">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square-o fa-stack-2x"></i>
+          <i class="fa fa-envelope-o fa-stack-1x"></i>
+        </span>
+      </a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+              </div>
+
+              
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                </noscript>
+                <a href="http://disqus.com" class="dsq-brlink">comments powered by
+                  <span class="logo-disqus">Disqus</span>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li>
+      <a href="/blog/2020-12-31/2020summary">2020年总结</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-12-13/capture-message">Fiddler vs. Charles vs. Wireshark</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-11-02/network-okhttp-protocol">网络 --- OkHttp Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-23/av-protocol-http-ts">AV --- HTTP-TS Protocol</a>
+    </li>
+    
+    <li>
+      <a href="/blog/2020-10-22/av-container-ts">AV --- TS Container</a>
+    </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul class="sideBarTags">
+    <!-- 
+      <li><a href="/blog/tag/呓语">呓语</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/language">elementary/language</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/others">elementary/others</a></li>
+      
+    
+      <li><a href="/blog/tag/tools">tools</a></li>
+      
+    
+      <li><a href="/blog/tag/逆向工程">逆向工程</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/network">app-design/network</a></li>
+      
+    
+      <li><a href="/blog/tag/build-tools">build-tools</a></li>
+      
+    
+      <li><a href="/blog/tag/AI">AI</a></li>
+      
+    
+      <li><a href="/blog/tag/React Native">React Native</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/location">framework-design/location</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/architecture">app-design/architecture</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/service">framework-design/service</a></li>
+      
+    
+      <li><a href="/blog/tag/framework-design/ui">framework-design/ui</a></li>
+      
+    
+      <li><a href="/blog/tag/分享">分享</a></li>
+      
+    
+      <li><a href="/blog/tag/elementary/algorithm">elementary/algorithm</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/image">app-design/image</a></li>
+      
+    
+      <li><a href="/blog/tag/app-design/av">app-design/av</a></li>
+      
+     -->
+
+     
+    <li>
+      <a href="/blog/tag/AI" data-toggle="tooltip" data-placement="right" title="2">
+        <span>AI</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/React%20Native" data-toggle="tooltip" data-placement="right" title="1">
+        <span>React Native</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/architecture" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/architecture</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/av" data-toggle="tooltip" data-placement="right" title="4">
+        <span>app-design/av</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/image" data-toggle="tooltip" data-placement="right" title="1">
+        <span>app-design/image</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/app-design/network" data-toggle="tooltip" data-placement="right" title="7">
+        <span>app-design/network</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/build-tools" data-toggle="tooltip" data-placement="right" title="3">
+        <span>build-tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/algorithm" data-toggle="tooltip" data-placement="right" title="1">
+        <span>elementary/algorithm</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/language" data-toggle="tooltip" data-placement="right" title="2">
+        <span>elementary/language</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/elementary/others" data-toggle="tooltip" data-placement="right" title="3">
+        <span>elementary/others</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/location" data-toggle="tooltip" data-placement="right" title="6">
+        <span>framework-design/location</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/service" data-toggle="tooltip" data-placement="right" title="5">
+        <span>framework-design/service</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/framework-design/ui" data-toggle="tooltip" data-placement="right" title="4">
+        <span>framework-design/ui</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/tools" data-toggle="tooltip" data-placement="right" title="2">
+        <span>tools</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%88%86%E4%BA%AB" data-toggle="tooltip" data-placement="right" title="3">
+        <span>分享</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E5%91%93%E8%AF%AD" data-toggle="tooltip" data-placement="right" title="6">
+        <span>呓语</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/blog/tag/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B" data-toggle="tooltip" data-placement="right" title="2">
+        <span>逆向工程</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'HawksJamesf'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017-04-12/tools-study-repo";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Hawks Jamesf &copy; 2016</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+  <li>
+    <a title="jamesfchen on Github" href="https://github.com/jamesfchen" target="_blank">
+      <i class="fa fa-github fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="6393208/hawks93jf on StackOverflow" href="http://stackoverflow.com/users/6393208/hawks93jf"
+      target="_blank">
+      <i class="fa fa-stack-overflow fa-2x"></i>
+    </a>
+  </li>
+      
+  <li>
+    <a title="feed.xml RSS" href="/blog/feed.xml" target="_blank">
+      <i class="fa fa-rss fa-2x"></i>
+    </a>
+  </li>
+   
+  <li>
+    <a title="wei-zhi-end zhihu" href="https://www.zhihu.com/people/wei-zhi-end " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">知</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+    
+  <li>
+    <a title="weizhiend douban" href="https://www.douban.com/people/weizhiend " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">豆</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+   
+  <li>
+    <a title="2239403 bilibili" href="https://space.bilibili.com/2239403 " target="_blank">
+      <!-- <span class="fa-stack fa-lg"> -->
+      <!-- <i class="fa   fa-inverse  fa-2x">知</i> -->
+      <i class="fa   fa-stop-circle  fa-2x">bilibili</i>
+      <!-- <i class="fa fa-check-circle fa-2x"></i> -->
+      <!-- <i class="fa fa-stack-1x fa-circle-o"></i> -->
+      <!-- </span> -->
+    </a>
+  </li>
+  
+
+</ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>
